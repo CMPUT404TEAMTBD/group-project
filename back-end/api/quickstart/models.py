@@ -3,8 +3,11 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Author(models.Model):
-  user = models.OneToOneField(User,on_delete=models.CASCADE)
-  userType = 'Author'
-  displayName = models.CharField(max_length=50)
-  github = models.CharField(max_length=50)
+  # TODO: uncomment this when we want to use built in User model behaviour (probably for authorization)
+  # user = models.OneToOneField(User,on_delete=models.CASCADE) 
+  _id = models.CharField(max_length=128, default='')
+  _type = 'author'
+  displayName = models.CharField(max_length=50, default='')
+  url = models.CharField(max_length=128, default='')
+  github = models.CharField(max_length=50, default='')
   
