@@ -29,4 +29,4 @@ class AuthorViewSet(viewsets.ModelViewSet):
     """
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
-    
+    lookup_field = '_id'
