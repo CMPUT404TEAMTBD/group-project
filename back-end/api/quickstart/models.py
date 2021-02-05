@@ -7,7 +7,7 @@ class Author(models.Model):
   # user = models.OneToOneField(User,on_delete=models.CASCADE) 
   _id = models.CharField(max_length=128, default='', unique=True)
   _type = 'author'
-  displayName = models.CharField(max_length=50, default='')
+  displayName = models.CharField(max_length=32, default='')
   url = models.CharField(max_length=128, default='', unique=True)
-  github = models.CharField(max_length=50, default='')
+  github = models.CharField(max_length=128, default='')
   
