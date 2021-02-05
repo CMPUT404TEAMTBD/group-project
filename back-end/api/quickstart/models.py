@@ -7,6 +7,4 @@ class Author(models.Model):
   userType = 'Author'
   displayName = models.CharField(max_length=50)
   github = models.CharField(max_length=50)
-class Following(models.Model):
-  author = models.ForeignKey(Author)
-  followers = models.ManyToManyField(Author)
+  
