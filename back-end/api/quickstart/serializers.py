@@ -18,5 +18,4 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class AuthorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Author
-        fields = ['userType', 'displayName', 'github']
-        
+        fields = ['_id', '_type', 'displayName', 'url', 'github']
