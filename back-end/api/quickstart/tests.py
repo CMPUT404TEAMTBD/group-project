@@ -18,7 +18,7 @@ class GetAuthorById(TestCase):
       )
 
   def test_get_valid_author(self):
-    response = client.get('/authors/testId/')
+    response = client.get(f'/authors/{self.john_doe._id}/')
     author = Author.objects.get(_id=self.john_doe._id)
     serializer = AuthorSerializer(author)
     self.assertEqual(response.data, serializer.data)
