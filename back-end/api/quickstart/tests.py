@@ -66,6 +66,18 @@ class UpdateAuthorById(TestCase):
     for k in self.payload:
       self.assertEqual(serializer.data[k], self.payload[k])
 
+    # Ensure other fields are unchanged
+    self.assertEqual(serializer.data['_id'], self.john._id)
+    self.assertEqual(serializer.data['_type'], self.john._type)
+
+  def test_update_invalid_author(self):
+    response = client.put(
+      f'/authors/invalidId/',
+      data=json.dumps(self.payload),
+      content_type='application/json'
+    )
+    self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    
 
 class GetPostById(TestCase):
 
