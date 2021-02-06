@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User, Group
-from .models import Author
+from .models import Author, Post
 from rest_framework import viewsets
 from rest_framework import permissions
-from quickstart.serializers import UserSerializer, GroupSerializer, AuthorSerializer
+from quickstart.serializers import UserSerializer, GroupSerializer, AuthorSerializer, PostSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -25,8 +25,17 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 class AuthorViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows groups to be viewed or edited.
+    API endpoint that allows authors to be viewed or edited.
     """
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     lookup_field = '_id'
+
+
+class PostViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows post to be viewed or edited.
+    """
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    lookup_field = "_id"
