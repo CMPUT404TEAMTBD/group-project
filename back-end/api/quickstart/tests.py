@@ -89,7 +89,6 @@ class GetPostById(TestCase):
     response = client.get(f'/posts/{self.post._id}/')
     post = Post.objects.get(_id=self.post._id)
     serializer = PostSerializer(post)
-    print(response.data)
     self.assertEqual(response.data, serializer.data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
