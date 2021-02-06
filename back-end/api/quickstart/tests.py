@@ -72,7 +72,7 @@ class UpdateAuthorById(TestCase):
 
   def test_update_invalid_author(self):
     response = client.put(
-      f'/authors/invalidId/',
+      '/authors/invalidId/',
       data=json.dumps(self.payload),
       content_type='application/json'
     )
