@@ -144,7 +144,7 @@ class UpdatePostById(TestCase):
       'description': 'i am a new post', 
       'source': 'new source post id', 
       'origin': 'new origin post id', 
-      'visibility': 'F', 
+      'visibility': 'Friends', 
       'unlisted': False, 
       'isPrivateToFriends': False, 
       'author': 'newId', 
