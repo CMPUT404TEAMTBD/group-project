@@ -9,7 +9,7 @@ LONG_CHAR_LENGTH = 128
 class Author(models.Model):
   # TODO: uncomment this when we want to use built in User model behaviour (probably for authorization)
   # user = models.OneToOneField(User,on_delete=models.CASCADE) 
-  _id = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
+  _id = models.CharField(primary_key=True, max_length=LONG_CHAR_LENGTH, editable=False)
   _type = 'author'
   displayName = models.CharField(max_length=SHORT_CHAR_LENGTH)
   url = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
@@ -22,7 +22,7 @@ class Post(models.Model):
     PUBLIC = 'P'
     FRIENDS = 'F'
 
-  _id = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
+  _id = models.CharField(primary_key=True, max_length=LONG_CHAR_LENGTH, editable=False)
   _type = 'post'
   title = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
   description = models.TextField()

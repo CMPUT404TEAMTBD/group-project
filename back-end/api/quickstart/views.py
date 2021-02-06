@@ -29,9 +29,6 @@ class AuthorViewSet(viewsets.ModelViewSet):
     """
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
-    # Using lookup_field as search param
-    # https://stackoverflow.com/questions/56431755/django-rest-framework-urls-without-pk
-    lookup_field = '_id'
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -40,4 +37,3 @@ class PostViewSet(viewsets.ModelViewSet):
     """
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    lookup_field = "_id"
