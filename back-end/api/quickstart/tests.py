@@ -33,7 +33,7 @@ class GetAuthorById(TestCase):
 
 
 class UpdateAuthorById(TestCase):
-  """Tests for updating a single Author by POSTing to endpoint /author/_id/.
+  """Tests for updating a single Author by PUT'ing to endpoint /author/_id/.
   Referenced https://realpython.com/test-driven-development-of-a-django-restful-api/
   """
   def setUp(self):
@@ -46,19 +46,20 @@ class UpdateAuthorById(TestCase):
 
     self.payload = {
       # TODO: Remove _id here once we figure out the _id field. It should be uneditable.
-      '_id': 'newId',
+      '_id': 'testId',
       'displayName': 'new John Doe',
       'url': "newUrl",
       'github': "newGithub"
     }
 
+  # TODO: update object tests most likely will be changed to use POST instead.
   def test_update_author(self):
     response = client.put(
       f'/authors/{self.john._id}/',
       data=json.dumps(self.payload),
       content_type='application/json'
     )
-    self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class GetPostById(TestCase):
@@ -78,7 +79,7 @@ class GetPostById(TestCase):
       content='Hello, I am a test post',
       categories='["Testing"]',
       published=datetime.datetime.now(),
-      count='5',
+      count=5,
       pageSize=20,
       commentLink='link to comments',
       comments='{ "text": "nice test" }'
@@ -88,10 +89,10 @@ class GetPostById(TestCase):
     response = client.get(f'/posts/{self.post._id}/')
     post = Post.objects.get(_id=self.post._id)
     serializer = PostSerializer(post)
+    print(response.data)
     self.assertEqual(response.data, serializer.data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
   def test_get_invalid_post(self):
     response = client.get('/posts/invalidId/')
     self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
