@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
 SHORT_CHAR_LENGTH = 32
 LONG_CHAR_LENGTH = 128
@@ -9,11 +9,11 @@ LONG_CHAR_LENGTH = 128
 class Author(models.Model):
   # TODO: uncomment this when we want to use built in User model behaviour (probably for authorization)
   # user = models.OneToOneField(User,on_delete=models.CASCADE) 
-  _id = models.CharField(max_length=LONG_CHAR_LENGTH, default='', unique=True)
+  _id = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
   _type = 'author'
-  displayName = models.CharField(max_length=SHORT_CHAR_LENGTH, default='')
-  url = models.CharField(max_length=LONG_CHAR_LENGTH, default='', unique=True)
-  github = models.CharField(max_length=LONG_CHAR_LENGTH, default='')
+  displayName = models.CharField(max_length=SHORT_CHAR_LENGTH)
+  url = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
+  github = models.CharField(max_length=LONG_CHAR_LENGTH)
 
 
 class Post(models.Model):
@@ -28,14 +28,15 @@ class Post(models.Model):
   description = models.TextField()
   source = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
   origin = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
-  visibility = models.CharField(max_length=SHORT_CHAR_LENGTH, choices=Visibility.choices, unique=True)
+  visibility = models.CharField(max_length=SHORT_CHAR_LENGTH, choices=Visibility.choices)
   unlisted = models.BooleanField()
   isPrivateToFriends = models.BooleanField()
   author = models.JSONField()
-  contentType = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
+  contentType = models.CharField(max_length=LONG_CHAR_LENGTH)
   content = models.TextField(blank=True)
-  categories = models.TextField()
-  published = models.TimeField()
+  categories = models.JSONField()
+  # cannot store time as IOS 8601 as per spec so when interacting will need parse (i.e using django.utils.dateparse)
+  published = models.TimeField(default=timezone.now)
   count = models.IntegerField()
   pageSize = models.IntegerField(default=50)
   commentLink = models.CharField(max_length=LONG_CHAR_LENGTH)
