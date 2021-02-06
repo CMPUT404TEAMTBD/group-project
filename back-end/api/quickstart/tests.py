@@ -61,6 +61,11 @@ class UpdateAuthorById(TestCase):
     )
     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    # Compare each payload field with the updated Author object.
+    serializer = AuthorSerializer(Author.objects.get(_id=self.john._id))
+    for k in self.payload:
+      self.assertEqual(serializer.data[k], self.payload[k])
+
 
 class GetPostById(TestCase):
 
