@@ -19,8 +19,8 @@ class Author(models.Model):
 class Post(models.Model):
 
   class Visibility(models.TextChoices):
-    PUBLIC = 'P'
-    FRIENDS = 'F'
+    PUBLIC = 'Public'
+    FRIENDS = 'Friends'
 
   _id = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
   _type = 'post'
