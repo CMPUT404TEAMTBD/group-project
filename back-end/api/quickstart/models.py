@@ -31,7 +31,7 @@ class Post(models.Model):
   visibility = models.CharField(max_length=SHORT_CHAR_LENGTH, choices=Visibility.choices)
   unlisted = models.BooleanField()
   isPrivateToFriends = models.BooleanField()
-  author = models.JSONField()
+  author = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
   contentType = models.CharField(max_length=LONG_CHAR_LENGTH)
   content = models.TextField(blank=True)
   categories = models.JSONField()
@@ -40,4 +40,5 @@ class Post(models.Model):
   count = models.IntegerField()
   pageSize = models.IntegerField(default=50)
   commentLink = models.CharField(max_length=LONG_CHAR_LENGTH)
+  # list of urls
   comments = models.JSONField()

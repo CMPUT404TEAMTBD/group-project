@@ -34,13 +34,6 @@ class GetAuthorById(TestCase):
 class GetPostById(TestCase):
 
   def setUp(self):
-    self.john = Author.objects.create(
-      _id='testId',
-      displayName='John Doe',
-      url="testUrl",
-      github="testGithub"
-    )
-
     self.post = Post.objects.create(
       _id='123',
       title='testpost',
@@ -50,7 +43,7 @@ class GetPostById(TestCase):
       visibility='Public',
       unlisted='True',
       isPrivateToFriends='True',
-      author=AuthorSerializer(self.john).data,
+      author='testId',
       contentType = 'text/plain',
       content='Hello, I am a test post',
       categories='["Testing"]',
