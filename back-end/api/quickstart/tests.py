@@ -10,7 +10,7 @@ class GetAuthorById(TestCase):
   Referenced https://realpython.com/test-driven-development-of-a-django-restful-api/
   """
   def setUp(self):
-      self.john_doe = Author.objects.create(
+      self.john = Author.objects.create(
         _id='testId', 
         displayName='John Doe',
         url="testUrl",
@@ -18,8 +18,8 @@ class GetAuthorById(TestCase):
       )
 
   def test_get_valid_author(self):
-    response = client.get(f'/authors/{self.john_doe._id}/')
-    author = Author.objects.get(_id=self.john_doe._id)
+    response = client.get(f'/authors/{self.john._id}/')
+    author = Author.objects.get(_id=self.john._id)
     serializer = AuthorSerializer(author)
     self.assertEqual(response.data, serializer.data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
