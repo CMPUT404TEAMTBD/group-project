@@ -147,6 +147,7 @@ class UpdatePostById(TestCase):
       'visibility': 'Friends', 
       'unlisted': False, 
       'isPrivateToFriends': False, 
+      # TODO: Remove author here once we figure fields out. It should be uneditable.
       'author': 'newId', 
       'contentType': 'text/plain', 
       'content': 'Hello, I am a new post', 
