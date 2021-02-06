@@ -30,7 +30,7 @@ class AuthorViewSet(viewsets.ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     # Using lookup_field as search param
-    # https: // stackoverflow.com / questions / 56431755 / django - rest - framework - urls - without - pk
+    # https://stackoverflow.com/questions/56431755/django-rest-framework-urls-without-pk
     lookup_field = '_id'
 
 
