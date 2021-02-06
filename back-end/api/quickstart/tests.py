@@ -1,3 +1,4 @@
+import json
 from rest_framework import status
 from django.test import TestCase, Client
 from .models import Author, Post
@@ -29,6 +30,35 @@ class GetAuthorById(TestCase):
   def test_get_invalid_author(self):
     response = client.get('/authors/invalidId/')
     self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class UpdateAuthorById(TestCase):
+  """Tests for updating a single Author by POSTing to endpoint /author/_id/.
+  Referenced https://realpython.com/test-driven-development-of-a-django-restful-api/
+  """
+  def setUp(self):
+    self.john = Author.objects.create(
+      _id='testId', 
+      displayName='John Doe',
+      url="testUrl",
+      github="testGithub"
+    )
+
+    self.payload = {
+      # TODO: Remove _id here once we figure out the _id field. It should be uneditable.
+      '_id': 'newId',
+      'displayName': 'new John Doe',
+      'url': "newUrl",
+      'github': "newGithub"
+    }
+
+  def test_update_author(self):
+    response = client.put(
+      f'/authors/{self.john._id}/',
+      data=json.dumps(self.payload),
+      content_type='application/json'
+    )
+    self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
 
 class GetPostById(TestCase):
