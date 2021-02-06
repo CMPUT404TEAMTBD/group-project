@@ -9,7 +9,7 @@ client = Client()
 
 
 class GetAuthorById(TestCase):
-  """Tests for getting a single Author by their ID at endpoint /author/_id/.
+  """Tests for getting a single Author by their ID at endpoint /authors/_id/.
   Referenced https://realpython.com/test-driven-development-of-a-django-restful-api/
   """
   def setUp(self):
@@ -33,7 +33,7 @@ class GetAuthorById(TestCase):
 
 
 class UpdateAuthorById(TestCase):
-  """Tests for updating a single Author by PUT'ing to endpoint /author/_id/.
+  """Tests for updating a single Author by PUT'ing to endpoint /authors/_id/.
   Referenced https://realpython.com/test-driven-development-of-a-django-restful-api/
   """
   def setUp(self):
@@ -80,7 +80,7 @@ class UpdateAuthorById(TestCase):
     
 
 class GetPostById(TestCase):
-
+  """Tests for getting a single Post by their ID at endpoint /posts/_id/."""
   def setUp(self):
     self.post = Post.objects.create(
       _id='123',
@@ -115,9 +115,7 @@ class GetPostById(TestCase):
 
 
 class UpdatePostById(TestCase):
-  """Tests for updating a single Author by PUT'ing to endpoint /author/_id/.
-  Referenced https://realpython.com/test-driven-development-of-a-django-restful-api/
-  """
+  """Tests for updating a single Post by PUT'ing to endpoint /posts/_id/."""
   def setUp(self):
     self.post = Post.objects.create(
       _id='123',
