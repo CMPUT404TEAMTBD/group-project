@@ -114,6 +114,38 @@ class UpdatePostById(TestCase):
     )
     self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+  
+class DeletePostById(TestCase):
+  """Tests for deleting a single Post by their ID at endpoint /author/{AUTHOR_ID}/posts/{POST_ID}/."""
+  def setUp(self):
+    self.post = Post.objects.create(
+      _id='123',
+      title='testpost',
+      description='i am a test post',
+      source='source post id',
+      origin='origin post id',
+      visibility='Public',
+      unlisted=True,
+      isPrivateToFriends=True,
+      author='authorId',
+      contentType = 'text/plain',
+      content='Hello, I am a test post',
+      categories='["Testing"]',
+      published=datetime.datetime.now(),
+      count=5,
+      pageSize=20,
+      commentLink='link to comments',
+      comments='{ "text": "nice test" }'
+    )
+
+  def test_delete_valid_post(self):
+    response = client.delete(f'/author/{self.post.author}/posts/{self.post._id}/')
+    self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+  def test_delete_invalid_post(self):
+    response = client.delete(f'/author/{self.post.author}/posts/invalidId/')
+    self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
 
 class CreatePostById(TestCase):
   """Tests for updating a single Post by PUT'ing to endpoint /author/{AUTHOR_ID}/posts/{POST_ID}/."""
