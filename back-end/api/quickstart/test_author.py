@@ -1,3 +1,5 @@
+"""Tests for the /author/{AUTHOR_ID} endpoint. 
+Referenced https://realpython.com/test-driven-development-of-a-django-restful-api/"""
 import json
 from rest_framework import status
 from django.test import TestCase, Client

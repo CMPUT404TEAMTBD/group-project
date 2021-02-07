@@ -1,3 +1,5 @@
+"""Tests for the /author/{AUTHOR_ID}/posts/{POST_ID}/ endpoint. 
+Referenced https://realpython.com/test-driven-development-of-a-django-restful-api/"""
 import json
 from rest_framework import status
 from django.test import TestCase, Client
@@ -111,3 +113,38 @@ class UpdatePostById(TestCase):
       content_type='application/json'
     )
     self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class CreatePostById(TestCase):
+  """Tests for updating a single Post by PUT'ing to endpoint /author/{AUTHOR_ID}/posts/{POST_ID}/."""
+  def setUp(self):
+    self.payload = {
+      '_id': '123',
+      '_type': 'post',
+      'title': 'testpost',
+      'description': 'i am a test post',
+      'source': 'source post id',
+      'origin': 'origin post id',
+      'visibility': 'Public',
+      'unlisted': True,
+      'isPrivateToFriends': True,
+      'author': 'authorId',
+      'contentType': 'text/plain',
+      'content': 'Hello, I am a test post',
+      'categories': '["Testing"]',
+      'published': '03:25:53.827044',
+      'count': 5,
+      'pageSize': 20,
+      'commentLink': 'link to comments',
+      'comments': '{ "text": "nice test" }'
+    }
+
+  def test_create_post(self):
+    response = client.put(
+      f'/author/{self.payload["author"]}/posts/{self.payload["_id"]}/',
+      data=json.dumps(self.payload),
+      content_type='application/json'
+    )
+    self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    # TODO: Add more test logic if we ever to override the creation functionality ourselves.
