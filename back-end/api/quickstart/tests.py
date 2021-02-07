@@ -9,7 +9,7 @@ client = Client()
 
 
 class GetAuthorById(TestCase):
-  """Tests for getting a single Author by their ID at endpoint /authors/_id/.
+  """Tests for getting a single Author by their ID at endpoint /author/{AUTHOR_ID}/.
   Referenced https://realpython.com/test-driven-development-of-a-django-restful-api/
   """
   def setUp(self):
@@ -21,19 +21,19 @@ class GetAuthorById(TestCase):
     )
 
   def test_get_valid_author(self):
-    response = client.get(f'/authors/{self.john._id}/')
+    response = client.get(f'/author/{self.john._id}/')
     author = Author.objects.get(_id=self.john._id)
     serializer = AuthorSerializer(author)
     self.assertEqual(response.data, serializer.data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
     
   def test_get_invalid_author(self):
-    response = client.get('/authors/invalidId/')
+    response = client.get('/author/invalidId/')
     self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
 class UpdateAuthorById(TestCase):
-  """Tests for updating a single Author by PUT'ing to endpoint /authors/_id/.
+  """Tests for updating a single Author by PUT'ing to endpoint /author/{AUTHOR_ID}/.
   Referenced https://realpython.com/test-driven-development-of-a-django-restful-api/
   """
   def setUp(self):
@@ -52,10 +52,9 @@ class UpdateAuthorById(TestCase):
       'github': "newGithub"
     }
 
-  # TODO: update object tests most likely will be changed to use POST instead.
   def test_update_author(self):
-    response = client.put(
-      f'/authors/{self.john._id}/',
+    response = client.post(
+      f'/author/{self.john._id}/',
       data=json.dumps(self.payload),
       content_type='application/json'
     )
@@ -71,8 +70,8 @@ class UpdateAuthorById(TestCase):
     self.assertEqual(serializer.data['_type'], self.john._type)
 
   def test_update_invalid_author(self):
-    response = client.put(
-      '/authors/invalidId/',
+    response = client.post(
+      '/author/invalidId/',
       data=json.dumps(self.payload),
       content_type='application/json'
     )
@@ -80,7 +79,7 @@ class UpdateAuthorById(TestCase):
     
 
 class GetPostById(TestCase):
-  """Tests for getting a single Post by their ID at endpoint /posts/_id/."""
+  """Tests for getting a single Post by their ID at endpoint /author/{AUTHOR_ID}/posts/{POST_ID}/."""
   def setUp(self):
     self.post = Post.objects.create(
       _id='123',
@@ -91,7 +90,7 @@ class GetPostById(TestCase):
       visibility='Public',
       unlisted=True,
       isPrivateToFriends=True,
-      author='testId',
+      author='authorId',
       contentType = 'text/plain',
       content='Hello, I am a test post',
       categories='["Testing"]',
@@ -103,19 +102,19 @@ class GetPostById(TestCase):
     )
 
   def test_get_valid_post(self):
-    response = client.get(f'/posts/{self.post._id}/')
+    response = client.get(f'/author/{self.post.author}/posts/{self.post._id}/')
     post = Post.objects.get(_id=self.post._id)
     serializer = PostSerializer(post)
     self.assertEqual(response.data, serializer.data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
   def test_get_invalid_post(self):
-    response = client.get('/posts/invalidId/')
+    response = client.get(f'/author/{self.post.author}/posts/invalidId/')
     self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
 class UpdatePostById(TestCase):
-  """Tests for updating a single Post by PUT'ing to endpoint /posts/_id/."""
+  """Tests for updating a single Post by PUT'ing to endpoint /author/{AUTHOR_ID}/posts/{POST_ID}/."""
   def setUp(self):
     self.post = Post.objects.create(
       _id='123',
@@ -126,7 +125,7 @@ class UpdatePostById(TestCase):
       visibility='Public',
       unlisted=True,
       isPrivateToFriends=True,
-      author='testId',
+      author='authorId',
       contentType = 'text/plain',
       content='Hello, I am a test post',
       categories='["Testing"]',
@@ -159,10 +158,9 @@ class UpdatePostById(TestCase):
       'comments': '{ "text": "nice new test" }'
     }
 
-  # TODO: update object tests most likely will be changed to use POST instead.
   def test_update_post(self):
-    response = client.put(
-      f'/posts/{self.post._id}/',
+    response = client.post(
+      f'/author/{self.post.author}/posts/{self.post._id}/',
       data=json.dumps(self.payload),
       content_type='application/json'
     )
@@ -178,8 +176,8 @@ class UpdatePostById(TestCase):
     self.assertEqual(serializer.data['_type'], self.post._type)
 
   def test_update_invalid_post(self):
-    response = client.put(
-      '/posts/invalidId/',
+    response = client.post(
+      f'/author/{self.post.author}/posts/invalidId/',
       data=json.dumps(self.payload),
       content_type='application/json'
     )
