@@ -9,27 +9,32 @@ import datetime
 
 client = Client()
 
+def get_test_post_fields():
+  return {
+    '_id': '123',
+    'title': 'testpost',
+    'description': 'i am a test post',
+    'source': 'source post id',
+    'origin': 'origin post id',
+    'visibility': 'Public',
+    'unlisted': 'True',
+    'isPrivateToFriends': 'True',
+    'author': 'testId',
+    'contentType': 'text/plain',
+    'content': 'Hello, I am a test post',
+    'categories': '["Testing"]',
+    'published': datetime.datetime.now(),
+    'count': '5',
+    'pageSize': 20,
+    'commentLink': 'link to comments',
+    'comments': '{ "text": "nice test" }'
+  }
+
 class GetPostById(TestCase):
   """Tests for getting a single Post by their ID at endpoint /author/{AUTHOR_ID}/posts/{POST_ID}/."""
   def setUp(self):
     self.post = Post.objects.create(
-      _id='123',
-      title='testpost',
-      description='i am a test post',
-      source='source post id',
-      origin='origin post id',
-      visibility='Public',
-      unlisted=True,
-      isPrivateToFriends=True,
-      author='authorId',
-      contentType = 'text/plain',
-      content='Hello, I am a test post',
-      categories='["Testing"]',
-      published=datetime.datetime.now(),
-      count=5,
-      pageSize=20,
-      commentLink='link to comments',
-      comments='{ "text": "nice test" }'
+      **get_test_post_fields()
     )
 
   def test_get_valid_post(self):
@@ -47,25 +52,7 @@ class GetPostById(TestCase):
 class UpdatePostById(TestCase):
   """Tests for updating a single Post by PUT'ing to endpoint /author/{AUTHOR_ID}/posts/{POST_ID}/."""
   def setUp(self):
-    self.post = Post.objects.create(
-      _id='123',
-      title='testpost',
-      description='i am a test post',
-      source='source post id',
-      origin='origin post id',
-      visibility='Public',
-      unlisted=True,
-      isPrivateToFriends=True,
-      author='authorId',
-      contentType = 'text/plain',
-      content='Hello, I am a test post',
-      categories='["Testing"]',
-      published=datetime.datetime.now(),
-      count=5,
-      pageSize=20,
-      commentLink='link to comments',
-      comments='{ "text": "nice test" }'
-    )
+    self.post = Post.objects.create(**get_test_post_fields())
 
     self.payload = {
       # TODO: Remove _id here once we figure out the _id field. It should be uneditable.
@@ -118,25 +105,7 @@ class UpdatePostById(TestCase):
 class DeletePostById(TestCase):
   """Tests for deleting a single Post by their ID at endpoint /author/{AUTHOR_ID}/posts/{POST_ID}/."""
   def setUp(self):
-    self.post = Post.objects.create(
-      _id='123',
-      title='testpost',
-      description='i am a test post',
-      source='source post id',
-      origin='origin post id',
-      visibility='Public',
-      unlisted=True,
-      isPrivateToFriends=True,
-      author='authorId',
-      contentType = 'text/plain',
-      content='Hello, I am a test post',
-      categories='["Testing"]',
-      published=datetime.datetime.now(),
-      count=5,
-      pageSize=20,
-      commentLink='link to comments',
-      comments='{ "text": "nice test" }'
-    )
+    self.post = Post.objects.create(**get_test_post_fields())
 
   def test_delete_valid_post(self):
     response = client.delete(f'/author/{self.post.author}/posts/{self.post._id}/')
