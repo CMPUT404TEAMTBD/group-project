@@ -7,6 +7,8 @@ router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 
+# Manually bind viewsets instead of using the router so that we can use POST for updates.
+# Referenced Lucas Weyne's code at https://stackoverflow.com/a/53991768
 author = views.AuthorViewSet.as_view({
     'get': 'retrieve',
     'post': 'update',
