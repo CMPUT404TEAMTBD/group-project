@@ -13,6 +13,8 @@ router.register(r'groups', views.GroupViewSet)
 author = views.AuthorViewSet.as_view({
     'get': 'retrieve',
     'post': 'update',
+    # TODO: remove put: create once we no longer need a dev shortcut to create authors, 
+    # because user creation should be handled with the built in User model. 
     'put': 'create'
 })
 
