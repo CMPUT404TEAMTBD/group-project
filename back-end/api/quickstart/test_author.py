@@ -9,17 +9,18 @@ import datetime
 
 client = Client()
 
+def get_test_author_fields():
+  return {
+    '_id': 'testId',
+    'displayName': 'John Doe',
+    'url': 'testUrl',
+    'github': 'testGithub'
+  }
+
 class GetAuthorById(TestCase):
-  """Tests for getting a single Author by their ID at endpoint /author/{AUTHOR_ID}/.
-  Referenced https://realpython.com/test-driven-development-of-a-django-restful-api/
-  """
+  """Tests for getting a single Author by their ID at endpoint /author/{AUTHOR_ID}/."""
   def setUp(self):
-    self.john = Author.objects.create(
-      _id='testId', 
-      displayName='John Doe',
-      url="testUrl",
-      github="testGithub"
-    )
+    self.john = Author.objects.create(**get_test_author_fields())
 
   def test_get_valid_author(self):
     response = client.get(f'/author/{self.john._id}/')
@@ -34,16 +35,9 @@ class GetAuthorById(TestCase):
 
 
 class UpdateAuthorById(TestCase):
-  """Tests for updating a single Author by PUT'ing to endpoint /author/{AUTHOR_ID}/.
-  Referenced https://realpython.com/test-driven-development-of-a-django-restful-api/
-  """
+  """Tests for updating a single Author by PUT'ing to endpoint /author/{AUTHOR_ID}/."""
   def setUp(self):
-    self.john = Author.objects.create(
-      _id='testId', 
-      displayName='John Doe',
-      url="testUrl",
-      github="testGithub"
-    )
+    self.john = Author.objects.create(**get_test_author_fields())
 
     self.payload = {
       # TODO: Remove _id here once we figure out the _id field. It should be uneditable.
