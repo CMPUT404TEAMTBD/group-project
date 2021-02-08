@@ -8,10 +8,10 @@ import datetime
 client = Client()
 
 
-def get_test_comment_fields(i, postiD="testpostid"):
+def get_test_comment_fields(i, postid="testpostid"):
   return {
     '_id': f'testid{i}',
-    'postId': postiD,
+    'postId': postid,
     'author': f'testcommenter{i}',
     'comment': 'i am a comment',
     'contentType': 'text/plain',
@@ -29,27 +29,27 @@ class GetAllCommentsTest(TestCase):
 
 
   def test_get_all_comments(self):
-    # get API response
     response = client.get(f'/author/testauthor/posts/{self.comment1.postId}/comments/')
-    # get data from db
+
     comments = Comment.objects.filter(postId=self.comment1.postId)
     serializer = CommentSerializer(comments, many=True)
+
     self.assertEqual(response.data, serializer.data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
   def test_get_other_comments(self):
-    # get API response
     response = client.get(f'/author/testauthor/posts/{self.comment3.postId}/comments/')
-    # get data from db
+
     comments = Comment.objects.filter(postId=self.comment3.postId)
     serializer = CommentSerializer(comments, many=True)
+
     self.assertEqual(response.data, serializer.data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
 class CreateCommentTest(TestCase):
-  """ Test module for GET all comments for a post API """
+  """ Test module for creating comments for a post API """
 
   def setUp(self):
     self.payload = get_test_comment_fields(1)
