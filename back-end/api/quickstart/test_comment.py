@@ -7,32 +7,13 @@ import datetime
 
 client = Client()
 
-def get_test_comment1_fields():
+
+def get_test_comment_fields(i, postiD="testpostid"):
   return {
-    '_id': 'testid',
-    'postId': 'testpostid',
-    'author': 'testcommenter1',
+    '_id': f'testid{i}',
+    'postId': postiD,
+    'author': f'testcommenter{i}',
     'comment': 'i am a comment',
-    'contentType': 'text/plain',
-    'published': '03:25:53.827044',
-  }
-
-def get_test_comment2_fields():
-  return {
-    '_id': 'testid2',
-    'postId': 'testpostid',
-    'author': 'testcommenter2',
-    'comment': 'i am a comment2',
-    'contentType': 'text/plain',
-    'published': '03:25:53.827044',
-  }
-
-def get_test_comment3_fields():
-  return {
-    '_id': 'testid3',
-    'postId': 'testotherpostid',
-    'author': 'testcommenter4',
-    'comment': 'i am a comment3',
     'contentType': 'text/plain',
     'published': '03:25:53.827044',
   }
@@ -42,9 +23,9 @@ class GetAllCommentsTest(TestCase):
   """ Test module for GET all comments for a post API """
 
   def setUp(self):
-    self.comment1 = Comment.objects.create(**get_test_comment1_fields())
-    self.comment2 = Comment.objects.create(**get_test_comment2_fields())
-    self.comment3 = Comment.objects.create(**get_test_comment3_fields())
+    self.comment1 = Comment.objects.create(**get_test_comment_fields(1))
+    self.comment2 = Comment.objects.create(**get_test_comment_fields(2))
+    self.comment3 = Comment.objects.create(**get_test_comment_fields(3, "otherpostid"))
 
 
   def test_get_all_comments(self):
@@ -71,7 +52,7 @@ class CreateCommentTest(TestCase):
   """ Test module for GET all comments for a post API """
 
   def setUp(self):
-    self.payload = get_test_comment1_fields()
+    self.payload = get_test_comment_fields(1)
 
   def test_create_comment(self):
     response = client.post(
