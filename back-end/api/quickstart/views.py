@@ -51,10 +51,10 @@ class FollowersListViewSet(viewsets.ModelViewSet):
     API endpoint that allows for listing the followers of an author.
     """
     def list(self, request, receiver):
-        followers = Follow.objects.filter(receiver=receiver)
+        follows = Follow.objects.filter(receiver=receiver)
+        sender_ids = [f.sender for f in follows]
 
-        serializer = None
-        sender_ids = [f.sender for f in followers]
+        # TODO: Most likely will have to make API calls here instead of database reading.
         senders = Author.objects.filter(_id__in=sender_ids)
         serializer = AuthorSerializer(senders, many=True)
 
