@@ -1,10 +1,11 @@
 from django.contrib.auth.models import User, Group
-from .models import Author, Post, Comment
+from .models import Author, Post, Follow, Comment
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.response import Response
-from quickstart.serializers import UserSerializer, GroupSerializer, AuthorSerializer, PostSerializer, CommentSerializer
+from quickstart.serializers import UserSerializer, GroupSerializer, AuthorSerializer, PostSerializer, FollowSerializer, CommentSerializer
+from .mixins import MultipleFieldLookupMixin
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -61,3 +62,31 @@ class CommentViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(serializer.data)
+    lookup_field = "_id"
+
+
+class FollowersListViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows for listing the followers of an author.
+    """
+    def list(self, request, receiver):
+        follows = Follow.objects.filter(receiver=receiver)
+        sender_ids = [f.sender for f in follows]
+
+        # TODO: Most likely will have to make API calls here instead of database reading.
+        senders = Author.objects.filter(_id__in=sender_ids)
+        serializer = AuthorSerializer(senders, many=True)
+
+        return Response({
+            'type': 'followers',
+            'items': serializer.data
+        })
+
+
+class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
+    """
+    API endpoint that allows removing, adding, and checking followers for an author.
+    """
+    queryset = Follow.objects.all()
+    serializer_class = FollowSerializer
+    lookup_fields = ['receiver', 'sender']

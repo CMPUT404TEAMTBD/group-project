@@ -50,7 +50,7 @@ class GetPostById(TestCase):
 
 
 class UpdatePostById(TestCase):
-  """Tests for updating a single Post by PUT'ing to endpoint /author/{AUTHOR_ID}/posts/{POST_ID}/."""
+  """Tests for updating a single Post by POST'ing to endpoint /author/{AUTHOR_ID}/posts/{POST_ID}/."""
   def setUp(self):
     self.post = Post.objects.create(**get_test_post_fields())
 
@@ -117,7 +117,7 @@ class DeletePostById(TestCase):
 
 
 class CreatePostById(TestCase):
-  """Tests for updating a single Post by PUT'ing to endpoint /author/{AUTHOR_ID}/posts/{POST_ID}/."""
+  """Tests for creating a single Post by PUT'ing to endpoint /author/{AUTHOR_ID}/posts/{POST_ID}/."""
   def setUp(self):
     self.payload = {
       '_id': '123',

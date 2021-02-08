@@ -52,3 +52,8 @@ class Comment(models.Model):
   comment = models.TextField()
   contentType = models.CharField(max_length=LONG_CHAR_LENGTH)
   published = models.TimeField(default=timezone.now)
+
+class Follow(models.Model):
+  receiver = models.CharField(max_length=LONG_CHAR_LENGTH)
+  sender = models.CharField(max_length=LONG_CHAR_LENGTH)
+  approved = models.BooleanField()

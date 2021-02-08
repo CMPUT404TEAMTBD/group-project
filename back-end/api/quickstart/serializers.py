@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from .models import Author, Post, Comment
+from .models import Author, Post, Follow, Comment
 from rest_framework import serializers
 
 
@@ -33,3 +33,8 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Comment
         fields = ['_id', '_type', 'postId', 'author', 'comment', 'contentType', 'published']
+
+class FollowSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Follow
+        fields = ['receiver', 'sender', 'approved']
