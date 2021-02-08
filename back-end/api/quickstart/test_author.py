@@ -35,7 +35,7 @@ class GetAuthorById(TestCase):
 
 
 class UpdateAuthorById(TestCase):
-  """Tests for updating a single Author by PUT'ing to endpoint /author/{AUTHOR_ID}/."""
+  """Tests for updating a single Author by POST'ing to endpoint /author/{AUTHOR_ID}/."""
   def setUp(self):
     self.john = Author.objects.create(**get_test_author_fields())
 
