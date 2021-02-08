@@ -1,8 +1,11 @@
 from django.contrib.auth.models import User, Group
-from .models import Author, Post
+from .models import Author, Post, Follow
 from rest_framework import viewsets
 from rest_framework import permissions
-from quickstart.serializers import UserSerializer, GroupSerializer, AuthorSerializer, PostSerializer
+from rest_framework import status
+from rest_framework.response import Response
+from quickstart.serializers import UserSerializer, GroupSerializer, AuthorSerializer, PostSerializer, FollowSerializer
+from .mixins import MultipleFieldLookupMixin
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -41,3 +44,12 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     lookup_field = "_id"
+
+
+class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
+    """
+    API endpoint that allows removing, adding, and checking followers for an author.
+    """
+    queryset = Follow.objects.all()
+    serializer_class = FollowSerializer
+    lookup_fields = ['receiver', 'sender']

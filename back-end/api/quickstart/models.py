@@ -42,3 +42,9 @@ class Post(models.Model):
   commentLink = models.CharField(max_length=LONG_CHAR_LENGTH)
   # list of urls
   comments = models.JSONField()
+
+
+class Follow(models.Model):
+    receiver = models.CharField(max_length=LONG_CHAR_LENGTH)
+    sender = models.CharField(max_length=LONG_CHAR_LENGTH)
+    approved = models.BooleanField()
