@@ -25,6 +25,11 @@ posts = views.PostViewSet.as_view({
     'put': 'create'
 })
 
+comments = views.CommentViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
@@ -32,5 +37,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('admin/', admin.site.urls),
     path('author/<str:_id>/', author, name='author'),
-    path('author/<str:author>/posts/<str:_id>/', posts, name='posts')
+    path('author/<str:author>/posts/<str:_id>/', posts, name='posts'),
+    path('author/<str:author>/posts/<str:posts>/comments/', comments, name='comments')
 ]
