@@ -46,6 +46,24 @@ class PostViewSet(viewsets.ModelViewSet):
     lookup_field = "_id"
 
 
+class FollowersListViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows for listing the followers of an author.
+    """
+    def list(self, request, receiver):
+        follows = Follow.objects.filter(receiver=receiver)
+        sender_ids = [f.sender for f in follows]
+
+        # TODO: Most likely will have to make API calls here instead of database reading.
+        senders = Author.objects.filter(_id__in=sender_ids)
+        serializer = AuthorSerializer(senders, many=True)
+
+        return Response({
+            'type': 'followers',
+            'items': serializer.data
+        })
+
+
 class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows removing, adding, and checking followers for an author.
