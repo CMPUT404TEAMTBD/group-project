@@ -25,6 +25,11 @@ posts = views.PostViewSet.as_view({
     'put': 'create'
 })
 
+comments = views.CommentViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+
 followers_list = views.FollowersListViewSet.as_view({
     'get': 'list'
 })
@@ -44,5 +49,6 @@ urlpatterns = [
     path('author/<str:_id>/', author, name='author'),
     path('author/<str:author>/posts/<str:_id>/', posts, name='posts'),
     path('author/<str:receiver>/followers/', followers_list, name='followers-list'),
-    path('author/<str:receiver>/followers/<str:sender>/', followers, name='followers')
+    path('author/<str:receiver>/followers/<str:sender>/', followers, name='followers'),
+    path('author/<str:author>/posts/<str:posts>/comments/', comments, name='comments')
 ]

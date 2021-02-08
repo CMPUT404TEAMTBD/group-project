@@ -1,10 +1,10 @@
 from django.contrib.auth.models import User, Group
-from .models import Author, Post, Follow
+from .models import Author, Post, Follow, Comment
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.response import Response
-from quickstart.serializers import UserSerializer, GroupSerializer, AuthorSerializer, PostSerializer, FollowSerializer
+from quickstart.serializers import UserSerializer, GroupSerializer, AuthorSerializer, PostSerializer, FollowSerializer, CommentSerializer
 from .mixins import MultipleFieldLookupMixin
 
 
@@ -43,6 +43,25 @@ class PostViewSet(viewsets.ModelViewSet):
     """
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    lookup_field = '_id'
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows comments to be viewed or edited.
+    """
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    lookup_field = '_id'
+
+    def list(self, request, author, posts):
+        try:
+            queryset = Comment.objects.filter(postId=posts)
+            serializer = CommentSerializer(queryset, many=True)
+        except Comment.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.data)
     lookup_field = "_id"
 
 
