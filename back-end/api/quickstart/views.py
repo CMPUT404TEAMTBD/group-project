@@ -53,18 +53,14 @@ class FollowersListViewSet(viewsets.ModelViewSet):
     def list(self, request, receiver):
         followers = Follow.objects.filter(receiver=receiver)
 
+        serializer = None
         sender_ids = [f.sender for f in followers]
-
-        serialized = ''
-        for i, _id in enumerate(sender_ids):
-            sender = Author.objects.get(_id=_id)
-            serialized += f'{AuthorSerializer(sender).data}'
-            if i != len(sender_ids) -1:
-                serialized += ','
+        senders = Author.objects.filter(_id__in=sender_ids)
+        serializer = AuthorSerializer(senders, many=True)
 
         return Response({
             'type': 'followers',
-            'items': f'[{serialized}]'
+            'items': serializer.data
         })
 
 
