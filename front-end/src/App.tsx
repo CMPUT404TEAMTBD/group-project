@@ -1,24 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Container } from 'reactstrap';
+import AppNavBar from './components/AppNavBar';
+import HomePage from './pages/HomePage';
+import NotFoundPage from './pages/NotFoundPage';
+import AuthPage from './pages/AuthPage';
+import { LoggedInUserContext } from './contexts/LoggedInUserContext';
+import { UserLogin } from './types/UserLogin';
 
+
+/*
+* Snippet based on
+* https://github.com/ChrisChrisLoLo/CoursePlusPlus/blob/master/frontend/src/App.js
+* from ChrisChrisLoLo
+*/
 function App() {
+
+  const [loggedInUser,setLoggedInUser] = useState<UserLogin | undefined>(undefined);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <LoggedInUserContext.Provider value={loggedInUser}>
+      <BrowserRouter>
+        <div>
+          <AppNavBar/>
+            <Container fluid={true}>
+              <Switch>
+                <Route exact path="/" component={HomePage} />
+                <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} />} />
+                <Route component={NotFoundPage} />
+              </Switch>
+            </Container>
+          </div>
+        </BrowserRouter>
+        </LoggedInUserContext.Provider>
     </div>
   );
 }
