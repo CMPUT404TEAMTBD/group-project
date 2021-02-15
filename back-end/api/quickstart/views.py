@@ -40,8 +40,8 @@ class PostListViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows posts to be viewed or edited.
     """
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
     lookup_field = '_id'
 
     def list(self, request, author):
