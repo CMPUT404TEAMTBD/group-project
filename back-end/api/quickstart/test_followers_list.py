@@ -15,7 +15,7 @@ def get_test_follow_fields():
   }
 
 class GetFollowers(TestCase):
-  """Tests for getting all followers of an author at endpoint /author/{RECEIVER_ID}/followers/."""
+  """Tests for getting all followers of an author at endpoint /api/author/{RECEIVER_ID}/followers/."""
   def setUp(self):
     self.senders = []
     for i in range(2):
@@ -34,7 +34,7 @@ class GetFollowers(TestCase):
         )
 
   def test_get_all_followers(self):
-    response = client.get(f'/author/receiverUrl/followers/')
+    response = client.get(f'/api/author/receiverUrl/followers/')
     self.assertEqual(response.status_code, status.HTTP_200_OK)
     self.assertEqual(response.data['type'], 'followers')
 
