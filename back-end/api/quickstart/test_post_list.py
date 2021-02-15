@@ -13,8 +13,8 @@ def get_test_post_fields(i, author="testauthorid"):
     '_id': i,
     'title': f'testpost{i}',
     'description': f'i am test post {i}',
-    'source': 'source post id',
-    'origin': 'origin post id',
+    'source': f'source post id{i}',
+    'origin': f'origin post id{i}',
     'visibility': 'Public',
     'unlisted': True,
     'isPrivateToFriends': True,
@@ -41,11 +41,11 @@ class GetPosts(TestCase):
       **get_test_post_fields(3, "otherauthor")
     )
 
-  def get_all_posts(self):
+  def test_get_all_posts(self):
     response = client.get(f'/api/author/{self.post1.author}/posts/')
 
-    comments = Post.objects.filter(postId=self.post1.postId)
-    serializer = PostSerializer(comments, many=True)
+    posts = Post.objects.filter(author=self.post1.author)
+    serializer = PostSerializer(posts, many=True)
 
     self.assertEqual(response.data, serializer.data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)

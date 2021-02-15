@@ -36,6 +36,7 @@ class AuthorViewSet(viewsets.ModelViewSet):
     # https://stackoverflow.com/questions/56431755/django-rest-framework-urls-without-pk
     lookup_field = '_id'
 
+
 class PostListViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows posts to be viewed or edited.

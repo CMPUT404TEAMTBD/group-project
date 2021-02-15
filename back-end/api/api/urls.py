@@ -55,7 +55,7 @@ urlpatterns = [
     path('api/rest-auth/registration/', include('rest_auth.registration.urls')),
     path('api/admin/', admin.site.urls),
     path('api/author/<str:_id>/', author, name='author'),
-    path('api/author/<str:author>/posts/', posts, name='posts-list'),
+    path('api/author/<str:author>/posts/', posts_list, name='posts-list'),
     path('api/author/<str:author>/posts/<str:_id>/', posts, name='posts'),
     path('api/author/<str:receiver>/followers/', followers_list, name='followers-list'),
     path('api/author/<str:receiver>/followers/<str:sender>/', followers, name='followers'),
