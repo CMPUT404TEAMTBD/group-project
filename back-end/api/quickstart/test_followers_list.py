@@ -15,7 +15,7 @@ def get_test_follow_fields():
   }
 
 class GetFollowers(TestCase):
-  """Tests for getting all followers of an author at endpoint /author/{RECEIVER_ID}/followers/."""
+  """Tests for getting all followers of an author at endpoint /api/author/{RECEIVER_ID}/followers/."""
   def setUp(self):
     self.senders = []
     for i in range(2):
