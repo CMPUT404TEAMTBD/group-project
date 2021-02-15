@@ -36,6 +36,24 @@ class AuthorViewSet(viewsets.ModelViewSet):
     # https://stackoverflow.com/questions/56431755/django-rest-framework-urls-without-pk
     lookup_field = '_id'
 
+class PostListViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows posts to be viewed or edited.
+    """
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    lookup_field = '_id'
+
+    def list(self, request, author):
+        try:
+            # TODO: Set up pagination: https://www.django-rest-framework.org/api-guide/pagination/
+            queryset = Post.objects.filter(author=author)
+            serializer = PostSerializer(queryset, many=True)
+        except Post.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.data)
+
 
 class PostViewSet(viewsets.ModelViewSet):
     """
@@ -62,7 +80,6 @@ class CommentViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(serializer.data)
-    lookup_field = "_id"
 
 
 class FollowersListViewSet(viewsets.ModelViewSet):
