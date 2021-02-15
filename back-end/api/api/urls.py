@@ -28,6 +28,10 @@ posts = views.PostViewSet.as_view({
     'put': 'create'
 })
 
+posts_list = views.PostListViewSet.as_view({
+    'get': 'list'
+})
+
 comments = views.CommentViewSet.as_view({
     'get': 'list',
     'post': 'create'
@@ -51,6 +55,7 @@ urlpatterns = [
     path('api/rest-auth/registration/', include('rest_auth.registration.urls')),
     path('api/admin/', admin.site.urls),
     path('api/author/<str:_id>/', author, name='author'),
+    path('api/author/<str:author>/posts/', posts_list, name='posts-list'),
     path('api/author/<str:author>/posts/<str:_id>/', posts, name='posts'),
     path('api/author/<str:receiver>/followers/', followers_list, name='followers-list'),
     path('api/author/<str:receiver>/followers/<str:sender>/', followers, name='followers'),
