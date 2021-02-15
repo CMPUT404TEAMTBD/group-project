@@ -1,4 +1,4 @@
-"""Tests for the /author/{AUTHOR_ID} endpoint. 
+"""Tests for the /api/author/{AUTHOR_ID} endpoint.
 Referenced https://realpython.com/test-driven-development-of-a-django-restful-api/"""
 import json
 from rest_framework import status
@@ -18,12 +18,12 @@ def get_test_author_fields():
   }
 
 class GetAuthorById(TestCase):
-  """Tests for getting a single Author by their ID at endpoint /author/{AUTHOR_ID}/."""
+  """Tests for getting a single Author by their ID at endpoint /api/author/{AUTHOR_ID}/."""
   def setUp(self):
     self.john = Author.objects.create(**get_test_author_fields())
 
   def test_get_valid_author(self):
-    response = client.get(f'/author/{self.john._id}/')
+    response = client.get(f'/api/author/{self.john._id}/')
     author = Author.objects.get(_id=self.john._id)
     serializer = AuthorSerializer(author)
     self.assertEqual(response.data, serializer.data)
@@ -35,7 +35,7 @@ class GetAuthorById(TestCase):
 
 
 class UpdateAuthorById(TestCase):
-  """Tests for updating a single Author by POST'ing to endpoint /author/{AUTHOR_ID}/."""
+  """Tests for updating a single Author by POST'ing to endpoint /api/author/{AUTHOR_ID}/."""
   def setUp(self):
     self.john = Author.objects.create(**get_test_author_fields())
 
@@ -49,7 +49,7 @@ class UpdateAuthorById(TestCase):
 
   def test_update_author(self):
     response = client.post(
-      f'/author/{self.john._id}/',
+      f'/api/author/{self.john._id}/',
       data=json.dumps(self.payload),
       content_type='application/json'
     )
@@ -66,7 +66,7 @@ class UpdateAuthorById(TestCase):
 
   def test_update_invalid_author(self):
     response = client.post(
-      '/author/invalidId/',
+      '/api/author/invalidId/',
       data=json.dumps(self.payload),
       content_type='application/json'
     )

@@ -34,7 +34,7 @@ class GetFollowers(TestCase):
         )
 
   def test_get_all_followers(self):
-    response = client.get(f'/author/receiverUrl/followers/')
+    response = client.get(f'/api/author/receiverUrl/followers/')
     self.assertEqual(response.status_code, status.HTTP_200_OK)
     self.assertEqual(response.data['type'], 'followers')
 
