@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -7,9 +8,9 @@ LONG_CHAR_LENGTH = 128
 
 # Create your models here.
 class Author(models.Model):
-  # TODO: uncomment this when we want to use built in User model behaviour (probably for authorization)
-  # user = models.OneToOneField(User,on_delete=models.CASCADE) 
-  _id = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
+  # TODO: Null and blank for quicker testing purposes
+  user = models.OneToOneField(User,on_delete=models.CASCADE,null=True, blank=True)
+  _id = models.CharField(primary_key=True, max_length=LONG_CHAR_LENGTH, unique=True)
   _type = 'author'
   displayName = models.CharField(max_length=SHORT_CHAR_LENGTH)
   url = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
