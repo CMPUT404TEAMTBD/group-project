@@ -7,6 +7,11 @@ from .models import Author
 # This will auto-create an author when needed
 @receiver(user_signed_up)
 def after_user_signed_up(request, user, **kwargs):
-    #TODO: Make this url a uuid
-    url = user.id
+    """
+    After a user has signed up, an author is automatically
+    created with the appropriate id containing a UUID
+    Get absolute URI: https://stackoverflow.com/a/10119243
+    """
+    hex_uuid = str(uuid.uuid4().hex)
+    url = str(request.build_absolute_uri('/')) + "author/" + hex_uuid
     author = Author.objects.create(user=user,_id=url,url=url,displayName=user.username,github=user.username)
