@@ -11,6 +11,7 @@ router.register(r'posts', views.PostViewSet)
 router.register(r'comments', views.CommentViewSet)
 router.register(r'followers', views.FollowersViewSet)
 router.register(r'likes', views.LikesPostViewSet)
+# No need to register LikesCommentViewSet since the LikesPostViewSet shows the same objects.
 
 # Manually bind viewsets instead of using the router so that we can use POST for updates.
 # Also allows us to be more flexible with our URL endpoints.

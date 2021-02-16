@@ -24,7 +24,7 @@ class GetLikesForComment(TestCase):
 
     self.likes = [self.like1, self.like2]
 
-  def test_get_likes_for_post(self):
+  def test_get_likes_for_comment(self):
     response = client.get(f'/api/author/authorId/posts/postId/comments/{self.test_comment_id}/likes')
 
     likes = Like.objects.filter(_object=self.test_comment_id)
