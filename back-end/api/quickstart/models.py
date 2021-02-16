@@ -64,7 +64,7 @@ class Comment(models.Model):
   published = models.TimeField(default=timezone.now)
 
   def save(self, *args, **kwargs):
-    cuuid = str(uuid.uuid4())
+    cuuid = str(uuid.uuid4().hex)
     # TODO: change this if postId is not the full url to the post
     self._id = f"{self.postId}/comments/{cuuid}"
     super().save(*args, **kwargs)
