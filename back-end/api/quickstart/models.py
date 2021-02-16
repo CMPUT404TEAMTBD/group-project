@@ -23,7 +23,7 @@ class Post(models.Model):
     PUBLIC = 'Public'
     FRIENDS = 'Friends'
 
-  _id = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
+  _id = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True, default=None)
   _type = 'post'
   title = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
   description = models.TextField()
@@ -45,6 +45,15 @@ class Post(models.Model):
   # list of urls
   comments = models.JSONField()
 
+  def save(self, *args, **kwargs):
+    # Overriding save()
+    # https://stackoverflow.com/a/62588993
+    if not self._id:
+        self._id = str(uuid.uuid4().hex)
+    # assuming self.author is the authenticated user's corresponding author id
+    self._id = f"{self.author}/posts/{self._id}"
+    super().save(*args, **kwargs)
+
 class Comment(models.Model):
   _id = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
   _type = 'comment'
@@ -53,6 +62,12 @@ class Comment(models.Model):
   comment = models.TextField()
   contentType = models.CharField(max_length=LONG_CHAR_LENGTH)
   published = models.TimeField(default=timezone.now)
+
+  def save(self, *args, **kwargs):
+    cuuid = str(uuid.uuid4())
+    # TODO: change this if postId is not the full url to the post
+    self._id = f"{self.postId}/comments/{cuuid}"
+    super().save(*args, **kwargs)
 
 class Follow(models.Model):
   receiver = models.CharField(max_length=LONG_CHAR_LENGTH)
