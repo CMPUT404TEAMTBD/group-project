@@ -3,7 +3,7 @@ from rest_framework import status
 from django.test import TestCase, Client
 from .models import Comment
 from .serializers import CommentSerializer
-from .helpers_test import get_test_comment_fields
+from .helper_test import get_test_comment_fields
 
 client = Client()
 

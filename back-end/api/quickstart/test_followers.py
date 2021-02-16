@@ -3,8 +3,7 @@ from rest_framework import status
 from django.test import TestCase, Client
 from .models import Follow
 from .serializers import FollowSerializer
-import datetime
-from .helpers_test import get_test_follow_fields
+from .helper_test import get_test_follow_fields
 
 client = Client()
 

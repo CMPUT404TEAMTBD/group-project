@@ -3,7 +3,7 @@ from rest_framework import status
 from django.test import TestCase, Client
 from .models import Like
 from .serializers import LikeSerializer
-from .helpers_test import get_test_like_post_fields
+from .helper_test import get_test_like_post_fields
 
 client = Client()
 

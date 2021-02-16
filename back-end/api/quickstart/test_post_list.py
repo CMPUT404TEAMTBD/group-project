@@ -4,8 +4,7 @@ from rest_framework import status
 from django.test import TestCase, Client
 from .models import Post
 from .serializers import PostSerializer
-import datetime
-from .helpers_test import get_test_post_fields
+from .helper_test import get_test_post_fields
 
 client = Client()
 

@@ -5,8 +5,7 @@ from rest_framework import status
 from django.test import TestCase, Client
 from .models import Author
 from .serializers import AuthorSerializer
-import datetime
-from .helpers_test import get_test_author_fields
+from .helper_test import get_test_author_fields
 
 client = Client()
 
