@@ -44,4 +44,4 @@ class FollowSerializer(serializers.HyperlinkedModelSerializer):
 class LikeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Like
-        fields = '__all__'
+        fields = ['context', 'summary', '_type', 'author', '_object']

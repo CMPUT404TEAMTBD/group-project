@@ -113,11 +113,19 @@ class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
 
 class LikesPostViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows getting likes for a given post.
+    API endpoint that allows getting likes for a given post or comment.
     """
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
-    lookup_field = ['post']
+
+    def retrieve(self, request, author, post):
+        likes = Like.objects.filter(_object=post)
+        serializer = LikeSerializer(likes, many=True)
+
+        return Response({
+            'type': 'likes',
+            'items': serializer.data
+        })
 
 
 class LikesCommentViewSet(viewsets.ModelViewSet):
@@ -126,4 +134,12 @@ class LikesCommentViewSet(viewsets.ModelViewSet):
     """
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
-    lookup_field = ['comment']
+
+    def retrieve(self, request, author, post, comment):
+        likes = Like.objects.filter(_object=comment)
+        serializer = LikeSerializer(likes, many=True)
+
+        return Response({
+            'type': 'likes',
+            'items': serializer.data
+        })

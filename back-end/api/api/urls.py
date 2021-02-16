@@ -9,13 +9,12 @@ router.register(r'groups', views.GroupViewSet)
 router.register(r'authors', views.AuthorViewSet)
 router.register(r'posts', views.PostViewSet)
 router.register(r'followers', views.FollowersViewSet)
-# router.register(r'likes', views.LikesPostViewSet)
+router.register(r'likes', views.LikesPostViewSet)
+# Omitted likes object - 
 
 # Manually bind viewsets instead of using the router so that we can use POST for updates.
 # Also allows us to be more flexible with our URL endpoints.
 # Referenced Lucas Weyne's code at https://stackoverflow.com/a/53991768
-
-# api/author/<str:_id>/
 author = views.AuthorViewSet.as_view({
     'get': 'retrieve',
     'post': 'update',
@@ -50,12 +49,14 @@ followers = views.FollowersViewSet.as_view({
     'get': 'retrieve'
 })
 
+# Should be 'get': 'list', but leave it as retrieve so that the debug site still works.
 likes_post = views.LikesPostViewSet.as_view({
-    'get': 'list'
+    'get': 'retrieve'
 })
 
+# Should be 'get': 'list', but leave it as retrieve so that the debug site still works.
 likes_comment = views.LikesCommentViewSet.as_view({
-    'get': 'list'
+    'get': 'retrieve'
 })
 
 
