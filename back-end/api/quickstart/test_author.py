@@ -6,16 +6,9 @@ from django.test import TestCase, Client
 from .models import Author
 from .serializers import AuthorSerializer
 import datetime
+from .helpers_test import get_test_author_fields
 
 client = Client()
-
-def get_test_author_fields():
-  return {
-    '_id': 'testId',
-    'displayName': 'John Doe',
-    'url': 'testUrl',
-    'github': 'testGithub'
-  }
 
 class GetAuthorById(TestCase):
   """Tests for getting a single Author by their ID at endpoint /api/author/{AUTHOR_ID}/."""
