@@ -38,6 +38,25 @@ class AuthorViewSet(viewsets.ModelViewSet):
     lookup_field = '_id'
 
 
+class PostListViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows posts to be viewed or edited.
+    """
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    lookup_field = '_id'
+
+    def list(self, request, author):
+        try:
+            # TODO: Set up pagination: https://www.django-rest-framework.org/api-guide/pagination/
+            queryset = Post.objects.filter(author=author)
+            serializer = PostSerializer(queryset, many=True)
+        except Post.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.data)
+
+
 class PostViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows post to be viewed or edited.

@@ -1,4 +1,4 @@
-"""Tests for the /author/{AUTHOR_ID}/posts/{POST_ID}/ endpoint. 
+"""Tests for the /api/author/{AUTHOR_ID}/posts/{POST_ID}/ endpoint.
 Referenced https://realpython.com/test-driven-development-of-a-django-restful-api/"""
 import json
 from rest_framework import status
@@ -31,21 +31,21 @@ def get_test_post_fields():
   }
 
 class GetPostById(TestCase):
-  """Tests for getting a single Post by their ID at endpoint /author/{AUTHOR_ID}/posts/{POST_ID}/."""
+  """Tests for getting a single Post by their ID at endpoint /api/author/{AUTHOR_ID}/posts/{POST_ID}/."""
   def setUp(self):
     self.post = Post.objects.create(
       **get_test_post_fields()
     )
 
   def test_get_valid_post(self):
-    response = client.get(f'/author/{self.post.author}/posts/{self.post._id}/')
+    response = client.get(f'/api/author/{self.post.author}/posts/{self.post._id}/')
     post = Post.objects.get(_id=self.post._id)
     serializer = PostSerializer(post)
     self.assertEqual(response.data, serializer.data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
   def test_get_invalid_post(self):
-    response = client.get(f'/author/{self.post.author}/posts/invalidId/')
+    response = client.get(f'/api/author/{self.post.author}/posts/invalidId/')
     self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
@@ -78,7 +78,7 @@ class UpdatePostById(TestCase):
 
   def test_update_post(self):
     response = client.post(
-      f'/author/{self.post.author}/posts/{self.post._id}/',
+      f'/api/author/{self.post.author}/posts/{self.post._id}/',
       data=json.dumps(self.payload),
       content_type='application/json'
     )
@@ -95,7 +95,7 @@ class UpdatePostById(TestCase):
 
   def test_update_invalid_post(self):
     response = client.post(
-      f'/author/{self.post.author}/posts/invalidId/',
+      f'/api/author/{self.post.author}/posts/invalidId/',
       data=json.dumps(self.payload),
       content_type='application/json'
     )
@@ -108,11 +108,11 @@ class DeletePostById(TestCase):
     self.post = Post.objects.create(**get_test_post_fields())
 
   def test_delete_valid_post(self):
-    response = client.delete(f'/author/{self.post.author}/posts/{self.post._id}/')
+    response = client.delete(f'/api/author/{self.post.author}/posts/{self.post._id}/')
     self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
   def test_delete_invalid_post(self):
-    response = client.delete(f'/author/{self.post.author}/posts/invalidId/')
+    response = client.delete(f'/api/author/{self.post.author}/posts/invalidId/')
     self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
@@ -142,7 +142,7 @@ class CreatePostById(TestCase):
 
   def test_create_post(self):
     response = client.put(
-      f'/author/{self.payload["author"]}/posts/{self.payload["_id"]}/',
+      f'/api/author/{self.payload["author"]}/posts/{self.payload["_id"]}/',
       data=json.dumps(self.payload),
       content_type='application/json'
     )

@@ -1,9 +1,8 @@
 import json
 from rest_framework import status
 from django.test import TestCase, Client
-from .models import Author, Post, Comment
-from .serializers import AuthorSerializer, PostSerializer, CommentSerializer
-import datetime
+from .models import Comment
+from .serializers import CommentSerializer
 
 client = Client()
 
@@ -29,7 +28,7 @@ class GetAllCommentsTest(TestCase):
 
 
   def test_get_all_comments(self):
-    response = client.get(f'/author/testauthor/posts/{self.comment1.postId}/comments/')
+    response = client.get(f'/api/author/testauthor/posts/{self.comment1.postId}/comments/')
 
     comments = Comment.objects.filter(postId=self.comment1.postId)
     serializer = CommentSerializer(comments, many=True)
@@ -39,7 +38,7 @@ class GetAllCommentsTest(TestCase):
 
 
   def test_get_other_comments(self):
-    response = client.get(f'/author/testauthor/posts/{self.comment3.postId}/comments/')
+    response = client.get(f'/api/author/testauthor/posts/{self.comment3.postId}/comments/')
 
     comments = Comment.objects.filter(postId=self.comment3.postId)
     serializer = CommentSerializer(comments, many=True)
@@ -56,7 +55,7 @@ class CreateCommentTest(TestCase):
 
   def test_create_comment(self):
     response = client.post(
-      f'/author/testauthor/posts/{self.payload["postId"]}/comments/',
+      f'/api/author/testauthor/posts/{self.payload["postId"]}/comments/',
       data=json.dumps(self.payload),
       content_type='application/json'
     )
