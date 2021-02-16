@@ -5,30 +5,9 @@ from rest_framework import status
 from django.test import TestCase, Client
 from .models import Author, Post
 from .serializers import AuthorSerializer, PostSerializer
-import datetime
+from .helper_test import get_test_post_fields
 
 client = Client()
-
-def get_test_post_fields():
-  return {
-    '_id': '123',
-    'title': 'testpost',
-    'description': 'i am a test post',
-    'source': 'source post id',
-    'origin': 'origin post id',
-    'visibility': 'Public',
-    'unlisted': True,
-    'isPrivateToFriends': True,
-    'author': 'testId',
-    'contentType': 'text/plain',
-    'content': 'Hello, I am a test post',
-    'categories': '["Testing"]',
-    'published': datetime.datetime.now(),
-    'count': 5,
-    'pageSize': 20,
-    'commentLink': 'link to comments',
-    'comments': '{ "text": "nice test" }'
-  }
 
 class GetPostById(TestCase):
   """Tests for getting a single Post by their ID at endpoint /api/author/{AUTHOR_ID}/posts/{POST_ID}/."""

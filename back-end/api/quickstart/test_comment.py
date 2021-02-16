@@ -3,20 +3,9 @@ from rest_framework import status
 from django.test import TestCase, Client
 from .models import Comment
 from .serializers import CommentSerializer
+from .helper_test import get_test_comment_fields
 
 client = Client()
-
-
-def get_test_comment_fields(i, postid="testpostid"):
-  return {
-    '_id': f'testid{i}',
-    'postId': postid,
-    'author': f'testcommenter{i}',
-    'comment': 'i am a comment',
-    'contentType': 'text/plain',
-    'published': '03:25:53.827044',
-  }
-
 
 class GetAllCommentsTest(TestCase):
   """ Test module for GET all comments for a post API """

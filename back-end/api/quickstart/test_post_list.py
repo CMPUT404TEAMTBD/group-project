@@ -4,30 +4,9 @@ from rest_framework import status
 from django.test import TestCase, Client
 from .models import Post
 from .serializers import PostSerializer
-import datetime
+from .helper_test import get_test_post_fields
 
 client = Client()
-
-def get_test_post_fields(i, author="testauthorid"):
-  return {
-    '_id': i,
-    'title': f'testpost{i}',
-    'description': f'i am test post {i}',
-    'source': f'source post id{i}',
-    'origin': f'origin post id{i}',
-    'visibility': 'Public',
-    'unlisted': True,
-    'isPrivateToFriends': True,
-    'author': author,
-    'contentType': 'text/plain',
-    'content': 'Hello, I am a test post',
-    'categories': '["Testing"]',
-    'published': datetime.datetime.now(),
-    'count': 5,
-    'pageSize': 20,
-    'commentLink': 'link to comments',
-    'comments': '{ "text": "nice test" }'
-  }
 
 class GetPosts(TestCase):
   def setUp(self):

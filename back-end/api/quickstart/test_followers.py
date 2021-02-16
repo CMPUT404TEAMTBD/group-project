@@ -3,16 +3,9 @@ from rest_framework import status
 from django.test import TestCase, Client
 from .models import Follow
 from .serializers import FollowSerializer
-import datetime
+from .helper_test import get_test_follow_fields
 
 client = Client()
-
-def get_test_follow_fields():
-  return {
-    'receiver': 'receiverUrl',
-    'sender': 'senderUrl',
-    'approved': False
-  }
 
 class GetFollow(TestCase):
   """Tests for getting a single Follow at endpoint /api/author/{RECEIVER_ID}/followers/{SENDER_ID}/."""
