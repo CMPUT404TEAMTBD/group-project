@@ -8,7 +8,10 @@ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'authors', views.AuthorViewSet)
 router.register(r'posts', views.PostViewSet)
+router.register(r'comments', views.CommentViewSet)
 router.register(r'followers', views.FollowersViewSet)
+router.register(r'likes', views.LikesPostViewSet)
+# No need to register LikesCommentViewSet since the LikesPostViewSet shows the same objects.
 
 # Manually bind viewsets instead of using the router so that we can use POST for updates.
 # Also allows us to be more flexible with our URL endpoints.
@@ -32,8 +35,9 @@ posts_list = views.PostListViewSet.as_view({
     'get': 'list'
 })
 
+# Should be 'get': 'list', but leave it as retrieve so that the debug site still works.
 comments = views.CommentViewSet.as_view({
-    'get': 'list',
+    'get': 'retrieve',
     'post': 'create'
 })
 
@@ -47,6 +51,17 @@ followers = views.FollowersViewSet.as_view({
     'get': 'retrieve'
 })
 
+# Should be 'get': 'list', but leave it as retrieve so that the debug site still works.
+likes_post = views.LikesPostViewSet.as_view({
+    'get': 'retrieve'
+})
+
+# Should be 'get': 'list', but leave it as retrieve so that the debug site still works.
+likes_comment = views.LikesCommentViewSet.as_view({
+    'get': 'retrieve'
+})
+
+
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
@@ -59,5 +74,7 @@ urlpatterns = [
     path('api/author/<str:author>/posts/<str:_id>/', posts, name='posts'),
     path('api/author/<str:receiver>/followers/', followers_list, name='followers-list'),
     path('api/author/<str:receiver>/followers/<str:sender>/', followers, name='followers'),
-    path('api/author/<str:author>/posts/<str:posts>/comments/', comments, name='comments')
+    path('api/author/<str:author>/posts/<str:post>/comments/', comments, name='comments'),
+    path('api/author/<str:author>/posts/<str:post>/likes/', likes_post, name='likes-post'),
+    path('api/author/<str:author>/posts/<str:post>/comments/<str:comment>/likes', likes_comment, name='likes-comment')
 ]

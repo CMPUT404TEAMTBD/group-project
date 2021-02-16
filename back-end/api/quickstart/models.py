@@ -54,6 +54,7 @@ class Post(models.Model):
     self._id = f"{self.author}/posts/{self._id}"
     super().save(*args, **kwargs)
 
+
 class Comment(models.Model):
   _id = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
   _type = 'comment'
@@ -69,7 +70,16 @@ class Comment(models.Model):
     self._id = f"{self.postId}/comments/{cuuid}"
     super().save(*args, **kwargs)
 
+
 class Follow(models.Model):
   receiver = models.CharField(max_length=LONG_CHAR_LENGTH)
   sender = models.CharField(max_length=LONG_CHAR_LENGTH)
   approved = models.BooleanField()
+
+
+class Like(models.Model):
+  context = models.CharField(max_length=LONG_CHAR_LENGTH)
+  summary = models.CharField(max_length=LONG_CHAR_LENGTH)
+  _type = "like" 
+  author = models.CharField(max_length=LONG_CHAR_LENGTH)
+  _object = models.CharField(max_length=LONG_CHAR_LENGTH)
