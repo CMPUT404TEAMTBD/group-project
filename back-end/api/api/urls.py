@@ -8,6 +8,7 @@ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'authors', views.AuthorViewSet)
 router.register(r'posts', views.PostViewSet)
+router.register(r'comments', views.CommentViewSet)
 router.register(r'followers', views.FollowersViewSet)
 router.register(r'likes', views.LikesPostViewSet)
 
@@ -33,8 +34,9 @@ posts_list = views.PostListViewSet.as_view({
     'get': 'list'
 })
 
+# Should be 'get': 'list', but leave it as retrieve so that the debug site still works.
 comments = views.CommentViewSet.as_view({
-    'get': 'list',
+    'get': 'retrieve',
     'post': 'create'
 })
 

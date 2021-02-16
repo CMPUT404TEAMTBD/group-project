@@ -74,7 +74,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     lookup_field = '_id'
 
-    def list(self, request, author, post):
+    def retrieve(self, request, author, post):
         try:
             queryset = Comment.objects.filter(postId=post)
             serializer = CommentSerializer(queryset, many=True)
