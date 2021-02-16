@@ -12,9 +12,7 @@ def after_user_signed_up(request, user, **kwargs):
     created with the appropriate id containing a UUID
     Get absolute URI: https://stackoverflow.com/a/10119243
     """
-    # DO NOT SUBMIT, NEEDS TESTING
     hex_uuid = str(uuid.uuid4().hex)
     url = str(request.build_absolute_uri('/')) + "author/" + hex_uuid
     author = Author.objects.create(user=user, _id=url,url=url, displayName=user.username, github=user.username)
-    # create an empty inbox for the new author
-    inbox = Inbox.objects.create(author=author._id)
+    # TODO: create an empty inbox for the new author
