@@ -2,7 +2,7 @@ import uuid
 
 from allauth.account.signals import user_signed_up
 from django.dispatch import receiver
-from .models import Author
+from .models import Author, Inbox
 
 # This will auto-create an author when needed
 @receiver(user_signed_up)
@@ -14,4 +14,5 @@ def after_user_signed_up(request, user, **kwargs):
     """
     hex_uuid = str(uuid.uuid4().hex)
     url = str(request.build_absolute_uri('/')) + "author/" + hex_uuid
-    author = Author.objects.create(user=user,_id=url,url=url,displayName=user.username,github=user.username)
+    author = Author.objects.create(user=user, _id=url,url=url, displayName=user.username, github=user.username)
+    # TODO: create an empty inbox for the new author

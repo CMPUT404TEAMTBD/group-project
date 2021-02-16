@@ -1,10 +1,10 @@
 from django.contrib.auth.models import User, Group
-from .models import Author, Post, Follow, Comment, Like
+from .models import Author, Post, Follow, Comment, Like, Inbox
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.response import Response
-from quickstart.serializers import UserSerializer, GroupSerializer, AuthorSerializer, PostSerializer, FollowSerializer, CommentSerializer, LikeSerializer
+from quickstart.serializers import UserSerializer, GroupSerializer, AuthorSerializer, PostSerializer, FollowSerializer, CommentSerializer, LikeSerializer, InboxSerializer
 from .mixins import MultipleFieldLookupMixin
 
 
@@ -145,3 +145,27 @@ class LikesCommentViewSet(viewsets.ModelViewSet):
             'type': 'likes',
             'items': serializer.data
         })
+
+
+class InboxViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows getting inbox items for an author
+    """
+    queryset = Inbox.objects.all()
+    serializer_class = InboxSerializer
+    lookup_field = 'author'
+        
+    def update(self, request, author):
+        inbox = Inbox.objects.get(author=author)
+        inbox.items.append(request.data)
+        inbox.save()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def destroy(self, request, author):
+        inbox = Inbox.objects.get(author=author)
+        inbox.items.clear()
+        inbox.save()    
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
