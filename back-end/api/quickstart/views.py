@@ -118,6 +118,7 @@ class LikesPostViewSet(viewsets.ModelViewSet):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
 
+    # TODO: Author is currently being ignored. Do we need to use it?
     def retrieve(self, request, author, post):
         likes = Like.objects.filter(_object=post)
         serializer = LikeSerializer(likes, many=True)
@@ -135,6 +136,7 @@ class LikesCommentViewSet(viewsets.ModelViewSet):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
 
+    # TODO: Author+Post is currently being ignored. Do we need to use it?
     def retrieve(self, request, author, post, comment):
         likes = Like.objects.filter(_object=comment)
         serializer = LikeSerializer(likes, many=True)
