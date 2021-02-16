@@ -162,7 +162,7 @@ class InboxViewSet(viewsets.ModelViewSet):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    def clear(self, request, author):
+    def destroy(self, request, author):
         inbox = Inbox.objects.get(author=author)
         inbox.items.clear()
         inbox.save()    

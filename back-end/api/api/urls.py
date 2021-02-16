@@ -65,7 +65,7 @@ likes_comment = views.LikesCommentViewSet.as_view({
 inbox = views.InboxViewSet.as_view({
     'get': 'retrieve',
     'post': 'update',
-    'delete': 'clear'
+    'delete': 'destroy'
 })
 
 # Wire up our API using automatic URL routing.
