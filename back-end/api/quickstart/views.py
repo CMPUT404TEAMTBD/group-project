@@ -1,10 +1,10 @@
 from django.contrib.auth.models import User, Group
-from .models import Author, Post, Follow, Comment
+from .models import Author, Post, Follow, Comment, Like
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.response import Response
-from quickstart.serializers import UserSerializer, GroupSerializer, AuthorSerializer, PostSerializer, FollowSerializer, CommentSerializer
+from quickstart.serializers import UserSerializer, GroupSerializer, AuthorSerializer, PostSerializer, FollowSerializer, CommentSerializer, LikeSerializer
 from .mixins import MultipleFieldLookupMixin
 
 
@@ -32,6 +32,7 @@ class AuthorViewSet(viewsets.ModelViewSet):
     """
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
+
     # Using lookup_field as search param
     # https://stackoverflow.com/questions/56431755/django-rest-framework-urls-without-pk
     lookup_field = '_id'
@@ -54,15 +55,14 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     lookup_field = '_id'
 
-    def list(self, request, author, posts):
+    def list(self, request, author, post):
         try:
-            queryset = Comment.objects.filter(postId=posts)
+            queryset = Comment.objects.filter(postId=post)
             serializer = CommentSerializer(queryset, many=True)
         except Comment.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(serializer.data)
-    lookup_field = "_id"
 
 
 class FollowersListViewSet(viewsets.ModelViewSet):
@@ -90,3 +90,21 @@ class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     queryset = Follow.objects.all()
     serializer_class = FollowSerializer
     lookup_fields = ['receiver', 'sender']
+
+
+class LikesPostViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows getting likes for a given post.
+    """
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+    lookup_field = ['post']
+
+
+class LikesCommentViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows getting likes for a given comment.
+    """
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+    lookup_field = ['comment']

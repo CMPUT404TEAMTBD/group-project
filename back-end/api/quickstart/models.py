@@ -44,6 +44,7 @@ class Post(models.Model):
   # list of urls
   comments = models.JSONField()
 
+
 class Comment(models.Model):
   _id = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
   _type = 'comment'
@@ -53,7 +54,16 @@ class Comment(models.Model):
   contentType = models.CharField(max_length=LONG_CHAR_LENGTH)
   published = models.TimeField(default=timezone.now)
 
+
 class Follow(models.Model):
   receiver = models.CharField(max_length=LONG_CHAR_LENGTH)
   sender = models.CharField(max_length=LONG_CHAR_LENGTH)
   approved = models.BooleanField()
+
+
+class Like(models.Model):
+  context = models.CharField(max_length=LONG_CHAR_LENGTH)
+  summary = models.CharField(max_length=LONG_CHAR_LENGTH)
+  _type = "like" 
+  author = models.CharField(max_length=LONG_CHAR_LENGTH)
+  _object = models.CharField(max_length=LONG_CHAR_LENGTH)
