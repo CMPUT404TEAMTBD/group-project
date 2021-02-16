@@ -10,7 +10,6 @@ router.register(r'authors', views.AuthorViewSet)
 router.register(r'posts', views.PostViewSet)
 router.register(r'followers', views.FollowersViewSet)
 router.register(r'likes', views.LikesPostViewSet)
-# Omitted likes object - 
 
 # Manually bind viewsets instead of using the router so that we can use POST for updates.
 # Also allows us to be more flexible with our URL endpoints.
