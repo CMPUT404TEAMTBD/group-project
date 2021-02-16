@@ -113,7 +113,7 @@ class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
 
 class LikesPostViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows getting likes for a given post or comment.
+    API endpoint that allows getting likes for a given post.
     """
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
