@@ -33,6 +33,6 @@ class GetLikesForComment(TestCase):
     self.assertEqual(response.status_code, status.HTTP_200_OK)
     self.assertEqual(response.data['type'], 'likes')
 
-    self.assertEqual(len(response.data['items']), 2)
+    self.assertEqual(len(response.data['items']), len(self.likes))
     for i in range(len(self.likes)):
       self.assertEqual(response.data['items'][i], LikeSerializer(self.likes[i]).data)
