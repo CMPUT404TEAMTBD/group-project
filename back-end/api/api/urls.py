@@ -12,7 +12,7 @@ router.register(r'public-posts', views.PublicPostListViewSet)
 router.register(r'comments', views.CommentViewSet)
 router.register(r'followers', views.FollowersViewSet)
 router.register(r'likes', views.LikesPostViewSet)
-router.register(r'liked', views.LikedPostsViewSet)
+router.register(r'liked', views.LikedViewSet)
 # No need to register LikesCommentViewSet since the LikesPostViewSet shows the same objects.
 router.register(r'inbox', views.InboxViewSet)
 
@@ -70,7 +70,7 @@ likes_comment = views.LikesCommentViewSet.as_view({
 
 
 #GET list what public things author_id liked
-liked = views.LikedPostsViewSet.as_view({
+liked = views.LikedViewSet.as_view({
     'get': 'list'
 })
 

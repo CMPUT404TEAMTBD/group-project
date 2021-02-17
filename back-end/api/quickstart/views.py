@@ -164,7 +164,7 @@ class LikesCommentViewSet(viewsets.ModelViewSet):
         })
 
 
-class LikedPostsViewSet(viewsets.ModelViewSet):
+class LikedViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows getting a list of public things author_id liked
     """
