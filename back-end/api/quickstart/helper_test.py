@@ -65,7 +65,7 @@ def get_test_post_fields(i=1, author="testauthorid"):
 def get_test_liked_fields(author_id):
   return {
   'context': 'testContext',
-  'summary': 'you liked these posts',
+  'summary': 'you liked',
   'author': f'{author_id}',
   '_object': 'testobject'
 }

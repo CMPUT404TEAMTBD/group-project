@@ -63,7 +63,7 @@ likes_comment = views.LikesCommentViewSet.as_view({
 })
 
 #GET list what public things author_id liked
-liked_posts = views.LikedPostsViewSet.as_view({
+liked = views.LikedPostsViewSet.as_view({
     'get': 'list'
 })
 
@@ -85,5 +85,5 @@ urlpatterns = [
     path('api/author/<str:author>/posts/<str:post>/comments/', comments, name='comments'),
     path('api/author/<str:author>/posts/<str:post>/likes/', likes_post, name='likes-post'),
     path('api/author/<str:author>/posts/<str:post>/comments/<str:comment>/likes', likes_comment, name='likes-comment'),
-    path('api/author/<str:author>/liked/', liked_posts, name='liked-posts')
+    path('api/author/<str:author>/liked/', liked, name='liked')
 ]

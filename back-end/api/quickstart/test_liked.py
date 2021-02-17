@@ -8,7 +8,7 @@ from .helper_test import get_test_liked_fields
 client = Client()
 
 class GetLikedForAuthor(TestCase):
-  """Tests for getting all likes of a post at endpoint 'api/author/<str:author>/liked/'."""
+  """Tests for getting all things liked by an author '/api/author/<str:author>/liked/'."""
   def setUp(self):
     self.test_author_id = 1
     self.like1 = Like.objects.create(**get_test_liked_fields(author_id= self.test_author_id))
@@ -20,12 +20,12 @@ class GetLikedForAuthor(TestCase):
   def test_get_liked(self):
     response = client.get(f'/api/author/{self.test_author_id}/liked/')
 
-    print(response.data)
+   
     liked_posts = Like.objects.filter(author=self.test_author_id)
     serializer = LikeSerializer(liked_posts, many=True)
 
     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    self.assertEqual(response.data['type'], 'liked_posts')
+    self.assertEqual(response.data['type'], 'liked')
 
     self.assertEqual(len(response.data['items']), len(self.likes))
     for i in range(len(self.likes)):

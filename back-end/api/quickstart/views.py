@@ -154,11 +154,11 @@ class LikedPostsViewSet(viewsets.ModelViewSet):
     serializer_class = LikeSerializer
 
     def list(self, request, author):
-        liked_posts = Like.objects.filter(author=author)
-        serializer = LikeSerializer(liked_posts, many=True)
+        liked = Like.objects.filter(author=author)
+        serializer = LikeSerializer(liked, many=True)
 
         return Response({
-            'type': 'liked_posts',
+            'type': 'liked',
             'items': serializer.data
         })
 
