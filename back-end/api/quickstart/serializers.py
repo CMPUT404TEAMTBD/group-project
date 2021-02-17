@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User, Group
-from .models import Author, Post, Follow, Comment, Like
+from .models import Author, Post, Follow, Comment, Like, Inbox
 from rest_framework import serializers
 
 
@@ -45,3 +45,9 @@ class LikeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Like
         fields = ['context', 'summary', '_type', 'author', '_object']
+        
+
+class InboxSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Inbox
+        fields = ["_type", "author", "items"]

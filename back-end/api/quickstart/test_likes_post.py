@@ -3,24 +3,17 @@ from rest_framework import status
 from django.test import TestCase, Client
 from .models import Like
 from .serializers import LikeSerializer
+from .helper_test import get_test_like_post_fields
 
 client = Client()
-
-def get_test_like_fields(post_id):
-  return {
-    'context': 'testContext',
-    'summary': 'Someone likes your post',
-    'author': 'testAuthorUrl',
-    '_object': f'{post_id}',
-  }
 
 class GetLikesForPost(TestCase):
   """Tests for getting all likes of a post at endpoint api/author/<str:author>/posts/<str:post>/likes/."""
   def setUp(self):
     self.test_post_id = 1
-    self.like1 = Like.objects.create(**get_test_like_fields(post_id=self.test_post_id))
-    self.like2 = Like.objects.create(**get_test_like_fields(post_id=self.test_post_id))
-    self.like3 = Like.objects.create(**get_test_like_fields(post_id=2))
+    self.like1 = Like.objects.create(**get_test_like_post_fields(post_id=self.test_post_id))
+    self.like2 = Like.objects.create(**get_test_like_post_fields(post_id=self.test_post_id))
+    self.like3 = Like.objects.create(**get_test_like_post_fields(post_id=2))
 
     self.likes = [self.like1, self.like2]
 
