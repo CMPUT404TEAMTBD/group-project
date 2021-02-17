@@ -29,16 +29,23 @@ class GetInbox(TestCase):
 
 
 class PostInbox(TestCase):
-"""Tests for sending a post/follow/like to an inbox by POST'ing to /api/author/<str:author>/inbox/."""
+  """Tests for sending a post/follow/like to an inbox by POST'ing to /api/author/<str:author>/inbox/."""
   def setUp(self):
     self.inbox = Inbox.objects.create(author="testAuthorId")
 
   def test_send_post_to_inbox(self):
-    self.payload = get_test_follow_fields()
+    self.send_to_inbox(get_test_post_fields())
 
+  def test_send_follow_to_inbox(self):
+    self.send_to_inbox(get_test_follow_fields())
+
+  def test_send_like_to_inbox(self):
+    self.send_to_inbox(get_test_like_post_fields())
+
+  def send_to_inbox(self, payload):
     response = client.post(
       f'/api/author/{self.inbox.author}/inbox/',
-      data=json.dumps(self.payload),
+      data=json.dumps(payload),
       content_type='application/json'
     )
     
@@ -46,7 +53,7 @@ class PostInbox(TestCase):
     changed_inbox = Inbox.objects.get(author=self.inbox.author)
 
     self.assertEqual(len(changed_inbox.items), 1)
-    self.assertEqual(changed_inbox.items[0], self.payload)
+    self.assertEqual(changed_inbox.items[0], payload)
 
 
 class ClearInbox(TestCase):

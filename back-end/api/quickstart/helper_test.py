@@ -1,4 +1,5 @@
 import datetime
+from django.utils import timezone, dateformat
 
 def get_test_author_fields():
   return {
@@ -55,7 +56,7 @@ def get_test_post_fields(i=1, author="testauthorid"):
     'contentType': 'text/plain',
     'content': 'Hello, I am a test post',
     'categories': '["Testing"]',
-    'published': datetime.datetime.now(),
+    'published': '03:25:53.827044',
     'count': 5,
     'pageSize': 20,
     'commentLink': 'link to comments',
