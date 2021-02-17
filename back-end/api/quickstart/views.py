@@ -1,10 +1,10 @@
 from django.contrib.auth.models import User, Group
-from .models import Author, Post, Follow, Comment, Like
+from .models import Author, Post, Follow, Comment, Like, Inbox
 from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework import status
 from rest_framework.response import Response
-from quickstart.serializers import UserSerializer, GroupSerializer, AuthorSerializer, PostSerializer, FollowSerializer, CommentSerializer, LikeSerializer
+from quickstart.serializers import UserSerializer, GroupSerializer, AuthorSerializer, PostSerializer, FollowSerializer, CommentSerializer, LikeSerializer, InboxSerializer
 from .mixins import MultipleFieldLookupMixin
 
 
@@ -50,6 +50,23 @@ class PostListViewSet(viewsets.ModelViewSet):
         try:
             # TODO: Set up pagination: https://www.django-rest-framework.org/api-guide/pagination/
             queryset = Post.objects.filter(author=author)
+            serializer = PostSerializer(queryset, many=True)
+        except Post.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.data)
+class PublicPostListViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows posts to be viewed or edited.
+    """
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    lookup_field = '_id'
+
+    def list(self, request):
+        try:
+            # TODO: Set up pagination: https://www.django-rest-framework.org/api-guide/pagination/
+            queryset = Post.objects.filter(visibility='Public')
             serializer = PostSerializer(queryset, many=True)
         except Post.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
@@ -146,6 +163,7 @@ class LikesCommentViewSet(viewsets.ModelViewSet):
             'items': serializer.data
         })
 
+
 class LikedPostsViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows getting a list of public things author_id liked
@@ -154,11 +172,34 @@ class LikedPostsViewSet(viewsets.ModelViewSet):
     serializer_class = LikeSerializer
 
     def list(self, request, author):
-        liked_posts = Like.objects.filter(author=author)
-        serializer = LikeSerializer(liked_posts, many=True)
+        liked = Like.objects.filter(author=author)
+        serializer = LikeSerializer(liked, many=True)
 
         return Response({
-            'type': 'liked_posts',
+            'type': 'liked',
             'items': serializer.data
         })
+
+class InboxViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows getting inbox items for an author
+    """
+    queryset = Inbox.objects.all()
+    serializer_class = InboxSerializer
+    lookup_field = 'author'
+        
+    def update(self, request, author):
+        inbox = Inbox.objects.get(author=author)
+        inbox.items.append(request.data)
+        inbox.save()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def destroy(self, request, author):
+        inbox = Inbox.objects.get(author=author)
+        inbox.items.clear()
+        inbox.save()    
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
