@@ -5,6 +5,9 @@ import {
   NavbarToggler,
   Nav,
   NavItem,
+  Form,
+  Input,
+  Button,
 } from "reactstrap";
 import {NavLink} from "react-router-dom";
 
@@ -20,8 +23,9 @@ export default class NavbarComp extends React.Component {
 
     this.toggle = this.toggle.bind(this);
     this.close = this.close.bind(this);
+    this.logOut = this.logOut.bind(this);
     this.state = {
-      isOpen: false
+      isOpen: false,
     };
   }
 
@@ -37,26 +41,23 @@ export default class NavbarComp extends React.Component {
     });
   }
 
+  logOut(){
+    this.props.setLoggedInUser(undefined);
+  }
+
   render() {
     return (
       <div>
         <Navbar color="dark" dark expand="md">
           <NavLink to="/" className="navbar-brand font-title">
-          🗑🔥 Uh oh broken
+          🗑🔥
           </NavLink>
-
           <NavbarToggler onClick={this.toggle}/>
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
-              <NavItem onClick={this.close}>
-                <NavLink to="/search/" className="nav-link">Search</NavLink>
-              </NavItem>
-              <NavItem onClick={this.close}>
-                <NavLink to="/scheduleBuilder/" className="nav-link">Schedule Builder</NavLink>
-              </NavItem>
-              {false ?
+              {this.props.loggedInUser ?
                 <NavItem onClick={this.close}>
-                  <NavLink to="/logout/" className="nav-link">Log Out</NavLink>
+                  <a onClick={this.logOut}>Log Out</a>
                 </NavItem> :
                 <NavItem onClick={this.close}>
                   <NavLink to="/auth/" className="nav-link">Log In</NavLink>
