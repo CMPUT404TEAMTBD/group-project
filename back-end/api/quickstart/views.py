@@ -55,6 +55,23 @@ class PostListViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(serializer.data)
+class PublicPostListViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows posts to be viewed or edited.
+    """
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    lookup_field = '_id'
+
+    def list(self, request):
+        try:
+            # TODO: Set up pagination: https://www.django-rest-framework.org/api-guide/pagination/
+            queryset = Post.objects.filter(visibility='Public')
+            serializer = PostSerializer(queryset, many=True)
+        except Post.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.data)
 
 
 class PostViewSet(viewsets.ModelViewSet):

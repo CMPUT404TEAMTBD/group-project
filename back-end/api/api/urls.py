@@ -8,6 +8,7 @@ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'authors', views.AuthorViewSet)
 router.register(r'posts', views.PostViewSet)
+router.register(r'public-posts', views.PublicPostListViewSet)
 router.register(r'comments', views.CommentViewSet)
 router.register(r'followers', views.FollowersViewSet)
 router.register(r'likes', views.LikesPostViewSet)
@@ -30,6 +31,10 @@ posts = views.PostViewSet.as_view({
     'post': 'update',
     'delete': 'destroy',
     'put': 'create'
+})
+
+public_posts_list = views.PublicPostListViewSet.as_view({
+    'get': 'list'
 })
 
 posts_list = views.PostListViewSet.as_view({
@@ -76,6 +81,7 @@ urlpatterns = [
     path('api/rest-auth/registration/', include('rest_auth.registration.urls')),
     path('api/admin/', admin.site.urls),
     path('api/author/<str:_id>/', author, name='author'),
+    path('api/public-posts/', public_posts_list, name='public-posts-list'),
     path('api/author/<str:author>/posts/', posts_list, name='posts-list'),
     path('api/author/<str:author>/posts/<str:_id>/', posts, name='posts'),
     path('api/author/<str:receiver>/followers/', followers_list, name='followers-list'),
