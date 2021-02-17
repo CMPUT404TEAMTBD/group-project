@@ -15,4 +15,4 @@ def after_user_signed_up(request, user, **kwargs):
     hex_uuid = str(uuid.uuid4().hex)
     url = str(request.build_absolute_uri('/')) + "author/" + hex_uuid
     author = Author.objects.create(user=user, _id=url,url=url, displayName=user.username, github=user.username)
-    # TODO: create an empty inbox for the new author
+    Inbox.objects.create(author=author._id)
