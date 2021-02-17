@@ -83,3 +83,4 @@ class Like(models.Model):
   _type = "like" 
   author = models.CharField(max_length=LONG_CHAR_LENGTH)
   _object = models.CharField(max_length=LONG_CHAR_LENGTH)
+

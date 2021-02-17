@@ -61,3 +61,12 @@ def get_test_post_fields(i=1, author="testauthorid"):
     'commentLink': 'link to comments',
     'comments': '{ "text": "nice test" }'
   }
+
+
+  def get_test_liked_fields(author_id):
+    return {
+    'context': 'testContext',
+    'summary': 'you liked these posts',
+    'author': f'{author_id}',
+    '_object': 'testobject' ,
+  }

@@ -145,3 +145,20 @@ class LikesCommentViewSet(viewsets.ModelViewSet):
             'type': 'likes',
             'items': serializer.data
         })
+
+class LikedPostsViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows getting a list of public things author_id liked
+    """
+    queryset = Like.objects.all() #used for default behaviour
+    serializer_class = LikeSerializer
+
+    def list(self, request, author):
+        liked_posts = Like.objects.filter(author=author)
+        serializer = LikeSerializer(liked_posts, many=True)
+
+        return Response({
+            'type': 'liked_posts',
+            'items': serializer.data
+        })
+
