@@ -18,13 +18,14 @@ class GetLikedForAuthor(TestCase):
     self.likes = [self.like1, self.like2]
 
   def test_get_liked(self):
-    response = client.get(f'api/author/{self.test_author_id}/liked/')
+    response = client.get(f'/api/author/{self.test_author_id}/liked/')
 
+    print(response.data)
     liked_posts = Like.objects.filter(author=self.test_author_id)
     serializer = LikeSerializer(liked_posts, many=True)
 
     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    self.assertEqual(response.data['type'], 'likes')
+    self.assertEqual(response.data['type'], 'liked_posts')
 
     self.assertEqual(len(response.data['items']), len(self.likes))
     for i in range(len(self.likes)):
