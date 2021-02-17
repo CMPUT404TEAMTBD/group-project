@@ -8,11 +8,13 @@ router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'authors', views.AuthorViewSet)
 router.register(r'posts', views.PostViewSet)
+router.register(r'public-posts', views.PublicPostListViewSet)
 router.register(r'comments', views.CommentViewSet)
 router.register(r'followers', views.FollowersViewSet)
 router.register(r'likes', views.LikesPostViewSet)
 router.register(r'liked', views.LikedPostsViewSet)
 # No need to register LikesCommentViewSet since the LikesPostViewSet shows the same objects.
+router.register(r'inbox', views.InboxViewSet)
 
 # Manually bind viewsets instead of using the router so that we can use POST for updates.
 # Also allows us to be more flexible with our URL endpoints.
@@ -30,6 +32,10 @@ posts = views.PostViewSet.as_view({
     'post': 'update',
     'delete': 'destroy',
     'put': 'create'
+})
+
+public_posts_list = views.PublicPostListViewSet.as_view({
+    'get': 'list'
 })
 
 posts_list = views.PostListViewSet.as_view({
@@ -62,12 +68,18 @@ likes_comment = views.LikesCommentViewSet.as_view({
     'get': 'retrieve'
 })
 
+
 #GET list what public things author_id liked
 liked = views.LikedPostsViewSet.as_view({
     'get': 'list'
 })
 
 
+inbox = views.InboxViewSet.as_view({
+    'get': 'retrieve',
+    'post': 'update',
+    'delete': 'destroy'
+})
 
 
 # Wire up our API using automatic URL routing.
@@ -78,6 +90,7 @@ urlpatterns = [
     path('api/rest-auth/registration/', include('rest_auth.registration.urls')),
     path('api/admin/', admin.site.urls),
     path('api/author/<str:_id>/', author, name='author'),
+    path('api/public-posts/', public_posts_list, name='public-posts-list'),
     path('api/author/<str:author>/posts/', posts_list, name='posts-list'),
     path('api/author/<str:author>/posts/<str:_id>/', posts, name='posts'),
     path('api/author/<str:receiver>/followers/', followers_list, name='followers-list'),
@@ -85,5 +98,6 @@ urlpatterns = [
     path('api/author/<str:author>/posts/<str:post>/comments/', comments, name='comments'),
     path('api/author/<str:author>/posts/<str:post>/likes/', likes_post, name='likes-post'),
     path('api/author/<str:author>/posts/<str:post>/comments/<str:comment>/likes', likes_comment, name='likes-comment'),
-    path('api/author/<str:author>/liked/', liked, name='liked')
+    path('api/author/<str:author>/liked/', liked, name='liked'),
+    path('api/author/<str:author>/inbox/', inbox, name='inbox')
 ]

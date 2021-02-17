@@ -9,6 +9,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import AuthPage from './pages/AuthPage';
 import { LoggedInUserContext } from './contexts/LoggedInUserContext';
 import { UserLogin } from './types/UserLogin';
+import UserPage from './pages/UserPage';
 
 
 /*
@@ -25,17 +26,18 @@ function App() {
       <LoggedInUserContext.Provider value={loggedInUser}>
       <BrowserRouter>
         <div>
-          <AppNavBar/>
-            <Container fluid={true}>
-              <Switch>
-                <Route exact path="/" component={HomePage} />
-                <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} />} />
-                <Route component={NotFoundPage} />
-              </Switch>
-            </Container>
+          <AppNavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser}/>
+          <Container fluid={true}>
+            <Switch>
+              <Route exact path="/" component={HomePage} />
+              <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} />} />
+              <Route path="/user" component={UserPage}/>
+              <Route component={NotFoundPage} />
+            </Switch>
+          </Container>
           </div>
         </BrowserRouter>
-        </LoggedInUserContext.Provider>
+      </LoggedInUserContext.Provider>
     </div>
   );
 }
