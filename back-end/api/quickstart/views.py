@@ -164,6 +164,22 @@ class LikesCommentViewSet(viewsets.ModelViewSet):
         })
 
 
+class LikedViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows getting a list of public things author_id liked
+    """
+    queryset = Like.objects.all() #used for default behaviour
+    serializer_class = LikeSerializer
+
+    def list(self, request, author):
+        liked = Like.objects.filter(author=author)
+        serializer = LikeSerializer(liked, many=True)
+
+        return Response({
+            'type': 'liked',
+            'items': serializer.data
+        })
+
 class InboxViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows getting inbox items for an author
@@ -185,4 +201,5 @@ class InboxViewSet(viewsets.ModelViewSet):
         inbox.save()    
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 

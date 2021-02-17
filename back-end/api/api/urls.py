@@ -12,6 +12,7 @@ router.register(r'public-posts', views.PublicPostListViewSet)
 router.register(r'comments', views.CommentViewSet)
 router.register(r'followers', views.FollowersViewSet)
 router.register(r'likes', views.LikesPostViewSet)
+router.register(r'liked', views.LikedViewSet)
 # No need to register LikesCommentViewSet since the LikesPostViewSet shows the same objects.
 router.register(r'inbox', views.InboxViewSet)
 
@@ -67,11 +68,19 @@ likes_comment = views.LikesCommentViewSet.as_view({
     'get': 'retrieve'
 })
 
+
+#GET list what public things author_id liked
+liked = views.LikedViewSet.as_view({
+    'get': 'list'
+})
+
+
 inbox = views.InboxViewSet.as_view({
     'get': 'retrieve',
     'post': 'update',
     'delete': 'destroy'
 })
+
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
@@ -89,5 +98,6 @@ urlpatterns = [
     path('api/author/<str:author>/posts/<str:post>/comments/', comments, name='comments'),
     path('api/author/<str:author>/posts/<str:post>/likes/', likes_post, name='likes-post'),
     path('api/author/<str:author>/posts/<str:post>/comments/<str:comment>/likes', likes_comment, name='likes-comment'),
+    path('api/author/<str:author>/liked/', liked, name='liked'),
     path('api/author/<str:author>/inbox/', inbox, name='inbox')
 ]
