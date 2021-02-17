@@ -15,7 +15,7 @@ def get_test_follow_fields():
     'approved': False
   }
 
-def get_test_like_post_fields(post_id):
+def get_test_like_post_fields(post_id=1):
   return {
     'context': 'testContext',
     'summary': 'Someone likes your post',
@@ -23,7 +23,7 @@ def get_test_like_post_fields(post_id):
     '_object': f'{post_id}',
   }
 
-def get_test_like_comment_fields(comment_id):
+def get_test_like_comment_fields(comment_id=1):
   return {
     'context': 'testContext',
     'summary': 'Someone likes your comment',
@@ -31,7 +31,7 @@ def get_test_like_comment_fields(comment_id):
     '_object': f'{comment_id}',
   }
 
-def get_test_comment_fields(i, postid="testpostid"):
+def get_test_comment_fields(i=1, postid="testpostid"):
   return {
     '_id': f'testid{i}',
     'postId': postid,
@@ -55,7 +55,7 @@ def get_test_post_fields(i=1, author="testauthorid"):
     'contentType': 'text/plain',
     'content': 'Hello, I am a test post',
     'categories': '["Testing"]',
-    'published': datetime.datetime.now(),
+    'published': '03:25:53.827044',
     'count': 5,
     'pageSize': 20,
     'commentLink': 'link to comments',

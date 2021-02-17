@@ -98,26 +98,7 @@ class DeletePostById(TestCase):
 class CreatePostById(TestCase):
   """Tests for creating a single Post by PUT'ing to endpoint /author/{AUTHOR_ID}/posts/{POST_ID}/."""
   def setUp(self):
-    self.payload = {
-      '_id': '123',
-      '_type': 'post',
-      'title': 'testpost',
-      'description': 'i am a test post',
-      'source': 'source post id',
-      'origin': 'origin post id',
-      'visibility': 'Public',
-      'unlisted': True,
-      'isPrivateToFriends': True,
-      'author': 'authorId',
-      'contentType': 'text/plain',
-      'content': 'Hello, I am a test post',
-      'categories': '["Testing"]',
-      'published': '03:25:53.827044',
-      'count': 5,
-      'pageSize': 20,
-      'commentLink': 'link to comments',
-      'comments': '{ "text": "nice test" }'
-    }
+    self.payload = get_test_post_fields()
 
   def test_create_post(self):
     response = client.put(
