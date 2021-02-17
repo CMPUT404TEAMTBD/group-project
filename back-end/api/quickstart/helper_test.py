@@ -1,5 +1,4 @@
 import datetime
-from django.utils import timezone, dateformat
 
 def get_test_author_fields():
   return {
