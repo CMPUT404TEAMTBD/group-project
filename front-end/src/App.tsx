@@ -33,7 +33,7 @@ function App() {
               <Route exact path="/" component={HomePage} />
               <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} />} />
               <Route path="/user" component={UserPage}/>
-              <Route path="/settings" render={(props) => <SettingsPage {...props} />}/>
+              <Route path="/settings" render={(props) => <SettingsPage loggedInUser={loggedInUser} />} />
               <Route component={NotFoundPage} />
             </Switch>
           </Container>
