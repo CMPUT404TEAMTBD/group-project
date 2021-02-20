@@ -34,7 +34,7 @@ const SettingsPage = (loggedInUser: any) => {
     const handleSubmit = (e: any) => {
         e.preventDefault();
 
-        axios.get(process.env.REACT_APP_API_URL + "/api/authors/").then(res =>{
+        axios.get(process.env.REACT_APP_API_URL + "/api/authors/").then(res => {
             res.data.results.forEach((author: any) => {
                 // test by changing loggedInUser to a hardcoded string
                 if (author.displayName == loggedInUser.loggedInUser.username) {
@@ -52,12 +52,12 @@ const SettingsPage = (loggedInUser: any) => {
         authorObject.github = githubUrl;
 
         axios.post(process.env.REACT_APP_API_URL + "/api/author/" + authorObject._id + "/", authorObject)
-        .then(res => {
-              console.log(res);
-              console.log(res.data);
-          }).catch(err => {
-              console.log("POST ERROR");
-          });
+            .then(res => {
+                console.log(res);
+                console.log(res.data);
+            }).catch(err => {
+                console.log("POST ERROR");
+            });
     };
 
     return (
@@ -70,7 +70,7 @@ const SettingsPage = (loggedInUser: any) => {
                             type="text"
                             name="displayName"
                             id="displayName"
-                            placeholder={loggedInUser.loggedInUser.username}
+                            placeholder="New Display Name"
                             onChange={handleInputChange}
                             value={displayName}
                         />
