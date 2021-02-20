@@ -1,7 +1,5 @@
 import axios from 'axios';
-import { url } from 'inspector';
-import React, { useEffect, useState } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import React, { useState } from 'react';
 import {
     Card,
     CardBody,
@@ -15,17 +13,19 @@ import {
 const SettingsPage = (loggedInUser: any) => {
     // https://reactstrap.github.io/components/form/#app
     // https://medium.com/better-programming/easily-create-a-form-with-react-hooks-1cab17e2be0d
+    // setting state: https://stackoverflow.com/questions/45850550/accessing-data-from-axios-get-request
+
     const initialInputState = { displayName: "", githubUrl: "" };
     const [eachEntry, setEachEntry] = useState(initialInputState);
     const { displayName, githubUrl } = eachEntry;
-    const authorOb = {
-        displayName: "",
-        github: "",
-        url: "",
+    const authorObject = {
         _id: "",
-        _type: "",
+        _type: "author",
+        displayName: "",
+        url: "",
+        github: "",
     };
-    const [adata, setAdata] = useState(authorOb);
+    const [adata, setAdata] = useState(authorObject);
 
     const handleInputChange = (e: any) => {
         setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
@@ -33,18 +33,31 @@ const SettingsPage = (loggedInUser: any) => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        const test_author = "whomsdt";
 
         axios.get(process.env.REACT_APP_API_URL + "/api/authors/").then(res =>{
             res.data.results.forEach((author: any) => {
-                if (author.displayName == test_author) {
+                // test by changing loggedInUser to a hardcoded string
+                if (author.displayName == loggedInUser.loggedInUser.username) {
+                    console.log(author)
                     setAdata(author);
                 }
             });
         }).catch(err => {
-            console.log("ERROR");
+            console.log("GET ERROR");
         });
-        console.log(adata.url);
+
+        authorObject._id = adata._id;
+        authorObject.displayName = displayName;
+        authorObject.url = adata.url;
+        authorObject.github = githubUrl;
+
+        axios.post(process.env.REACT_APP_API_URL + "/api/author/" + authorObject._id + "/", authorObject)
+        .then(res => {
+              console.log(res);
+              console.log(res.data);
+          }).catch(err => {
+              console.log("POST ERROR");
+          });
     };
 
     return (
@@ -57,7 +70,7 @@ const SettingsPage = (loggedInUser: any) => {
                             type="text"
                             name="displayName"
                             id="displayName"
-                            placeholder="New Display Name"
+                            placeholder={loggedInUser.loggedInUser.username}
                             onChange={handleInputChange}
                             value={displayName}
                         />
