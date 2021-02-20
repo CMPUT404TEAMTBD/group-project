@@ -50,7 +50,6 @@ def get_test_post_fields(i=1, author="testauthorid"):
     'origin': f'origin post id{i}',
     'visibility': 'Public',
     'unlisted': True,
-    'isPrivateToFriends': True,
     'author': author,
     'contentType': 'text/plain',
     'content': 'Hello, I am a test post',
