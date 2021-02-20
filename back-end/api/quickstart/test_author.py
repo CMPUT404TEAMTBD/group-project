@@ -33,7 +33,6 @@ class UpdateAuthorById(TestCase):
 
     self.payload = {
       'displayName': 'new John Doe',
-      'url': "newUrl",
       'github': "newGithub"
     }
 
