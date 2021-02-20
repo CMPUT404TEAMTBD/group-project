@@ -40,7 +40,7 @@ export default function HomePage(props:RouteComponentProps) {
     postListElToDisplay = <p>No Entries Found</p>;
   } else {
     postListElToDisplay = postEntries.map((post:Post)=>
-      <PostListItem post={post}/>
+      <PostListItem post={post} key={post._id}/>
     );
   }
   console.log(postListElToDisplay)
