@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import { url } from 'inspector';
+import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-// import axios from "axios";
 import {
     Card,
     CardBody,
@@ -12,13 +13,19 @@ import {
 } from 'reactstrap';
 
 const SettingsPage = (loggedInUser: any) => {
-    // console.log(props);
     // https://reactstrap.github.io/components/form/#app
     // https://medium.com/better-programming/easily-create-a-form-with-react-hooks-1cab17e2be0d
     const initialInputState = { displayName: "", githubUrl: "" };
-    // const [loggedInUser, setLoggedInUser] = useState(props);
     const [eachEntry, setEachEntry] = useState(initialInputState);
     const { displayName, githubUrl } = eachEntry;
+    const authorOb = {
+        displayName: "",
+        github: "",
+        url: "",
+        _id: "",
+        _type: "",
+    };
+    const [adata, setAdata] = useState(authorOb);
 
     const handleInputChange = (e: any) => {
         setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
@@ -26,8 +33,18 @@ const SettingsPage = (loggedInUser: any) => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        console.log(eachEntry);
-        console.log(loggedInUser);
+        const test_author = "whomsdt";
+
+        axios.get(process.env.REACT_APP_API_URL + "/api/authors/").then(res =>{
+            res.data.results.forEach((author: any) => {
+                if (author.displayName == test_author) {
+                    setAdata(author);
+                }
+            });
+        }).catch(err => {
+            console.log("ERROR");
+        });
+        console.log(adata.url);
     };
 
     return (
