@@ -21,7 +21,7 @@ router.register(r'inbox', views.InboxViewSet)
 # Referenced Lucas Weyne's code at https://stackoverflow.com/a/53991768
 author = views.AuthorViewSet.as_view({
     'get': 'retrieve',
-    'post': 'update',
+    'post': 'partial_update',
     # TODO: remove put: create once we no longer need a dev shortcut to create authors, 
     # because user creation should be handled with the built in User model. 
     'put': 'create'
@@ -89,7 +89,7 @@ urlpatterns = [
     path('api/rest-auth/', include('rest_auth.urls')),
     path('api/rest-auth/registration/', include('rest_auth.registration.urls')),
     path('api/admin/', admin.site.urls),
-    path('api/author/<str:_id>/', author, name='author'),
+    path('api/author/<str:id>/', author, name='author'),
     path('api/public-posts/', public_posts_list, name='public-posts-list'),
     path('api/author/<str:author>/posts/', posts_list, name='posts-list'),
     path('api/author/<str:author>/posts/<str:_id>/', posts, name='posts'),

@@ -35,8 +35,7 @@ class AuthorViewSet(viewsets.ModelViewSet):
 
     # Using lookup_field as search param
     # https://stackoverflow.com/questions/56431755/django-rest-framework-urls-without-pk
-    lookup_field = '_id'
-
+    lookup_field = 'id'
 
 class PostListViewSet(viewsets.ModelViewSet):
     """
@@ -110,7 +109,7 @@ class FollowersListViewSet(viewsets.ModelViewSet):
         sender_ids = [f.sender for f in follows]
 
         # TODO: Most likely will have to make API calls here instead of database reading.
-        senders = Author.objects.filter(_id__in=sender_ids)
+        senders = Author.objects.filter(id__in=sender_ids)
         serializer = AuthorSerializer(senders, many=True)
 
         return Response({

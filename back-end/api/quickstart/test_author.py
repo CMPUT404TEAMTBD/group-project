@@ -15,8 +15,8 @@ class GetAuthorById(TestCase):
     self.john = Author.objects.create(**get_test_author_fields())
 
   def test_get_valid_author(self):
-    response = client.get(f'/api/author/{self.john._id}/')
-    author = Author.objects.get(_id=self.john._id)
+    response = client.get(f'/api/author/{self.john.id}/')
+    author = Author.objects.get(id=self.john.id)
     serializer = AuthorSerializer(author)
     self.assertEqual(response.data, serializer.data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -32,29 +32,26 @@ class UpdateAuthorById(TestCase):
     self.john = Author.objects.create(**get_test_author_fields())
 
     self.payload = {
-      # TODO: Remove _id here once we figure out the _id field. It should be uneditable.
-      '_id': 'testId',
       'displayName': 'new John Doe',
-      'url': "newUrl",
       'github': "newGithub"
     }
 
   def test_update_author(self):
     response = client.post(
-      f'/api/author/{self.john._id}/',
+      f'/api/author/{self.john.id}/',
       data=json.dumps(self.payload),
       content_type='application/json'
     )
     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     # Compare each payload field with the updated Author object.
-    serializer = AuthorSerializer(Author.objects.get(_id=self.john._id))
+    serializer = AuthorSerializer(Author.objects.get(id=self.john.id))
     for k in self.payload:
       self.assertEqual(serializer.data[k], self.payload[k])
 
     # Ensure other fields are unchanged
-    self.assertEqual(serializer.data['_id'], self.john._id)
-    self.assertEqual(serializer.data['_type'], self.john._type)
+    self.assertEqual(serializer.data['id'], self.john.id)
+    self.assertEqual(serializer.data['type'], self.john.type)
 
   def test_update_invalid_author(self):
     response = client.post(

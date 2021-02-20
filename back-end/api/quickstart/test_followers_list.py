@@ -20,7 +20,7 @@ class GetFollowers(TestCase):
 
       self.senders.append(
         Author.objects.create(
-          _id=f'senderUrl{i}',
+          id=f'senderUrl{i}',
           displayName=f'John Doe{i}',
           url=f'testUrl{i}',
           github=f'testGithub{i}')
