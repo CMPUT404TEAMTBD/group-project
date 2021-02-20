@@ -55,6 +55,23 @@ class PostListViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(serializer.data)
+class PublicPostListViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows posts to be viewed or edited.
+    """
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    lookup_field = '_id'
+
+    def list(self, request):
+        try:
+            # TODO: Set up pagination: https://www.django-rest-framework.org/api-guide/pagination/
+            queryset = Post.objects.filter(visibility='Public')
+            serializer = PostSerializer(queryset, many=True)
+        except Post.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.data)
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -147,6 +164,22 @@ class LikesCommentViewSet(viewsets.ModelViewSet):
         })
 
 
+class LikedViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows getting a list of public things author_id liked
+    """
+    queryset = Like.objects.all() #used for default behaviour
+    serializer_class = LikeSerializer
+
+    def list(self, request, author):
+        liked = Like.objects.filter(author=author)
+        serializer = LikeSerializer(liked, many=True)
+
+        return Response({
+            'type': 'liked',
+            'items': serializer.data
+        })
+
 class InboxViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows getting inbox items for an author
@@ -168,4 +201,5 @@ class InboxViewSet(viewsets.ModelViewSet):
         inbox.save()    
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 

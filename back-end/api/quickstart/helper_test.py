@@ -60,3 +60,34 @@ def get_test_post_fields(i=1, author="testauthorid"):
     'commentLink': 'link to comments',
     'comments': '{ "text": "nice test" }'
   }
+
+# Private field used to test conditional
+# Note how `isPrivateToFriends` is False
+def get_test_public_post_fields(i=1, author="testauthorid"):
+  return {
+    '_id': i,
+    'title': f'testpost{i}',
+    'description': f'i am test post {i}',
+    'source': f'source post id{i}',
+    'origin': f'origin post id{i}',
+    'visibility': 'Public',
+    'unlisted': True,
+    'isPrivateToFriends': False,
+    'author': author,
+    'contentType': 'text/plain',
+    'content': 'Hello, I am a test post',
+    'categories': '["Testing"]',
+    'published': '03:25:53.827044',
+    'count': 5,
+    'pageSize': 20,
+    'commentLink': 'link to comments',
+    'comments': '{ "text": "nice test" }'
+  }
+
+def get_test_liked_fields(author_id):
+  return {
+  'context': 'testContext',
+  'summary': 'you liked',
+  'author': f'{author_id}',
+  '_object': 'testobject'
+}
