@@ -10,8 +10,8 @@ LONG_CHAR_LENGTH = 128
 class Author(models.Model):
   # TODO: Null and blank for quicker testing purposes
   user = models.OneToOneField(User,on_delete=models.CASCADE,null=True, blank=True)
-  _id = models.CharField(primary_key=True, max_length=LONG_CHAR_LENGTH)
-  _type = 'author'
+  id = models.CharField(primary_key=True, max_length=LONG_CHAR_LENGTH)
+  type = 'author'
   displayName = models.CharField(max_length=SHORT_CHAR_LENGTH)
   url = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
   github = models.CharField(max_length=LONG_CHAR_LENGTH)
