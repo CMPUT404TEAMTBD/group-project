@@ -33,27 +33,7 @@ class UpdatePostById(TestCase):
   def setUp(self):
     self.post = Post.objects.create(**get_test_post_fields())
 
-    self.payload = {
-      # TODO: Remove _id here once we figure out the _id field. It should be uneditable.
-      '_id': '123', 
-      'title': 'newpost', 
-      'description': 'i am a new post', 
-      'source': 'new source post id', 
-      'origin': 'new origin post id', 
-      'visibility': 'Friends', 
-      'unlisted': False, 
-      'isPrivateToFriends': False, 
-      # TODO: Remove author here once we figure fields out. It should be uneditable.
-      'author': 'newId', 
-      'contentType': 'text/plain', 
-      'content': 'Hello, I am a new post', 
-      'categories': '["New Testing"]', 
-      'published': '22:11:27.254321', 
-      'count': 10, 
-      'pageSize': 40, 
-      'commentLink': 'new link to comments', 
-      'comments': '{ "text": "nice new test" }'
-    }
+    self.payload = get_test_post_fields()
 
   def test_update_post(self):
     response = client.post(

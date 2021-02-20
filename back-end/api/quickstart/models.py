@@ -31,8 +31,6 @@ class Post(models.Model):
   origin = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
   visibility = models.CharField(max_length=SHORT_CHAR_LENGTH, choices=Visibility.choices)
   unlisted = models.BooleanField()
-  # TODO: remove this. We should use visibility exclusively
-  isPrivateToFriends = models.BooleanField()
   author = models.CharField(max_length=LONG_CHAR_LENGTH)
   contentType = models.CharField(max_length=LONG_CHAR_LENGTH)
   content = models.TextField(blank=True)
