@@ -79,13 +79,12 @@ class Follow(models.Model):
 class Like(models.Model):
   context = models.CharField(max_length=LONG_CHAR_LENGTH)
   summary = models.CharField(max_length=LONG_CHAR_LENGTH)
-  _type = "like" 
+  type = "like" 
   author = models.CharField(max_length=LONG_CHAR_LENGTH)
-  _object = models.CharField(max_length=LONG_CHAR_LENGTH)
+  object = models.CharField(max_length=LONG_CHAR_LENGTH)
   
 
 class Inbox(models.Model):
-  _type = "like"
   author = models.CharField(primary_key=True, max_length=LONG_CHAR_LENGTH)
   items = models.JSONField(default=list)
 

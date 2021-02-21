@@ -20,7 +20,7 @@ def get_test_like_post_fields(post_id=1):
     'context': 'testContext',
     'summary': 'Someone likes your post',
     'author': 'testAuthorUrl',
-    '_object': f'{post_id}',
+    'object': f'{post_id}',
   }
 
 def get_test_like_comment_fields(comment_id=1):
@@ -28,7 +28,7 @@ def get_test_like_comment_fields(comment_id=1):
     'context': 'testContext',
     'summary': 'Someone likes your comment',
     'author': 'testAuthorUrl',
-    '_object': f'{comment_id}',
+    'object': f'{comment_id}',
   }
 
 def get_test_comment_fields(i=1, postid="testpostid"):
@@ -66,5 +66,5 @@ def get_test_liked_fields(author_id):
   'context': 'testContext',
   'summary': 'you liked',
   'author': f'{author_id}',
-  '_object': 'testobject'
+  'object': 'testobject'
 }
