@@ -23,12 +23,12 @@ class Post(models.Model):
     PUBLIC = 'Public'
     FRIENDS = 'Friends'
 
-  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+  id = models.CharField(primary_key=True, max_length=LONG_CHAR_LENGTH)
   type = 'post'
-  title = models.CharField(max_length=LONG_CHAR_LENGTH)
+  title = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
   description = models.TextField()
-  source = models.TextField()
-  origin = models.TextField()
+  source = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
+  origin = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
   visibility = models.CharField(max_length=SHORT_CHAR_LENGTH, choices=Visibility.choices)
   unlisted = models.BooleanField()
   author = models.CharField(max_length=LONG_CHAR_LENGTH)
@@ -43,6 +43,15 @@ class Post(models.Model):
   # TODO: remove
   # list of urls
   comments = models.JSONField()
+
+  def save(self, *args, **kwargs):
+    # Overriding save()
+    # https://stackoverflow.com/a/62588993
+    if not self.id:
+        self.id = str(uuid.uuid4().hex)
+    # assuming self.author is the authenticated user's corresponding author id
+    self.id = f"{self.author}/posts/{self.id}"
+    super().save(*args, **kwargs)
 
 
 class Comment(models.Model):
