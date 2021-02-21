@@ -38,6 +38,23 @@ class AuthorViewSet(viewsets.ModelViewSet):
     lookup_field = 'id'
 
 
+class AuthUserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows to fetch an author by the author's username (NOT displayName).
+    """
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+
+    def retrieve(self, request, username):
+        try:
+            author = Author.objects.get(user__username=username)
+            serializer = AuthorSerializer(author)
+        except Author.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.data)
+
+
 class PostListViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows posts to be viewed or edited.
