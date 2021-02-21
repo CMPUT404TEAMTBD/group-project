@@ -13,6 +13,7 @@ class Author(models.Model):
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   type = 'author'
   displayName = models.CharField(max_length=SHORT_CHAR_LENGTH)
+  host = models.TextField()
   url = models.TextField()
   github = models.CharField(max_length=LONG_CHAR_LENGTH)
 

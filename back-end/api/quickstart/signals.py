@@ -13,7 +13,9 @@ def after_user_signed_up(request, user, **kwargs):
     Get absolute URI: https://stackoverflow.com/a/10119243
     """
     author = Author.objects.create(user=user, displayName=user.username, github=user.username)
-    author.url = str(request.build_absolute_uri('/')) + "author/" + str(author.id)
+    author.host = str(request.build_absolute_uri('/'))
+    author.url = f'{author.host}author/{author.id}'
+    
     author.save()
 
     Inbox.objects.create(author=author.id)
