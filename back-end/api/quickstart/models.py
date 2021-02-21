@@ -55,8 +55,8 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-  _id = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
-  _type = 'comment'
+  id = models.CharField(primary_key=True, max_length=LONG_CHAR_LENGTH)
+  type = 'comment'
   postId = models.CharField(max_length=LONG_CHAR_LENGTH)
   author = models.CharField(max_length=LONG_CHAR_LENGTH)
   comment = models.TextField()
@@ -66,7 +66,7 @@ class Comment(models.Model):
   def save(self, *args, **kwargs):
     cuuid = str(uuid.uuid4().hex)
     # TODO: change this if postId is not the full url to the post
-    self._id = f"{self.postId}/comments/{cuuid}"
+    self.id = f"{self.postId}/comments/{cuuid}"
     super().save(*args, **kwargs)
 
 
