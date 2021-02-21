@@ -23,8 +23,8 @@ class Post(models.Model):
     PUBLIC = 'Public'
     FRIENDS = 'Friends'
 
-  _id = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True, default=None)
-  _type = 'post'
+  id = models.CharField(primary_key=True, max_length=LONG_CHAR_LENGTH)
+  type = 'post'
   title = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
   description = models.TextField()
   source = models.CharField(max_length=LONG_CHAR_LENGTH, unique=True)
@@ -47,10 +47,10 @@ class Post(models.Model):
   def save(self, *args, **kwargs):
     # Overriding save()
     # https://stackoverflow.com/a/62588993
-    if not self._id:
-        self._id = str(uuid.uuid4().hex)
+    if not self.id:
+        self.id = str(uuid.uuid4().hex)
     # assuming self.author is the authenticated user's corresponding author id
-    self._id = f"{self.author}/posts/{self._id}"
+    self.id = f"{self.author}/posts/{self.id}"
     super().save(*args, **kwargs)
 
 
