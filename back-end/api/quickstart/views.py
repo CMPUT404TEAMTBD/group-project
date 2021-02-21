@@ -44,7 +44,6 @@ class AuthUserViewSet(viewsets.ModelViewSet):
     """
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
-    lookup_field = 'id'
 
     def retrieve(self, request, username):
         try:
