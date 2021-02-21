@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Post } from '../types/Post';
 import { Form, Input } from 'reactstrap';
 
@@ -36,7 +36,8 @@ export default function CreatePostComponent() {
                 <Input type="text" name="Content" placeholder="Content" onChange={e => setContent(e.target.value)}/>
                 <Input type="text" name="Categories" placeholder="Categories" onChange={e => setCategories(e.target.value)}/>
                 <Input type="text" name="Visibility" placeholder="Visibility" onChange={e => setVisibility(e.target.value)}/>
-                <Input type="text" name="Unlisted" placeholder="Unlisted" onChange={e => setUnlisted(e.target.value)}/>
+                <Input id="Unlisted" type="checkbox" name="Unlisted" placeholder="Unlisted" onChange={e => setUnlisted(e.target.value)}/>
+                <Label for="Unlisted">Unlisted</Label>
                 <input type="submit" value="Submit" />
             </Form>
         </div>
