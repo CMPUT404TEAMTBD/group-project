@@ -33,8 +33,7 @@ def get_test_like_comment_fields(comment_id=1):
 
 def get_test_comment_fields(i=1, postid="testpostid"):
   return {
-    '_id': f'testid{i}',
-    'postId': postid,
+    'id': f'testid{i}',
     'author': f'testcommenter{i}',
     'comment': 'i am a comment',
     'contentType': 'text/plain',

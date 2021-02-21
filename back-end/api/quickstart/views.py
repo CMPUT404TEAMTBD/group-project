@@ -88,7 +88,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     """
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    lookup_field = '_id'
+    lookup_field = 'id'
 
     def retrieve(self, request, author, post):
         try:
