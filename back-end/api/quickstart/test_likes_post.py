@@ -20,7 +20,7 @@ class GetLikesForPost(TestCase):
   def test_get_likes_for_post(self):
     response = client.get(f'/api/author/authorId/posts/{self.test_post_id}/likes/')
 
-    likes = Like.objects.filter(_object=self.test_post_id)
+    likes = Like.objects.filter(object=self.test_post_id)
     serializer = LikeSerializer(likes, many=True)
 
     self.assertEqual(response.status_code, status.HTTP_200_OK)
