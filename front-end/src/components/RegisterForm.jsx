@@ -37,8 +37,13 @@ export default class RegisterForm extends React.Component {
       password1: this.state.password,
       password2: this.state.passwordConf
     }).then(res => {
-      this.props.setLoggedInUser({username: this.state.username, password: this.state.password});
-      this.props.history.push("/");
+      axios.get(process.env.REACT_APP_API_URL + `/api/auth-user/${this.state.username}/`
+      ).then(res => {
+        this.props.setLoggedInUser({username: this.state.username, password: this.state.password, authorId: res.data.authorId});
+        this.props.history.push("/");
+      }).catch(err => {
+        this.setState({registerErr: err.response});
+      });
     }).catch(err => {
       this.setState({registerErr: err.response});
     });
