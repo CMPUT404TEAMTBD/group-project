@@ -85,6 +85,7 @@ class Like(models.Model):
   
 
 class Inbox(models.Model):
+  type = "inbox"
   author = models.CharField(primary_key=True, max_length=LONG_CHAR_LENGTH)
   items = models.JSONField(default=list)
 
