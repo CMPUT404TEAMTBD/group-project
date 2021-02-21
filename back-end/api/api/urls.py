@@ -27,6 +27,10 @@ author = views.AuthorViewSet.as_view({
     'put': 'create'
 })
 
+auth_user = views.AuthUserViewSet.as_view({
+    'get': 'retrieve'
+})
+
 posts = views.PostViewSet.as_view({
     'get': 'retrieve',
     'post': 'update',
@@ -91,6 +95,7 @@ urlpatterns = [
     path('api/admin/', admin.site.urls),
     path('api/author/<str:id>/', author, name='author'),
     path('api/public-posts/', public_posts_list, name='public-posts-list'),
+    path('api/auth-user/<str:username>/', auth_user, name='auth-user'),
     path('api/author/<str:author>/posts/', posts_list, name='posts-list'),
     path('api/author/<str:author>/posts/<str:id>/', posts, name='posts'),
     path('api/author/<str:receiver>/followers/', followers_list, name='followers-list'),
