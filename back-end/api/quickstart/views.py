@@ -37,13 +37,14 @@ class AuthorViewSet(viewsets.ModelViewSet):
     # https://stackoverflow.com/questions/56431755/django-rest-framework-urls-without-pk
     lookup_field = 'id'
 
+
 class PostListViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows posts to be viewed or edited.
     """
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    lookup_field = '_id'
+    lookup_field = 'id'
 
     def list(self, request, author):
         try:
@@ -54,13 +55,15 @@ class PostListViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(serializer.data)
+
+
 class PublicPostListViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows posts to be viewed or edited.
     """
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    lookup_field = '_id'
+    lookup_field = 'id'
 
     def list(self, request):
         try:
@@ -79,8 +82,8 @@ class PostViewSet(viewsets.ModelViewSet):
     """
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    lookup_field = '_id'
-
+    lookup_field = 'id'
+    
 
 class CommentViewSet(viewsets.ModelViewSet):
     """

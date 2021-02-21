@@ -42,7 +42,7 @@ def get_test_comment_fields(i=1):
 
 def get_test_post_fields(i=1, author="testauthorid", visibility="Public"):
   return {
-    '_id': i,
+    'id': i,
     'title': f'testpost{i}',
     'description': f'i am test post {i}',
     'source': f'source post id{i}',
