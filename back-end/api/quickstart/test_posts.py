@@ -49,7 +49,7 @@ class UpdatePostById(TestCase):
       self.assertEqual(serializer.data[k], self.payload[k])
 
     # Ensure other fields are unchanged
-    self.assertEqual(serializer.data['id'], self.post.id)
+    self.assertEqual(serializer.data['id'], str(self.post.id))
     self.assertEqual(serializer.data['type'], self.post.type)
 
   def test_update_invalid_post(self):
@@ -82,7 +82,7 @@ class CreatePostById(TestCase):
 
   def test_create_post(self):
     response = client.put(
-      f'/api/author/{self.payload["author"]}/posts/{self.payload["id"]}/',
+      f'/api/author/{self.payload["author"]}/posts/testId/',
       data=json.dumps(self.payload),
       content_type='application/json'
     )
