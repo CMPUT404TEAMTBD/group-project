@@ -12,7 +12,8 @@ def after_user_signed_up(request, user, **kwargs):
     created with the appropriate id containing a UUID
     Get absolute URI: https://stackoverflow.com/a/10119243
     """
-    hex_uuid = str(uuid.uuid4().hex)
-    url = str(request.build_absolute_uri('/')) + "author/" + hex_uuid
-    author = Author.objects.create(user=user, url=url, displayName=user.username, github=user.username)
+    author = Author.objects.create(user=user, displayName=user.username, github=user.username)
+    author.url = str(request.build_absolute_uri('/')) + "author/" + str(author.id)
+    author.save()
+
     Inbox.objects.create(author=author.id)
