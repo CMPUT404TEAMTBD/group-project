@@ -10,6 +10,7 @@ import AuthPage from './pages/AuthPage';
 import { LoggedInUserContext } from './contexts/LoggedInUserContext';
 import { UserLogin } from './types/UserLogin';
 import UserPage from './pages/UserPage';
+import CreatePostComponent from './components/CreatePost';
 
 
 /*
@@ -32,6 +33,7 @@ function App() {
               <Route exact path="/" component={HomePage} />
               <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} />} />
               <Route path="/user" component={UserPage}/>
+              <Route path="/create_post" component={CreatePostComponent}/>
               <Route component={NotFoundPage} />
             </Switch>
           </Container>
