@@ -1,11 +1,10 @@
 import datetime
 
-def get_test_author_fields():
+def get_test_author_fields(i=1):
   return {
-    'id': 'testId',
-    'displayName': 'John Doe',
-    'url': 'testUrl',
-    'github': 'testGithub'
+    'displayName': f'John Doe {i}',
+    'url': f'testUrl{i}',
+    'github': f'testGithub{i}'
   }
 
 def get_test_follow_fields():

@@ -50,7 +50,7 @@ class UpdateAuthorById(TestCase):
       self.assertEqual(serializer.data[k], self.payload[k])
 
     # Ensure other fields are unchanged
-    self.assertEqual(serializer.data['id'], self.john.id)
+    self.assertEqual(serializer.data['id'], str(self.john.id))
     self.assertEqual(serializer.data['type'], self.john.type)
 
   def test_update_invalid_author(self):
