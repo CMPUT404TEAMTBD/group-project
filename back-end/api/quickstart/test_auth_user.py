@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 client = Client()
 
 class GetAuthorByUsername(TestCase):
-  """Tests for getting a single Author by their username (NOT displayName) at endpoint /api/authuser/{AUTHOR_USERNAME}/."""
+  """Tests for getting a single Author by their User object's username (NOT displayName) at endpoint /api/authuser/{AUTHOR_USERNAME}/."""
   def setUp(self):
     self.user = User.objects.create(username='john')
     self.john = Author.objects.create(user=self.user, **get_test_author_fields())
