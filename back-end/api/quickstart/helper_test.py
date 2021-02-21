@@ -31,7 +31,7 @@ def get_test_like_comment_fields(comment_id=1):
     '_object': f'{comment_id}',
   }
 
-def get_test_comment_fields(i=1, postid="testpostid"):
+def get_test_comment_fields(i=1):
   return {
     'id': f'testid{i}',
     'author': f'testcommenter{i}',
