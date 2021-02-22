@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { Row, Col, Form, Input } from 'reactstrap';
+import { Row, Col, Form, Input, Button } from 'reactstrap';
+import CreatePostComponent from '../components/CreatePost';
 import PostListItem from '../components/PostListItem';
 import { Post } from '../types/Post';
 
