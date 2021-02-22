@@ -18,14 +18,6 @@ const SettingsPage = (loggedInUser: any) => {
     const initialInputState = { displayName: "", githubUrl: "" };
     const [eachEntry, setEachEntry] = useState(initialInputState);
     const { displayName, githubUrl } = eachEntry;
-    const authorObject = {
-        _id: "",
-        _type: "author",
-        displayName: "",
-        url: "",
-        github: "",
-    };
-    const [adata, setAdata] = useState(authorObject);
 
     const handleInputChange = (e: any) => {
         setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
@@ -34,30 +26,16 @@ const SettingsPage = (loggedInUser: any) => {
     const handleSubmit = (e: any) => {
         e.preventDefault();
 
-        axios.get(process.env.REACT_APP_API_URL + "/api/authors/").then(res => {
-            res.data.results.forEach((author: any) => {
-                // test by changing loggedInUser to a hardcoded string
-                if (author.displayName == loggedInUser.loggedInUser.username) {
-                    console.log(author)
-                    setAdata(author);
-                }
-            });
+        // TODO: handle empty input
+        axios.post(process.env.REACT_APP_API_URL + "/api/author/" + loggedInUser.loggedInUser.authorId + "/", {
+            displayName: displayName,
+            github: githubUrl,
+        }).then(res => {
+            console.log(res);
+            console.log(res.data);
         }).catch(err => {
-            console.log("GET ERROR");
+            console.log("POST ERROR");
         });
-
-        authorObject._id = adata._id;
-        authorObject.displayName = displayName;
-        authorObject.url = adata.url;
-        authorObject.github = githubUrl;
-
-        axios.post(process.env.REACT_APP_API_URL + "/api/author/" + authorObject._id + "/", authorObject)
-            .then(res => {
-                console.log(res);
-                console.log(res.data);
-            }).catch(err => {
-                console.log("POST ERROR");
-            });
     };
 
     return (
@@ -78,7 +56,7 @@ const SettingsPage = (loggedInUser: any) => {
                     <FormGroup>
                         <Label for="githubUrl">GitHub Account</Label>
                         <Input
-                            type="text" // add form validation?
+                            type="text" // TODO add form validation?
                             name="githubUrl"
                             id="githubUrl"
                             placeholder="New GitHub Account"
