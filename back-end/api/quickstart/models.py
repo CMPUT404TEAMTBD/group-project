@@ -37,7 +37,8 @@ class Post(models.Model):
   content = models.TextField(blank=True)
   categories = models.JSONField()
   # cannot store time as IOS 8601 as per spec so when interacting will need parse (i.e using django.utils.dateparse)
-  published = models.TimeField(default=timezone.now)
+  # TODO: defualt is broken maybe change to DateField
+  published = models.DateTimeField(default=timezone.now, editable=False)
   commentLink = models.TextField(default='')
 
 class Comment(models.Model):
@@ -47,7 +48,7 @@ class Comment(models.Model):
   author = models.CharField(max_length=LONG_CHAR_LENGTH)
   comment = models.TextField()
   contentType = models.CharField(max_length=LONG_CHAR_LENGTH)
-  published = models.TimeField(default=timezone.now)
+  published = models.DateTimeField(default=timezone.now, editable=False)
 
   def save(self, *args, **kwargs):
     cuuid = str(uuid.uuid4().hex)
