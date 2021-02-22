@@ -17,8 +17,8 @@ class GetPostById(TestCase):
     )
 
   def test_get_valid_post(self):
-    response = client.get(f'/api/author/{self.post.author}/posts/{self.post._id}/')
-    post = Post.objects.get(_id=self.post._id)
+    response = client.get(f'/api/author/{self.post.author}/posts/{self.post.id}/')
+    post = Post.objects.get(id=self.post.id)
     serializer = PostSerializer(post)
     self.assertEqual(response.data, serializer.data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -33,44 +33,24 @@ class UpdatePostById(TestCase):
   def setUp(self):
     self.post = Post.objects.create(**get_test_post_fields())
 
-    self.payload = {
-      # TODO: Remove _id here once we figure out the _id field. It should be uneditable.
-      '_id': '123', 
-      'title': 'newpost', 
-      'description': 'i am a new post', 
-      'source': 'new source post id', 
-      'origin': 'new origin post id', 
-      'visibility': 'Friends', 
-      'unlisted': False, 
-      'isPrivateToFriends': False, 
-      # TODO: Remove author here once we figure fields out. It should be uneditable.
-      'author': 'newId', 
-      'contentType': 'text/plain', 
-      'content': 'Hello, I am a new post', 
-      'categories': '["New Testing"]', 
-      'published': '22:11:27.254321', 
-      'count': 10, 
-      'pageSize': 40, 
-      'commentLink': 'new link to comments', 
-      'comments': '{ "text": "nice new test" }'
-    }
+    self.payload = get_test_post_fields()
 
   def test_update_post(self):
     response = client.post(
-      f'/api/author/{self.post.author}/posts/{self.post._id}/',
+      f'/api/author/{self.post.author}/posts/{self.post.id}/',
       data=json.dumps(self.payload),
       content_type='application/json'
     )
     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     # Compare each payload field with the updated Post object.
-    serializer = PostSerializer(Post.objects.get(_id=self.post._id))
+    serializer = PostSerializer(Post.objects.get(id=self.post.id))
     for k in self.payload:
       self.assertEqual(serializer.data[k], self.payload[k])
 
     # Ensure other fields are unchanged
-    self.assertEqual(serializer.data['_id'], self.post._id)
-    self.assertEqual(serializer.data['_type'], self.post._type)
+    self.assertEqual(serializer.data['id'], str(self.post.id))
+    self.assertEqual(serializer.data['type'], self.post.type)
 
   def test_update_invalid_post(self):
     response = client.post(
@@ -87,7 +67,7 @@ class DeletePostById(TestCase):
     self.post = Post.objects.create(**get_test_post_fields())
 
   def test_delete_valid_post(self):
-    response = client.delete(f'/api/author/{self.post.author}/posts/{self.post._id}/')
+    response = client.delete(f'/api/author/{self.post.author}/posts/{self.post.id}/')
     self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
   def test_delete_invalid_post(self):
@@ -102,7 +82,7 @@ class CreatePostById(TestCase):
 
   def test_create_post(self):
     response = client.put(
-      f'/api/author/{self.payload["author"]}/posts/{self.payload["_id"]}/',
+      f'/api/author/{self.payload["author"]}/posts/testId/',
       data=json.dumps(self.payload),
       content_type='application/json'
     )

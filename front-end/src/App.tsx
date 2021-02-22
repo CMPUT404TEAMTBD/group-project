@@ -11,6 +11,7 @@ import { LoggedInUserContext } from './contexts/LoggedInUserContext';
 import { UserLogin } from './types/UserLogin';
 import UserPage from './pages/UserPage';
 import SettingsPage from './pages/SettingsPage';
+import CreatePostComponent from './components/CreatePost';
 
 
 /*
@@ -34,6 +35,7 @@ function App() {
               <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} />} />
               <Route path="/user" component={UserPage}/>
               <Route path="/settings" render={(props) => <SettingsPage loggedInUser={loggedInUser} />} />
+              <Route path="/create_post" component={CreatePostComponent}/>
               <Route component={NotFoundPage} />
             </Switch>
           </Container>
