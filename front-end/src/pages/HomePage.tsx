@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Row, Col, Form, Input, Button } from 'reactstrap';
-import CreatePostComponent from '../components/CreatePost';
 import PostListItem from '../components/PostListItem';
 import { Post } from '../types/Post';
 
@@ -32,7 +31,10 @@ export default function HomePage(props:RouteComponentProps) {
     e.preventDefault();
     props.history.push('/authors/'+userSearch);
   }
-
+    
+  function createPost(path:string) {
+    props.history.push('/create_post');
+  }
 
   let postListElToDisplay;
   if (postEntries === undefined){
@@ -56,6 +58,9 @@ export default function HomePage(props:RouteComponentProps) {
       <Col>
         <h3>Feed</h3>
         {postListElToDisplay}
+      </Col>
+      <Col>
+        <Button onClick={() => createPost("/create_post")}>Create Post</Button>
       </Col>
     </Row>
   );
