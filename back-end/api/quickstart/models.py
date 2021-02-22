@@ -28,23 +28,18 @@ class Post(models.Model):
   type = 'post'
   title = models.TextField()
   description = models.TextField()
-  source = models.TextField()
-  origin = models.TextField()
+  source = models.TextField(default='')
+  origin = models.TextField(default='')
   visibility = models.CharField(max_length=SHORT_CHAR_LENGTH, choices=Visibility.choices)
   unlisted = models.BooleanField()
-  author = models.CharField(max_length=LONG_CHAR_LENGTH)
+  author = models.TextField(default='')
   contentType = models.CharField(max_length=LONG_CHAR_LENGTH)
   content = models.TextField(blank=True)
   categories = models.JSONField()
   # cannot store time as IOS 8601 as per spec so when interacting will need parse (i.e using django.utils.dateparse)
-  published = models.TimeField(default=timezone.now)
-  count = models.IntegerField()
-  pageSize = models.IntegerField(default=50)
-  commentLink = models.CharField(max_length=LONG_CHAR_LENGTH)
-  # TODO: remove
-  # list of urls
-  comments = models.JSONField()
-
+  # TODO: defualt is broken maybe change to DateField
+  published = models.DateTimeField(default=timezone.now, editable=False)
+  commentLink = models.TextField(default='')
 
 class Comment(models.Model):
   id = models.CharField(primary_key=True, max_length=LONG_CHAR_LENGTH)
@@ -53,7 +48,7 @@ class Comment(models.Model):
   author = models.CharField(max_length=LONG_CHAR_LENGTH)
   comment = models.TextField()
   contentType = models.CharField(max_length=LONG_CHAR_LENGTH)
-  published = models.TimeField(default=timezone.now)
+  published = models.DateTimeField(default=timezone.now, editable=False)
 
   def save(self, *args, **kwargs):
     cuuid = str(uuid.uuid4().hex)

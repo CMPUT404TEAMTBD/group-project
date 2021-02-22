@@ -5,7 +5,7 @@ from rest_framework import status
 from django.test import TestCase, Client
 from .models import Author, Post
 from .serializers import AuthorSerializer, PostSerializer
-from .helper_test import get_test_post_fields
+from .helper_test import get_test_post_fields, get_test_partial_post_fields
 
 client = Client()
 
@@ -33,7 +33,7 @@ class UpdatePostById(TestCase):
   def setUp(self):
     self.post = Post.objects.create(**get_test_post_fields())
 
-    self.payload = get_test_post_fields()
+    self.payload = get_test_partial_post_fields()
 
   def test_update_post(self):
     response = client.post(
