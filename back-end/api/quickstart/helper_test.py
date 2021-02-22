@@ -52,10 +52,7 @@ def get_test_post_fields(i=1, author="testauthorid", visibility="Public"):
     'content': 'Hello, I am a test post',
     'categories': '["Testing"]',
     'published': '03:25:53.827044',
-    'count': 5,
-    'pageSize': 20,
-    'commentLink': 'link to comments',
-    'comments': '{ "text": "nice test" }'
+    'commentLink': 'link to comments'
   }
 
 def get_test_liked_fields(author_id):
