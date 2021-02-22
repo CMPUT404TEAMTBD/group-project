@@ -38,7 +38,7 @@ export default class LoginForm extends React.Component {
 
       axios.get(process.env.REACT_APP_API_URL + `/api/auth-user/${this.state.username}/`
       ).then(res => {
-        this.props.setLoggedInUser({username: this.state.username, password: this.state.password, authorId: res.data.authorId});
+        this.props.setLoggedInUser({username: this.state.username, password: this.state.password, authorId: res.data.id});
         this.props.history.push("/");
       }).catch(err => {
         this.setState({loginErr: true});
