@@ -16,8 +16,18 @@ const SettingsPage = (loggedInUser: any) => {
     // setting state: https://stackoverflow.com/questions/45850550/accessing-data-from-axios-get-request
 
     const initialInputState = { displayName: "", githubUrl: "" };
+    const authorUrl = process.env.REACT_APP_API_URL + "/api/author/" + loggedInUser.loggedInUser.authorId + "/";
     const [eachEntry, setEachEntry] = useState(initialInputState);
     const { displayName, githubUrl } = eachEntry;
+    const [unchangedData, setUnchangedData] = useState(initialInputState);
+
+    function getAuthorData() {
+        axios.get(authorUrl).then(res => {
+            setUnchangedData(res.data);
+            console.log(unchangedData)
+        }).catch(err => {
+            console.log("GET ERROR");
+        })};
 
     const handleInputChange = (e: any) => {
         setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
@@ -25,11 +35,11 @@ const SettingsPage = (loggedInUser: any) => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
+        getAuthorData();
 
-        // TODO: handle empty input
-        axios.post(process.env.REACT_APP_API_URL + "/api/author/" + loggedInUser.loggedInUser.authorId + "/", {
-            displayName: displayName,
-            github: githubUrl,
+        axios.post(authorUrl, {
+            displayName: (displayName === "") ? unchangedData.displayName : displayName,
+            github: (githubUrl === "") ? unchangedData.githubUrl : githubUrl,
         }).then(res => {
             console.log(res);
             console.log(res.data);
@@ -56,7 +66,7 @@ const SettingsPage = (loggedInUser: any) => {
                     <FormGroup>
                         <Label for="githubUrl">GitHub Account</Label>
                         <Input
-                            type="text" // TODO add form validation?
+                            type="text" // TODO add URL validation
                             name="githubUrl"
                             id="githubUrl"
                             placeholder="New GitHub Account"
