@@ -63,9 +63,11 @@ const CreatePostComponent = (props: any) => {
                 <Input type="text" name="Description" placeholder="Description" onChange={e => setDesc(e.target.value)}/>
                 <Label for="Content Type">Content Type</Label>
                 <select name="Content Type" onChange={e => setContentType(e.target.value)}>
-                    <option value="Text">Text</option>
-                    <option value="Markdown">Markdown</option>
-                    <option value="Image">Image</option>
+                    <option value="text/markdown">text/markdown</option>
+                    <option value="text/plain">text/plain</option>
+                    <option value="application/base64">application/base64</option>
+                    <option value="image/png;base64">image/png</option>
+                    <option value="image/jpeg;base64">image/jpeg</option>
                 </select>
                 <Input type="text" name="Content" placeholder="Content" onChange={e => setContent(e.target.value)}/>
                 <Input type="text" name="Categories" placeholder="Categories" onChange={e => parseCategories(e.target.value)}/>
