@@ -7,7 +7,7 @@ import { Post } from '../types/Post';
 
 
 // https://stackoverflow.com/questions/44118060/react-router-dom-with-typescript/44571743
-export default function HomePage(props:RouteComponentProps) {
+export default function HomePage(props:any) {
 
   const [userSearch,setUserSearch] = useState('');
 
@@ -57,7 +57,7 @@ export default function HomePage(props:RouteComponentProps) {
         {postListElToDisplay}
       </Col>
       <Col>
-        <Button onClick={() => props.history.push('/create_post')}>Create Post</Button>
+        {props.loggedInUser ? <Button onClick={() => props.history.push('/create_post')}>Create Post</Button> : null}
       </Col>
     </Row>
   );
