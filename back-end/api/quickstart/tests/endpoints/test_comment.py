@@ -1,8 +1,8 @@
 import json
 from rest_framework import status
 from django.test import TestCase, Client
-from .models import Comment
-from .serializers import CommentSerializer
+from quickstart.models import Comment
+from quickstart.serializers import CommentSerializer
 from .helper_test import get_test_comment_fields
 
 client = Client()
