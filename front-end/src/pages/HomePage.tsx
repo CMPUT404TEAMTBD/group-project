@@ -32,9 +32,6 @@ export default function HomePage(props:RouteComponentProps) {
     props.history.push('/authors/'+userSearch);
   }
     
-  function createPost(path:string) {
-    props.history.push('/create_post');
-  }
 
   let postListElToDisplay;
   if (postEntries === undefined){
@@ -60,7 +57,7 @@ export default function HomePage(props:RouteComponentProps) {
         {postListElToDisplay}
       </Col>
       <Col>
-        <Button onClick={() => createPost("/create_post")}>Create Post</Button>
+        <Button onClick={() => props.history.push('/create_post')}>Create Post</Button>
       </Col>
     </Row>
   );
