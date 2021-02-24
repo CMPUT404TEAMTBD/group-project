@@ -10,14 +10,19 @@ import {
     Input,
     Label,
 } from 'reactstrap';
+import { UserLogin } from '../types/UserLogin';
+interface Props {
+    loggedInUser: UserLogin | undefined;
+}
 
-const SettingsPage = (loggedInUser: any) => {
+const SettingsPage = (props: Props) => {
     // https://reactstrap.github.io/components/form/#app
     // https://medium.com/better-programming/easily-create-a-form-with-react-hooks-1cab17e2be0d
     // setting state: https://stackoverflow.com/questions/45850550/accessing-data-from-axios-get-request
 
     const initialInputState = { displayName: undefined, githubUrl: undefined };
-    const authorUrl = process.env.REACT_APP_API_URL + "/api/author/" + loggedInUser.loggedInUser.authorId + "/";
+    const authorId = props.loggedInUser ? props.loggedInUser.authorId + "/" : "";
+    const authorUrl = process.env.REACT_APP_API_URL + "/api/author/" + authorId;
     const [eachEntry, setEachEntry] = useState(initialInputState);
     const { displayName, githubUrl } = eachEntry;
     const [unchangedData, setUnchangedData] = useState(initialInputState);

@@ -34,6 +34,7 @@ function App() {
               <Route exact path="/" component={HomePage} />
               <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} />} />
               <Route path="/user" component={UserPage}/>
+              {/* TODO: hide settings page if not logged in */}
               <Route path="/settings" render={(props) => <SettingsPage loggedInUser={loggedInUser} />} />
               <Route path="/create_post" component={CreatePostComponent}/>
               <Route component={NotFoundPage} />
