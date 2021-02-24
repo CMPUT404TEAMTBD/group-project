@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import {
+    Alert,
     Card,
     CardBody,
     Button,
@@ -15,18 +16,19 @@ const SettingsPage = (loggedInUser: any) => {
     // https://medium.com/better-programming/easily-create-a-form-with-react-hooks-1cab17e2be0d
     // setting state: https://stackoverflow.com/questions/45850550/accessing-data-from-axios-get-request
 
-    const initialInputState = { displayName: "", githubUrl: "" };
+    const initialInputState = { displayName: undefined, githubUrl: undefined };
     const authorUrl = process.env.REACT_APP_API_URL + "/api/author/" + loggedInUser.loggedInUser.authorId + "/";
     const [eachEntry, setEachEntry] = useState(initialInputState);
     const { displayName, githubUrl } = eachEntry;
     const [unchangedData, setUnchangedData] = useState(initialInputState);
+    const [responseMessage, setResponseMessage] = useState(100);
 
     function getAuthorData() {
         axios.get(authorUrl).then(res => {
             setUnchangedData(res.data);
-            console.log(unchangedData)
         }).catch(err => {
             console.log("GET ERROR");
+            setResponseMessage(500);
         })};
 
     const handleInputChange = (e: any) => {
@@ -37,16 +39,34 @@ const SettingsPage = (loggedInUser: any) => {
         e.preventDefault();
         getAuthorData();
 
-        axios.post(authorUrl, {
-            displayName: (displayName === "") ? unchangedData.displayName : displayName,
-            github: (githubUrl === "") ? unchangedData.githubUrl : githubUrl,
-        }).then(res => {
-            console.log(res);
-            console.log(res.data);
-        }).catch(err => {
-            console.log("POST ERROR");
-        });
+        if (!displayName && !githubUrl) {
+            setResponseMessage(400); // handle empty input
+        } else {
+            axios.post(authorUrl, {
+                displayName: !displayName ? unchangedData.displayName : displayName,
+                github: !githubUrl ? unchangedData.githubUrl : githubUrl,
+            }).then(res => {
+                console.log(res);
+                setResponseMessage(res.status);
+            }).catch(err => {
+                console.log("POST ERROR")
+                setResponseMessage(500);
+            });
+        }
     };
+
+    function displayResponse() {
+        if (responseMessage > 499) {
+            return <Alert color="danger">Error! Please try again</Alert>
+        }
+        if (responseMessage === 400) {
+            return <Alert color="warning">Cannot submit empty form</Alert>
+        }
+        if (responseMessage > 199 && responseMessage < 300) {
+            return <Alert color="success">Update successful!</Alert>
+        }
+        return null;
+    }
 
     return (
         <Card>
@@ -75,6 +95,7 @@ const SettingsPage = (loggedInUser: any) => {
                         />
                     </FormGroup>
                     <Button type="submit">Submit</Button>
+                    {displayResponse()}
                 </Form>
             </CardBody>
         </Card>
