@@ -2,13 +2,12 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Row, Col, Form, Input, Button } from 'reactstrap';
-import CreatePostComponent from '../components/CreatePost';
 import PostListItem from '../components/PostListItem';
 import { Post } from '../types/Post';
 
 
 // https://stackoverflow.com/questions/44118060/react-router-dom-with-typescript/44571743
-export default function HomePage(props:RouteComponentProps) {
+export default function HomePage(props:any) {
 
   const [userSearch,setUserSearch] = useState('');
 
@@ -32,7 +31,7 @@ export default function HomePage(props:RouteComponentProps) {
     e.preventDefault();
     props.history.push('/authors/'+userSearch);
   }
-
+    
 
   let postListElToDisplay;
   if (postEntries === undefined){
@@ -56,6 +55,9 @@ export default function HomePage(props:RouteComponentProps) {
       <Col>
         <h3>Feed</h3>
         {postListElToDisplay}
+      </Col>
+      <Col>
+        {props.loggedInUser ? <Button onClick={() => props.history.push('/create_post')}>Create Post</Button> : null}
       </Col>
     </Row>
   );

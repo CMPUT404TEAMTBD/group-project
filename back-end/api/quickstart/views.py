@@ -72,7 +72,8 @@ class PostListViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(serializer.data)
-
+    
+    
 
 class PublicPostListViewSet(viewsets.ModelViewSet):
     """

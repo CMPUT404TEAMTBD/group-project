@@ -26,7 +26,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         model = Post
         fields = ['id', 'type', 'title', 'description', 'source', 'origin', 'visibility',
                   'unlisted', 'author', 'contentType', 'content',
-                  'categories', 'published', 'count', 'pageSize', 'commentLink', 'comments']
+                  'categories', 'published', 'commentLink']
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):

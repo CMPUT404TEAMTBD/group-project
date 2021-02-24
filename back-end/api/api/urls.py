@@ -43,7 +43,8 @@ public_posts_list = views.PublicPostListViewSet.as_view({
 })
 
 posts_list = views.PostListViewSet.as_view({
-    'get': 'list'
+    'get': 'list',
+    'post': 'create'
 })
 
 # Should be 'get': 'list', but leave it as retrieve so that the debug site still works.

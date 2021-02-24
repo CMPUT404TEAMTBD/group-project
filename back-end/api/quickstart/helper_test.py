@@ -36,7 +36,6 @@ def get_test_comment_fields(i=1):
     'author': f'testcommenter{i}',
     'comment': 'i am a comment',
     'contentType': 'text/plain',
-    'published': '03:25:53.827044',
   }
 
 def get_test_post_fields(i=1, author="testauthorid", visibility="Public"):
@@ -51,11 +50,19 @@ def get_test_post_fields(i=1, author="testauthorid", visibility="Public"):
     'contentType': 'text/plain',
     'content': 'Hello, I am a test post',
     'categories': '["Testing"]',
-    'published': '03:25:53.827044',
-    'count': 5,
-    'pageSize': 20,
-    'commentLink': 'link to comments',
-    'comments': '{ "text": "nice test" }'
+    'commentLink': 'link to comments'
+  }
+
+def get_test_partial_post_fields(i=1, author="testauthorid"):
+    return {
+    'title': f'testpost{i}',
+    'description': f'i am test post {i}',
+    'visibility': "Public",
+    'unlisted': True,
+    'contentType': 'text/plain',
+    'content': 'Hello, I am a test post',
+    'categories': '["Testing"]',
+    'commentLink': 'link to comments'
   }
 
 def get_test_liked_fields(author_id):
