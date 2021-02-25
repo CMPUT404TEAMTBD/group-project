@@ -4,7 +4,8 @@ def get_test_author_fields(i=1):
   return {
     'displayName': f'John Doe {i}',
     'url': f'testUrl{i}',
-    'github': f'testGithub{i}'
+    'github': f'testGithub{i}',
+    'host': 'testHost'
   }
 
 def get_test_follow_fields():
@@ -54,4 +55,10 @@ def get_test_partial_post_fields(i=1, author="testauthorid"):
     'content': 'Hello, I am a test post',
     'categories': '["Testing"]',
     'commentLink': 'link to comments'
+  }
+
+def get_test_inbox_fields():
+  return {
+    'author': 'testAuthor',
+    'items': '[{"type":"post"}, {"type":"comment"}]'
   }
