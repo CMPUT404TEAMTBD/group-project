@@ -5,7 +5,7 @@ from rest_framework import status
 from django.test import TestCase, Client
 from quickstart.models import Post
 from quickstart.serializers import PostSerializer
-from .helper_test import get_test_post_fields, get_test_partial_post_fields
+from quickstart.tests.helper_test import get_test_post_fields, get_test_partial_post_fields
 
 client = Client()
 

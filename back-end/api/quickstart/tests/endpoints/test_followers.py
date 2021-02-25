@@ -3,7 +3,7 @@ from rest_framework import status
 from django.test import TestCase, Client
 from quickstart.models import Follow
 from quickstart.serializers import FollowSerializer
-from .helper_test import get_test_follow_fields
+from quickstart.tests.helper_test import get_test_follow_fields
 
 client = Client()
 

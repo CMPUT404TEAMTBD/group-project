@@ -5,7 +5,7 @@ from rest_framework import status
 from django.test import TestCase, Client
 from quickstart.models import Author
 from quickstart.serializers import AuthorSerializer
-from .helper_test import get_test_author_fields
+from quickstart.tests.helper_test import get_test_author_fields
 
 client = Client()
 
