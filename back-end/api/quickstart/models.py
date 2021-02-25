@@ -42,19 +42,13 @@ class Post(models.Model):
   commentLink = models.TextField(default='')
 
 class Comment(models.Model):
-  id = models.CharField(primary_key=True, max_length=LONG_CHAR_LENGTH)
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   type = 'comment'
   postId = models.CharField(max_length=LONG_CHAR_LENGTH)
   author = models.CharField(max_length=LONG_CHAR_LENGTH)
   comment = models.TextField()
   contentType = models.CharField(max_length=LONG_CHAR_LENGTH)
   published = models.DateTimeField(default=timezone.now, editable=False)
-
-  def save(self, *args, **kwargs):
-    cuuid = str(uuid.uuid4().hex)
-    # TODO: change this if postId is not the full url to the post
-    self.id = f"{self.postId}/comments/{cuuid}"
-    super().save(*args, **kwargs)
 
 
 class Follow(models.Model):
@@ -66,13 +60,13 @@ class Follow(models.Model):
 class Like(models.Model):
   context = models.CharField(max_length=LONG_CHAR_LENGTH)
   summary = models.CharField(max_length=LONG_CHAR_LENGTH)
-  type = "like" 
+  type = 'like' 
   author = models.CharField(max_length=LONG_CHAR_LENGTH)
   object = models.CharField(max_length=LONG_CHAR_LENGTH)
   
 
 class Inbox(models.Model):
-  type = "inbox"
+  type = 'inbox'
   author = models.CharField(primary_key=True, max_length=LONG_CHAR_LENGTH)
   items = models.JSONField(default=list)
 
