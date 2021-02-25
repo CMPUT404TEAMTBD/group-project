@@ -14,20 +14,12 @@ def get_test_follow_fields():
     'approved': False
   }
 
-def get_test_like_post_fields(post_id=1):
+def get_test_like_fields(object_id=1, author_id='testAuthorId'):
   return {
     'context': 'testContext',
-    'summary': 'Someone likes your post',
-    'author': 'testAuthorUrl',
-    'object': f'{post_id}',
-  }
-
-def get_test_like_comment_fields(comment_id=1):
-  return {
-    'context': 'testContext',
-    'summary': 'Someone likes your comment',
-    'author': 'testAuthorUrl',
-    'object': f'{comment_id}',
+    'summary': 'Someone likes your object',
+    'author': author_id,
+    'object': object_id,
   }
 
 def get_test_comment_fields(i=1):
@@ -63,11 +55,3 @@ def get_test_partial_post_fields(i=1, author="testauthorid"):
     'categories': '["Testing"]',
     'commentLink': 'link to comments'
   }
-
-def get_test_liked_fields(author_id):
-  return {
-  'context': 'testContext',
-  'summary': 'you liked',
-  'author': f'{author_id}',
-  'object': 'testobject'
-}

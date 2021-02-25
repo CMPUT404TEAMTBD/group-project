@@ -3,7 +3,7 @@ from rest_framework import status
 from django.test import TestCase, Client
 from quickstart.models import Like
 from quickstart.serializers import LikeSerializer
-from .helper_test import get_test_liked_fields
+from quickstart.tests.helper_test import get_test_like_fields
 
 client = Client()
 
@@ -11,9 +11,9 @@ class GetLikedForAuthor(TestCase):
   """Tests for getting all things liked by an author '/api/author/<str:author>/liked/'."""
   def setUp(self):
     self.test_author_id = 1
-    self.like1 = Like.objects.create(**get_test_liked_fields(author_id= self.test_author_id))
-    self.like2 = Like.objects.create(**get_test_liked_fields(author_id= self.test_author_id))
-    self.like3 = Like.objects.create(**get_test_liked_fields(author_id=2))
+    self.like1 = Like.objects.create(**get_test_like_fields(author_id= self.test_author_id))
+    self.like2 = Like.objects.create(**get_test_like_fields(author_id= self.test_author_id))
+    self.like3 = Like.objects.create(**get_test_like_fields(author_id=2))
 
     self.likes = [self.like1, self.like2]
 
