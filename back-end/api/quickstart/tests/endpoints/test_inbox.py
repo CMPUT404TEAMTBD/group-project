@@ -1,8 +1,8 @@
 import json
 from rest_framework import status
 from django.test import TestCase, Client
-from .models import Inbox
-from .serializers import InboxSerializer
+from quickstart.models import Inbox
+from quickstart.serializers import InboxSerializer
 from .helper_test import get_test_post_fields, get_test_follow_fields, get_test_like_post_fields
 
 client = Client()

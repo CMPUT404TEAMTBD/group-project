@@ -1,8 +1,8 @@
 import json
 from rest_framework import status
 from django.test import TestCase, Client
-from .models import Author
-from .serializers import AuthorSerializer
+from quickstart.models import Author
+from quickstart.serializers import AuthorSerializer
 from .helper_test import get_test_author_fields
 from django.contrib.auth.models import User
 

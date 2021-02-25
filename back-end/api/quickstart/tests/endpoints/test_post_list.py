@@ -3,8 +3,8 @@ Referenced https://realpython.com/test-driven-development-of-a-django-restful-ap
 import json
 from rest_framework import status
 from django.test import TestCase, Client
-from .models import Post
-from .serializers import PostSerializer
+from quickstart.models import Post
+from quickstart.serializers import PostSerializer
 from .helper_test import get_test_post_fields, get_test_partial_post_fields
 
 client = Client()

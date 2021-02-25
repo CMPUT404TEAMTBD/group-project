@@ -1,8 +1,8 @@
 import json
 from rest_framework import status
 from django.test import TestCase, Client
-from .models import Like
-from .serializers import LikeSerializer
+from quickstart.models import Like
+from quickstart.serializers import LikeSerializer
 from .helper_test import get_test_liked_fields
 
 client = Client()
