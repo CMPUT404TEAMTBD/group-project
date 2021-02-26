@@ -21,10 +21,14 @@ router.register(r'inbox', views.InboxViewSet)
 # Referenced Lucas Weyne's code at https://stackoverflow.com/a/53991768
 author = views.AuthorViewSet.as_view({
     'get': 'retrieve',
-    'post': 'update',
+    'post': 'partial_update',
     # TODO: remove put: create once we no longer need a dev shortcut to create authors, 
     # because user creation should be handled with the built in User model. 
     'put': 'create'
+})
+
+auth_user = views.AuthUserViewSet.as_view({
+    'get': 'retrieve'
 })
 
 posts = views.PostViewSet.as_view({
@@ -39,7 +43,8 @@ public_posts_list = views.PublicPostListViewSet.as_view({
 })
 
 posts_list = views.PostListViewSet.as_view({
-    'get': 'list'
+    'get': 'list',
+    'post': 'create'
 })
 
 # Should be 'get': 'list', but leave it as retrieve so that the debug site still works.
@@ -89,10 +94,11 @@ urlpatterns = [
     path('api/rest-auth/', include('rest_auth.urls')),
     path('api/rest-auth/registration/', include('rest_auth.registration.urls')),
     path('api/admin/', admin.site.urls),
-    path('api/author/<str:_id>/', author, name='author'),
+    path('api/author/<str:id>/', author, name='author'),
     path('api/public-posts/', public_posts_list, name='public-posts-list'),
+    path('api/auth-user/<str:username>/', auth_user, name='auth-user'),
     path('api/author/<str:author>/posts/', posts_list, name='posts-list'),
-    path('api/author/<str:author>/posts/<str:_id>/', posts, name='posts'),
+    path('api/author/<str:author>/posts/<str:id>/', posts, name='posts'),
     path('api/author/<str:receiver>/followers/', followers_list, name='followers-list'),
     path('api/author/<str:receiver>/followers/<str:sender>/', followers, name='followers'),
     path('api/author/<str:author>/posts/<str:post>/comments/', comments, name='comments'),

@@ -35,7 +35,24 @@ class AuthorViewSet(viewsets.ModelViewSet):
 
     # Using lookup_field as search param
     # https://stackoverflow.com/questions/56431755/django-rest-framework-urls-without-pk
-    lookup_field = '_id'
+    lookup_field = 'id'
+
+
+class AuthUserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows to fetch an author by the author's username (NOT displayName).
+    """
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+
+    def retrieve(self, request, username):
+        try:
+            author = Author.objects.get(user__username=username)
+            serializer = AuthorSerializer(author)
+        except Author.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.data)
 
 
 class PostListViewSet(viewsets.ModelViewSet):
@@ -44,7 +61,7 @@ class PostListViewSet(viewsets.ModelViewSet):
     """
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    lookup_field = '_id'
+    lookup_field = 'id'
 
     def list(self, request, author):
         try:
@@ -55,13 +72,16 @@ class PostListViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(serializer.data)
+    
+    
+
 class PublicPostListViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows posts to be viewed or edited.
     """
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    lookup_field = '_id'
+    lookup_field = 'id'
 
     def list(self, request):
         try:
@@ -80,8 +100,8 @@ class PostViewSet(viewsets.ModelViewSet):
     """
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    lookup_field = '_id'
-
+    lookup_field = 'id'
+    
 
 class CommentViewSet(viewsets.ModelViewSet):
     """
@@ -89,7 +109,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     """
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    lookup_field = '_id'
+    lookup_field = 'id'
 
     def retrieve(self, request, author, post):
         try:
@@ -110,7 +130,7 @@ class FollowersListViewSet(viewsets.ModelViewSet):
         sender_ids = [f.sender for f in follows]
 
         # TODO: Most likely will have to make API calls here instead of database reading.
-        senders = Author.objects.filter(_id__in=sender_ids)
+        senders = Author.objects.filter(id__in=sender_ids)
         serializer = AuthorSerializer(senders, many=True)
 
         return Response({
@@ -137,7 +157,7 @@ class LikesPostViewSet(viewsets.ModelViewSet):
 
     # TODO: Author is currently being ignored. Do we need to use it?
     def retrieve(self, request, author, post):
-        likes = Like.objects.filter(_object=post)
+        likes = Like.objects.filter(object=post)
         serializer = LikeSerializer(likes, many=True)
 
         return Response({
@@ -155,7 +175,7 @@ class LikesCommentViewSet(viewsets.ModelViewSet):
 
     # TODO: Author+Post is currently being ignored. Do we need to use it?
     def retrieve(self, request, author, post, comment):
-        likes = Like.objects.filter(_object=comment)
+        likes = Like.objects.filter(object=comment)
         serializer = LikeSerializer(likes, many=True)
 
         return Response({

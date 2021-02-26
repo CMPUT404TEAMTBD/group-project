@@ -10,6 +10,8 @@ import AuthPage from './pages/AuthPage';
 import { LoggedInUserContext } from './contexts/LoggedInUserContext';
 import { UserLogin } from './types/UserLogin';
 import UserPage from './pages/UserPage';
+import SettingsPage from './pages/SettingsPage';
+import CreatePostComponent from './components/CreatePost';
 
 
 /*
@@ -29,9 +31,13 @@ function App() {
           <AppNavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser}/>
           <Container fluid={true}>
             <Switch>
-              <Route exact path="/" component={HomePage} />
+              <Route exact path="/" render={(props) => <HomePage {...props} loggedInUser={loggedInUser} />} />
               <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} />} />
               <Route path="/user" component={UserPage}/>
+              {/* TODO: hide settings page if not logged in */}
+              <Route path="/settings" render={(props) => <SettingsPage loggedInUser={loggedInUser} />} />
+              <Route path="/create_post" component={CreatePostComponent}/>
+              <Route path="/create_post" render={(props) => <CreatePostComponent {...props} loggedInUser={loggedInUser} />} />
               <Route component={NotFoundPage} />
             </Switch>
           </Container>

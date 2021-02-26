@@ -18,21 +18,21 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
 class AuthorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Author
-        fields = ['_id', '_type', 'displayName', 'url', 'github']
+        fields = ['id', 'type', 'displayName', 'url', 'github']
 
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Post
-        fields = ['_id', '_type', 'title', 'description', 'source', 'origin', 'visibility',
-                  'unlisted', 'isPrivateToFriends', 'author', 'contentType', 'content',
-                  'categories', 'published', 'count', 'pageSize', 'commentLink', 'comments']
+        fields = ['id', 'type', 'title', 'description', 'source', 'origin', 'visibility',
+                  'unlisted', 'author', 'contentType', 'content',
+                  'categories', 'published', 'commentLink']
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Comment
-        fields = ['_id', '_type', 'postId', 'author', 'comment', 'contentType', 'published']
+        fields = ['id', 'type', 'author', 'comment', 'contentType', 'published']
 
 
 class FollowSerializer(serializers.HyperlinkedModelSerializer):
@@ -44,10 +44,10 @@ class FollowSerializer(serializers.HyperlinkedModelSerializer):
 class LikeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Like
-        fields = ['context', 'summary', '_type', 'author', '_object']
+        fields = ['context', 'summary', 'type', 'author', 'object']
         
 
 class InboxSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Inbox
-        fields = ["_type", "author", "items"]
+        fields = ["author", "items"]
