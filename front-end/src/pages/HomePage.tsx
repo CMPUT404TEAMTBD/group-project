@@ -24,7 +24,7 @@ export default function HomePage(props:RouteComponentProps) {
   function searchUsers(e:any){
     e.preventDefault();
     //props.history.push('/authors/'+userSearch);
-    axios.get('http://localhost:8000/api/author/' + userSearch + "/")
+    axios.get('process.env.REACT_APP_API_URL + "/api/author/' + userSearch + "/")
       .then(response => {
       console.log(response.data);
       setUserSearch(response.data);  
