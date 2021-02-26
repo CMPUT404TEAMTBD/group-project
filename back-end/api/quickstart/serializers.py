@@ -22,6 +22,8 @@ class AuthorSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
+    author = AuthorSerializer(read_only=True)
+
     class Meta:
         model = Post
         fields = ['id', 'type', 'title', 'description', 'source', 'origin', 'visibility',

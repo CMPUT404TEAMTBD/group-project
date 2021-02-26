@@ -1,13 +1,13 @@
 from django.test import TestCase
-from quickstart.models import Post
+from quickstart.models import Author, Post
 from types import SimpleNamespace
-from quickstart.tests.helper_test import get_test_post_fields
+from quickstart.tests.helper_test import get_test_author_fields, get_test_post_fields
 
 class CreatePost(TestCase):
   """Tests for creating a Post."""
   def setUp(self): 
     self.fields = SimpleNamespace(**get_test_post_fields())
-    self.post = Post.objects.create(**vars(self.fields))
+    self.post = Post.objects.create(**vars(self.fields), author=Author.objects.create(**get_test_author_fields()))
 
   def test_create_post(self):
     self.assertTrue(self.post.id)

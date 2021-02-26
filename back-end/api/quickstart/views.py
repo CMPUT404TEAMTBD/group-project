@@ -72,8 +72,16 @@ class PostListViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(serializer.data)
-    
-    
+
+    def create(self, request, author):
+        try:
+            author = Author.objects.get(id=author)
+            post = Post.objects.create(author=author, **request.data)
+            serializer = PostSerializer(post)
+        except Author.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class PublicPostListViewSet(viewsets.ModelViewSet):
     """
@@ -101,6 +109,17 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     lookup_field = 'id'
+
+    def create(self, request, author, id):
+        try:
+            author = Author.objects.get(id=author)
+            post = Post.objects.create(author=author, id=id, **request.data)
+            serializer = PostSerializer(post)
+        except Author.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        print("HELLO! CREATED")
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 
 class CommentViewSet(viewsets.ModelViewSet):

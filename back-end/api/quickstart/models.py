@@ -25,6 +25,7 @@ class Post(models.Model):
     FRIENDS = 'Friends'
 
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+  author = models.ForeignKey(Author, on_delete=models.CASCADE)
   type = 'post'
   title = models.TextField()
   description = models.TextField()
@@ -32,7 +33,6 @@ class Post(models.Model):
   origin = models.TextField(default='')
   visibility = models.CharField(max_length=SHORT_CHAR_LENGTH, choices=Visibility.choices)
   unlisted = models.BooleanField()
-  author = models.TextField(default='')
   contentType = models.CharField(max_length=LONG_CHAR_LENGTH)
   content = models.TextField(blank=True)
   categories = models.JSONField()
