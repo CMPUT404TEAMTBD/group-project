@@ -118,7 +118,6 @@ class PostViewSet(viewsets.ModelViewSet):
         except Author.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        print("HELLO! CREATED")
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
 
