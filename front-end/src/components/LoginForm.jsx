@@ -35,10 +35,15 @@ export default class LoginForm extends React.Component {
     }).then(res => {
       //Store token in a cookie
       // document.cookie = "accessToken=" + res.data.key;
-      this.props.setLoggedInUser({username: this.state.username, password: this.state.password});
 
-      //console.log(cookieValue)
-      this.props.history.push("/");
+      axios.get(process.env.REACT_APP_API_URL + `/api/auth-user/${this.state.username}/`
+      ).then(res => {
+        this.props.setLoggedInUser({username: this.state.username, password: this.state.password, authorId: res.data.id});
+        this.props.history.push("/");
+      }).catch(err => {
+        this.setState({loginErr: true});
+      });
+
     }).catch(err => {
       this.setState({loginErr: true});
     });
