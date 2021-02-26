@@ -15,8 +15,6 @@ interface userProps {
 export default function HomePage(props:any) {
 
   const [userSearch,setUserSearch] = useState<userProps>();
-
-
   const [postEntries, setPostEntries] = useState<Post[]|undefined>(undefined);
 
   useEffect(()=>{
@@ -42,6 +40,19 @@ export default function HomePage(props:any) {
   });
     
   }
+    
+
+  let postListElToDisplay;
+  if (postEntries === undefined){
+    postListElToDisplay = <p>Loading...</p>;
+  } else if (postEntries.length === 0) {
+    postListElToDisplay = <p>No Entries Found</p>;
+  } else {
+    postListElToDisplay = postEntries.map((post:Post)=>
+      <PostListItem post={post} key={post.id}/>
+    );
+  }
+  console.log(postListElToDisplay)
 
   
   function result(){
@@ -73,19 +84,6 @@ export default function HomePage(props:any) {
     }
 
   }
-    
-
-  let postListElToDisplay;
-  if (postEntries === undefined){
-    postListElToDisplay = <p>Loading...</p>;
-  } else if (postEntries.length === 0) {
-    postListElToDisplay = <p>No Entries Found</p>;
-  } else {
-    postListElToDisplay = postEntries.map((post:Post)=>
-      <PostListItem post={post} key={post.id}/>
-    );
-  }
-  console.log(postListElToDisplay)
 
   return (
     <Row>
@@ -96,6 +94,7 @@ export default function HomePage(props:any) {
       </Col>
       <Col>
         <h3>Feed</h3>
+        {result()}
         {postListElToDisplay}
       </Col>
       <Col>

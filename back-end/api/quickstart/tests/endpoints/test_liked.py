@@ -21,8 +21,9 @@ class GetLikedForAuthor(TestCase):
     response = client.get(f'/api/author/{self.test_author_id}/liked/')
 
    
-    liked = Like.objects.filter(author=self.test_author_id)
-    serializer = LikeSerializer(liked, many=True)
+
+    liked_posts = Like.objects.filter(author=self.test_author_id)
+    serializer = LikeSerializer(liked_posts, many=True)
 
     self.assertEqual(response.status_code, status.HTTP_200_OK)
     self.assertEqual(response.data['type'], 'liked')
