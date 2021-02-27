@@ -25,15 +25,21 @@ class GetPublicPosts(TestCase):
     self.post4 = Post.objects.create(
       **get_test_post_fields(4, visibility="Private"), author=self.author2
     )
+    self.post5 = Post.objects.create(
+      **get_test_post_fields(5, visibility="Public", unlisted=True), author=self.author1
+    )
+    self.post6 = Post.objects.create(
+      **get_test_post_fields(6, visibility="Public", unlisted=False), author=self.author1
+    )
 
   def tests_get_all_public_posts(self):
     response = client.get(f'/api/public-posts/')
 
-    posts = Post.objects.filter(visibility='Public')
+    posts = Post.objects.filter(visibility='Public', unlisted=False)
 
     serializer = PostSerializer(posts, many=True)
 
     self.assertEqual(response.data, serializer.data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    self.assertEqual(len(response.data), 2)
+    self.assertEqual(len(response.data), 3)
