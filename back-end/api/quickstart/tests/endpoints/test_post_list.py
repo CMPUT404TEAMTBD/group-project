@@ -18,18 +18,16 @@ class GetPosts(TestCase):
     self.post2 = Post.objects.create(
       **get_test_post_fields(2), author=self.author1
     )
+
     self.author2 = Author.objects.create(**get_test_author_fields())
     self.post3 = Post.objects.create(
       **get_test_post_fields(3), author=self.author2
-    )
-    self.postUnlisted = Post.objects.create(
-      **get_test_post_fields(4, unlisted=True), author=self.author1
     )
 
   def test_get_all_posts(self):
     response = client.get(f'/api/author/{self.author1.id}/posts/')
 
-    posts = Post.objects.filter(author=self.author1.id, unlisted=False)
+    posts = Post.objects.filter(author=self.author1.id)
     serializer = PostSerializer(posts, many=True)
 
     self.assertEqual(response.data, serializer.data)
