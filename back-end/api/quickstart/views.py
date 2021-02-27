@@ -1,11 +1,12 @@
 from django.contrib.auth.models import User, Group
 from .models import Author, Post, Follow, Comment, Like, Inbox
 from rest_framework import viewsets
-from rest_framework import permissions
 from rest_framework import status
 from rest_framework.response import Response
 from quickstart.serializers import UserSerializer, GroupSerializer, AuthorSerializer, PostSerializer, FollowSerializer, CommentSerializer, LikeSerializer, InboxSerializer
 from .mixins import MultipleFieldLookupMixin
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -59,16 +60,30 @@ class PostListViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows posts to be viewed or edited.
     """
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     lookup_field = 'id'
-
+    
+    """
+    Get all posts for the queried author.
+    If the authenticated author is the same queried author, we return ALL posts for that author.
+    Otherwise, we only return the queried author's public posts.
+    """
     def list(self, request, author):
         try:
             # TODO: Set up pagination: https://www.django-rest-framework.org/api-guide/pagination/
-            queryset = Post.objects.filter(author=author)
+
+            authenticated_author = Author.objects.get(user__username=request.user)
+            # Check if the authenticated author is the same as the author we're querying for posts.
+            if str(authenticated_author.id) == author:
+                queryset = Post.objects.filter(author=author)
+            else:
+                queryset = Post.objects.filter(author=author, visibility="Public", unlisted=False)
+
             serializer = PostSerializer(queryset, many=True)
-        except Post.DoesNotExist:
+        except (Author.DoesNotExist, Post.DoesNotExist):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(serializer.data)
