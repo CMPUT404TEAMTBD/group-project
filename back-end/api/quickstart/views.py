@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from quickstart.serializers import UserSerializer, GroupSerializer, AuthorSerializer, PostSerializer, FollowSerializer, CommentSerializer, LikeSerializer, InboxSerializer
 from .mixins import MultipleFieldLookupMixin
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 
