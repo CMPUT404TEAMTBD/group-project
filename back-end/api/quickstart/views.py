@@ -66,7 +66,7 @@ class PostListViewSet(viewsets.ModelViewSet):
     def list(self, request, author):
         try:
             # TODO: Set up pagination: https://www.django-rest-framework.org/api-guide/pagination/
-            queryset = Post.objects.filter(author=author)
+            queryset = Post.objects.filter(author=author, unlisted=False)
             serializer = PostSerializer(queryset, many=True)
         except Post.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
