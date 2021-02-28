@@ -110,6 +110,22 @@ export default function CreateEditPostModal(props: Props){
     }
   }
 
+  //Code from Дмитрий Васильев, https://stackoverflow.com/questions/36280818/how-to-convert-file-to-base64-in-javascript
+  const toBase64 = (file:File) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+
+  async function fileToImageContent(files:any)
+  { 
+    if(files && files.length >= 1){
+      const result: any = await toBase64(files[0])
+      setContent(result)
+    }
+  }
+
   return (
     <Modal isOpen={props.isModalOpen} toggle={props.toggle}>
     <ModalHeader toggle={props.toggle}>{isCreate ? "Create Post" : "Edit Post"}</ModalHeader>
@@ -118,14 +134,14 @@ export default function CreateEditPostModal(props: Props){
           {showError ? <Alert>Could not modify post</Alert> : null}
           <Form inline={true} onSubmit={e => sendPost(e)}>
             <FormGroup>
-              <Input type="text" name="Title" placeholder="Title" onChange={e => setTitle(e.target.value)}/>
+              <Input type="text" name="Title" placeholder="Title" onChange={e => setTitle(e.target.value)} value={title}/>
             </FormGroup>
             <FormGroup>
-              <Input type="text" name="Description" placeholder="Description" onChange={e => setDesc(e.target.value)}/>
+              <Input type="text" name="Description" placeholder="Description" onChange={e => setDesc(e.target.value)} value={desc}/>
             </FormGroup>
             <FormGroup>
               <Label for="Content Type">Content Type</Label>
-              <select name="Content Type" onChange={e => setContentType(e.target.value)}>
+              <select name="Content Type" onChange={e => setContentType(e.target.value)} value={contentType}>
                 <option value="text/markdown">text/markdown</option>
                 <option value="text/plain">text/plain</option>
                 <option value="application/base64">application/base64</option>
@@ -134,15 +150,17 @@ export default function CreateEditPostModal(props: Props){
               </select>
             </FormGroup>
             <FormGroup>
-              <Input type="text" name="Content" placeholder="Content" onChange={e => setContent(e.target.value)}/>
+              <Input type="text" name="Content" placeholder="Content" onChange={e => setContent(e.target.value)} value={content}/>
+              <Input type="file" name="File" placeholder="File" onChange={e => fileToImageContent(e.target.files)}/>
             </FormGroup>
             <FormGroup>
+              {/* TODO: Two way bindings for categories */}
               <Input type="text" name="Categories" placeholder="Categories" onChange={e => parseCategories(e.target.value)}/>
             </FormGroup>
             <FormGroup>
-              <Input id="Visibility" type="checkbox" name="Visibility" placeholder="Unlisted" onChange={e => changeVisibility(e.target.checked)}/>
+              <Input id="Visibility" type="checkbox" name="Visibility" placeholder="Visibility" onChange={e => changeVisibility(e.target.checked)} defaultChecked={visibility==="Friends"}/>
               <Label for="Visibility">Private</Label>
-              <Input id="Unlisted" type="checkbox" name="Unlisted" placeholder="Unlisted" onChange={e => setUnlisted(e.target.checked)}/>
+              <Input id="Unlisted" type="checkbox" name="Unlisted" placeholder="Unlisted" onChange={e => setUnlisted(e.target.checked)} defaultChecked={unlisted}/>
               <Label for="Unlisted">Unlisted</Label>
             </FormGroup>
             <FormGroup>
