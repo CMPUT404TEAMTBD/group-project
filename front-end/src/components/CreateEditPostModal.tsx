@@ -1,23 +1,42 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import React, { useState } from "react";
 import { Alert, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { Post } from "../types/Post";
 import { UserLogin } from "../types/UserLogin";
 
 interface Props {
   loggedInUser: UserLogin
   toggle: any
   isModalOpen: boolean
+  editFields?: Post
 }
 
-export default function CreatePostComponent(props: Props){
+/**
+ * If editFields is not undefined, then this modal will act as an editing modal
+ * @param props 
+ */
 
-  const [title, setTitle] = useState('');
-  const [desc, setDesc] = useState('');
-  const [contentType, setContentType] = useState('Text');
-  const [content, setContent] = useState('');
-  const [categories, setCategories] = useState<string[]>([""])
-  const [visibility, setVisibility] = useState('Public');
-  const [unlisted, setUnlisted] = useState(false);
+export default function CreateEditPostModal(props: Props){
+
+  const emptyPostFields = {
+    title:'',
+    description:'',
+    contentType:'Text',
+    content:'',
+    categories:[''],
+    visibility:'Public',
+    unlisted:false
+  }
+
+  const postFields = props.editFields ?? emptyPostFields
+
+  const [title, setTitle] = useState(postFields.title);
+  const [desc, setDesc] = useState(postFields.description);
+  const [contentType, setContentType] = useState(postFields.contentType);
+  const [content, setContent] = useState(postFields.content);
+  const [categories, setCategories] = useState<string[]>(postFields.categories);
+  const [visibility, setVisibility] = useState(postFields.visibility);
+  const [unlisted, setUnlisted] = useState(postFields.unlisted);
   const [showError, setShowError] = useState(false);
 
   function changeVisibility(isChecked: boolean) {
@@ -53,25 +72,38 @@ export default function CreatePostComponent(props: Props){
         }
       }
 
-      axios.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data, config)
-      .then(res => {
-        if (res.status >= 400) {
-          setShowError(true)
-        } else if (res.status === 201) {
-          console.log('WORKED!!!')
-        }
-      }).catch(error => {
-        setShowError(true)
-      })
+      if(props.editFields === undefined){
+        axios.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data, config)
+          .then(res => {
+            handleRes(res)
+          }).catch(error => {
+            setShowError(true)
+          })
+      }
+      else{
+        axios.put(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id, data, config)
+          .then(res => {
+            handleRes(res)
+          }).catch(error => {
+            setShowError(true)
+          })
+      }
+  }
+
+  function handleRes(res:AxiosResponse){
+    if (res.status >= 400) {
+      setShowError(true)
+    } else if (res.status === 201) {
+      props.toggle()
+    }
   }
 
   return (
     <Modal isOpen={props.isModalOpen} toggle={props.toggle}>
-    <ModalHeader toggle={props.toggle}>EDIT/POST</ModalHeader>
+    <ModalHeader toggle={props.toggle}>{props.editFields === undefined ? "Create Post" : "Edit Post"}</ModalHeader>
     <ModalBody>
       <div>
-          {showError ? <Alert>Could not create post</Alert> : null}
-          <h1>Create Post</h1>
+          {showError ? <Alert>Could not modify post</Alert> : null}
           <Form inline={true} onSubmit={e => sendPost(e)}>
             <FormGroup>
               <Input type="text" name="Title" placeholder="Title" onChange={e => setTitle(e.target.value)}/>
