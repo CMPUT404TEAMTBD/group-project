@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { UserLogin } from '../types/UserLogin';
+import { Post } from '../types/Post';
 import {
   Col,
   Container,
@@ -14,6 +15,7 @@ import {
   CardText,
   CardLink,
 } from 'reactstrap';
+import PostListItem from '../components/PostListItem';
 
 interface Props {
   loggedInUser: UserLogin | undefined;
@@ -26,6 +28,7 @@ export default function AuthorPage(props: Props) {
   const initialInputState = { displayName: undefined, github: undefined };
   const [author, setAuthor] = useState(initialInputState);
   const [responseMessage, setResponseMessage] = useState(100);
+  const [postEntries, setPostEntries] = useState<Post[] | undefined>(undefined);
 
   useEffect(() => {
     axios.get(authorUrl).then(res => {
@@ -35,7 +38,48 @@ export default function AuthorPage(props: Props) {
       console.log("ERROR GETTING AUTHOR INFO");
       setResponseMessage(500);
     })
+
+    axios.get(process.env.REACT_APP_API_URL + "/api/author/" + authorId + "posts/",
+      {
+        auth: {
+          username: props.loggedInUser ? props.loggedInUser.username : "",
+          password: props.loggedInUser ? props.loggedInUser.password : "",
+        }
+      }
+    ).then(res => {
+      const posts: Post[] = res.data;
+      setPostEntries(posts);
+    }).catch(err => {
+      console.log("ERROR GETTING POSTS");
+      setResponseMessage(500);
+    })
   }, []);
+
+  const postCards = () => {
+    while (!postEntries) {
+      return (
+        <Card>
+          {/* <CardImg top width="100%" src="/assets/318x180.svg" alt="Card image cap" /> */}
+          <CardBody>
+            <CardTitle tag="h5">LOADING POSTS</CardTitle>
+          </CardBody>
+        </Card>
+      )
+    }
+    if (postEntries.length == 0) {
+      return (
+        <Card>
+          {/* <CardImg top width="100%" src="/assets/318x180.svg" alt="Card image cap" /> */}
+          <CardBody>
+            <CardTitle tag="h5">No Posts!</CardTitle>
+          </CardBody>
+        </Card>
+      )
+    }
+    return (
+      postEntries.map((post: Post) => <PostListItem post={post} key={post.id} />)
+    )
+  };
 
   if (responseMessage > 299) {
     return (<Container>
@@ -45,9 +89,9 @@ export default function AuthorPage(props: Props) {
 
   return (
     <Container fluid>
-      <Row>
-        <Col sm={3}>
-          <Card>
+      <Row className="justify-content-md-center">
+        <Col sm={2}>
+          <Card body className="text-center">
             {/* TODO: maybe add profile pic? uncomment line below */}
             {/* <CardImg top width="100%" src="/assets/318x180.svg" alt="Card image cap" /> */}
             <CardBody>
@@ -57,13 +101,8 @@ export default function AuthorPage(props: Props) {
             </CardBody>
           </Card>
         </Col>
-        <Col sm={9}>
-          <Card>
-            {/* <CardImg top width="100%" src="/assets/318x180.svg" alt="Card image cap" /> */}
-            <CardBody>
-              <CardTitle tag="h5">RENDER POSTS IN THIS CARD</CardTitle>
-            </CardBody>
-          </Card>
+        <Col sm={5}>
+          {postCards()}
         </Col>
       </Row>
     </Container>
