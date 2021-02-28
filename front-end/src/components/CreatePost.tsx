@@ -42,7 +42,14 @@ const CreatePostComponent = (props: any) => {
             categories: categories
         }
         console.log(data)
-        axios.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data)
+        axios.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data,
+            {
+                // TODO: consider adding headers as well
+                auth: {
+                    username: props.loggedInUser.username,
+                    password: props.loggedInUser.password,
+                },
+            })
         .then(res => {
             if (res.status >= 400) {
                 setShowError(true)
