@@ -22,7 +22,6 @@ import CreatePostComponent from './components/CreatePost';
 function App() {
 
   const [loggedInUser,setLoggedInUser] = useState<UserLogin | undefined>(undefined);
-  // const loggedInPath = loggedInUser ? "/author/" + loggedInUser.authorId : "/";
 
   return (
     <div>
