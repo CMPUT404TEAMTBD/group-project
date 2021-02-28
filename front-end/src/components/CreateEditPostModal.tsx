@@ -154,8 +154,7 @@ export default function CreateEditPostModal(props: Props){
               <Input type="file" name="File" placeholder="File" onChange={e => fileToImageContent(e.target.files)}/>
             </FormGroup>
             <FormGroup>
-              {/* TODO: Two way bindings for categories */}
-              <Input type="text" name="Categories" placeholder="Categories" onChange={e => parseCategories(e.target.value)}/>
+              <Input type="text" name="Categories" placeholder="Categories" onChange={e => parseCategories(e.target.value)} value={categories.join(' ')}/>
             </FormGroup>
             <FormGroup>
               <Input id="Visibility" type="checkbox" name="Visibility" placeholder="Visibility" onChange={e => changeVisibility(e.target.checked)} defaultChecked={visibility==="Friends"}/>
