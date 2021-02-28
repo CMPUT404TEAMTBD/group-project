@@ -1,6 +1,7 @@
 import React from 'react';
 
-export default function UserPage() {
+export default function AuthorPage() {
+  
   return (
     <div>
      Nothing found here :(

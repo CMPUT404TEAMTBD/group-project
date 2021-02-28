@@ -9,7 +9,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import AuthPage from './pages/AuthPage';
 import { LoggedInUserContext } from './contexts/LoggedInUserContext';
 import { UserLogin } from './types/UserLogin';
-import UserPage from './pages/UserPage';
+import AuthorPage from './pages/AuthorPage';
 import SettingsPage from './pages/SettingsPage';
 import CreatePostComponent from './components/CreatePost';
 
@@ -22,6 +22,7 @@ import CreatePostComponent from './components/CreatePost';
 function App() {
 
   const [loggedInUser,setLoggedInUser] = useState<UserLogin | undefined>(undefined);
+  // const loggedInPath = loggedInUser ? "/author/" + loggedInUser.authorId : "/";
 
   return (
     <div>
@@ -33,7 +34,7 @@ function App() {
             <Switch>
               <Route exact path="/" render={(props) => <HomePage {...props} loggedInUser={loggedInUser} />} />
               <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} />} />
-              <Route path="/user" component={UserPage}/>
+              {loggedInUser && <Route path={`/author/${loggedInUser.authorId}`} component={AuthorPage} />}
               {/* TODO: hide settings page if not logged in */}
               <Route path="/settings" render={(props) => <SettingsPage loggedInUser={loggedInUser} />} />
               <Route path="/create_post" component={CreatePostComponent}/>
