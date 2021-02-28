@@ -37,7 +37,7 @@ export default function HomePage(props:any) {
     props.history.push('/authors/'+userSearch);
   }
 
-  function preprendToFeed(post:Post){
+  function prependToFeed(post:Post){
     if(postEntries !== undefined){
       setPostEntries([post, ...postEntries])
     }
@@ -51,7 +51,7 @@ export default function HomePage(props:any) {
           toggle={()=>setIsCreatePostModalOpen(!isCreatePostModalOpen)}
           isModalOpen={isCreatePostModalOpen}
           loggedInUser={props.loggedInUser}
-          prependToFeed={preprendToFeed}
+          prependToFeed={prependToFeed}
         />
       </React.Fragment>
     )
@@ -65,7 +65,7 @@ export default function HomePage(props:any) {
     postListElToDisplay = <p>No Entries Found</p>;
   } else {
     postListElToDisplay = postEntries.map((post:Post)=>
-      <PostListItem post={post} key={post.id}/>
+      <PostListItem post={post} key={post.id} isEditable={true} loggedInUser={props.loggedInUser}/>
     );
   }
   console.log(postListElToDisplay)

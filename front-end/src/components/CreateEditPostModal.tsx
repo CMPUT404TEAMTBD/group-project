@@ -107,7 +107,7 @@ export default function CreateEditPostModal(props: Props){
           })
       }
       else if(props.editFields !== undefined){
-          axios.put(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data, config)
+          axios.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data, config)
           .then(res => {
             handleRes(res)
           }).catch(error => {
@@ -118,16 +118,19 @@ export default function CreateEditPostModal(props: Props){
   }
 
   function handleRes(res:AxiosResponse){
-    if (res.status >= 400) {
+    if (res.status >= 300) {
       setShowError(true)
-    } else if (res.status === 201) {
+    } else if (res.status >= 200) {
       if(isCreate){
         const post:Post = res.data;
         if(props.prependToFeed !== undefined){
           props.prependToFeed(post)
         }
+        resetFormAndToggle()
+      } else {
+        // We do not want to wipe the fields on our form when we edit
+        props.toggle()
       }
-      resetFormAndToggle()
     }
   }
 

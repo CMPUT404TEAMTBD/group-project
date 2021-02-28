@@ -22,7 +22,7 @@ export default function PostListItem(props:Props) {
   const toggle = () => setIsModalOpen(!isModalOpen);
   const toggleEdit = () => setIsEditModalOpen(!isEditModalOpen);
 
-  const EditCardLink = () => props.isEditable ? <CardLink onClick={()=>{setIsEditModalOpen(true);console.log("DDSDSSDF")}}>Edit</CardLink> : null
+  const EditCardLink = () => props.loggedInUser !== undefined && props.isEditable ? <CardLink onClick={()=>{setIsEditModalOpen(true);console.log("DDSDSSDF")}}>Edit</CardLink> : null
 
   if(props.isEditable || props.isDeletable){
     if(!props.loggedInUser){
