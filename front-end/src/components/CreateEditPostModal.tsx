@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import React, { useState } from "react";
 import { Alert, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { preProcessFile } from "typescript";
 import { Post } from "../types/Post";
 import { UserLogin } from "../types/UserLogin";
 
@@ -9,6 +10,9 @@ interface Props {
   toggle: any
   isModalOpen: boolean
   editFields?: Post
+  postFeed?: Post[]
+  // Used to append the created post to the feed. Otherwise the feed will be outdated
+  prependToFeed?: Function
 }
 
 /**
@@ -29,6 +33,7 @@ export default function CreateEditPostModal(props: Props){
   }
 
   const postFields = props.editFields ?? emptyPostFields
+  const isCreate = props.editFields === undefined
 
   const [title, setTitle] = useState(postFields.title);
   const [desc, setDesc] = useState(postFields.description);
@@ -72,7 +77,7 @@ export default function CreateEditPostModal(props: Props){
         }
       }
 
-      if(props.editFields === undefined){
+      if(isCreate){
         axios.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data, config)
           .then(res => {
             handleRes(res)
@@ -80,27 +85,34 @@ export default function CreateEditPostModal(props: Props){
             setShowError(true)
           })
       }
-      else{
-        axios.put(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id, data, config)
+      else if(props.editFields !== undefined){
+          axios.put(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id, data, config)
           .then(res => {
             handleRes(res)
           }).catch(error => {
             setShowError(true)
           })
-      }
+        }
+    
   }
 
   function handleRes(res:AxiosResponse){
     if (res.status >= 400) {
       setShowError(true)
     } else if (res.status === 201) {
+      if(isCreate){
+        const post:Post = res.data;
+        if(props.prependToFeed !== undefined){
+          props.prependToFeed(post)
+        }
+      }
       props.toggle()
     }
   }
 
   return (
     <Modal isOpen={props.isModalOpen} toggle={props.toggle}>
-    <ModalHeader toggle={props.toggle}>{props.editFields === undefined ? "Create Post" : "Edit Post"}</ModalHeader>
+    <ModalHeader toggle={props.toggle}>{isCreate ? "Create Post" : "Edit Post"}</ModalHeader>
     <ModalBody>
       <div>
           {showError ? <Alert>Could not modify post</Alert> : null}

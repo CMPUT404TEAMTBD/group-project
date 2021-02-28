@@ -37,6 +37,12 @@ export default function HomePage(props:any) {
     props.history.push('/authors/'+userSearch);
   }
 
+  function preprendToFeed(post:Post){
+    if(postEntries !== undefined){
+      setPostEntries([post, ...postEntries])
+    }
+  }
+
   function CreatePostModal(){
     return(
       <React.Fragment>
@@ -45,6 +51,7 @@ export default function HomePage(props:any) {
           toggle={()=>setIsCreatePostModalOpen(!isCreatePostModalOpen)}
           isModalOpen={isCreatePostModalOpen}
           loggedInUser={props.loggedInUser}
+          prependToFeed={preprendToFeed}
         />
       </React.Fragment>
     )
