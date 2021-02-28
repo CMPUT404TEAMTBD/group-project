@@ -14,16 +14,16 @@ export default function PostListItem(props:Props) {
 
   function Content() {
     if (isImage(post)) {
-      return <img src={post.content}/>
+      return <img src={post.content} style={{width:'100%'}}/>
     } else {
-      return <p>{post.content}</p>
+      return <p style={{width:'100%'}}>{post.content}</p>
     }
   }
 
   return (
     <Modal isOpen={props.isOpen} toggle={props.toggle}>
       <ModalHeader toggle={props.toggle}>{post.title}</ModalHeader>
-      <ModalBody>
+      <ModalBody style={{wordWrap: 'break-word'}}>
         <h6 className="mb-2 text-muted">By: {post.author.displayName}</h6>
         <div>
           <p>{post.description}</p>

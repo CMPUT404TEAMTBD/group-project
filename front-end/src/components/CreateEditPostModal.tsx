@@ -9,8 +9,9 @@ interface Props {
   loggedInUser: UserLogin
   toggle: any
   isModalOpen: boolean
+  // These are fields of a post that you want to edit. If this is undefined, the modal will create posts.
+  // If defined, modal will edit an existing post.
   editFields?: Post
-  postFeed?: Post[]
   // Used to append the created post to the feed. Otherwise the feed will be outdated
   prependToFeed?: Function
 }
@@ -19,13 +20,12 @@ interface Props {
  * If editFields is not undefined, then this modal will act as an editing modal
  * @param props 
  */
-
 export default function CreateEditPostModal(props: Props){
 
   const emptyPostFields = {
     title:'',
     description:'',
-    contentType:'Text',
+    contentType:'text/plain',
     content:'',
     categories:[''],
     visibility:'Public',
@@ -51,6 +51,27 @@ export default function CreateEditPostModal(props: Props){
       else {
           setVisibility("Public")
       }
+  }
+  
+  /**
+   * Reset form fields and close modal. To be used when submission is successful
+   */
+  function resetFormAndToggle(){
+    resetFormFields();
+    props.toggle();
+  }
+
+  /**
+   * Reset the forms of the modal, as closing the modal alone does _not_ reset the form fields
+   */
+  function resetFormFields(){
+    setTitle(emptyPostFields.title)
+    setDesc(emptyPostFields.description)
+    setContentType(emptyPostFields.contentType)
+    setContent(emptyPostFields.contentType)
+    setCategories(emptyPostFields.categories)
+    setVisibility(emptyPostFields.visibility)
+    setUnlisted(emptyPostFields.unlisted)
   }
 
   function parseCategories(categories: string) {
@@ -106,7 +127,7 @@ export default function CreateEditPostModal(props: Props){
           props.prependToFeed(post)
         }
       }
-      props.toggle()
+      resetFormAndToggle()
     }
   }
 
@@ -142,8 +163,8 @@ export default function CreateEditPostModal(props: Props){
             <FormGroup>
               <Label for="Content Type">Content Type</Label>
               <select name="Content Type" onChange={e => setContentType(e.target.value)} value={contentType}>
-                <option value="text/markdown">text/markdown</option>
                 <option value="text/plain">text/plain</option>
+                <option value="text/markdown">text/markdown</option>
                 <option value="application/base64">application/base64</option>
                 <option value="image/png;base64">image/png</option>
                 <option value="image/jpeg;base64">image/jpeg</option>
