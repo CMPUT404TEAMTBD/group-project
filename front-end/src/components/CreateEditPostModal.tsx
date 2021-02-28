@@ -107,7 +107,7 @@ export default function CreateEditPostModal(props: Props){
           })
       }
       else if(props.editFields !== undefined){
-          axios.put(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id, data, config)
+          axios.put(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data, config)
           .then(res => {
             handleRes(res)
           }).catch(error => {
