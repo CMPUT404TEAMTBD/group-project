@@ -45,6 +45,7 @@ const CreatePostComponent = (props: any) => {
         axios.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data,
             {
                 // TODO: consider adding headers as well
+                // https://stackoverflow.com/a/44239543
                 auth: {
                     username: props.loggedInUser.username,
                     password: props.loggedInUser.password,
