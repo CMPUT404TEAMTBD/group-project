@@ -1,7 +1,5 @@
-import { Post } from '../types/Post';
-
-const imageTypes = ["application/base64", "image/png;base64", "image/jpeg;base64"]
+import { imageContentTypes, Post } from '../types/Post';
 
 export function isImage(post: Post): boolean {
-  return imageTypes.includes(post.contentType) 
+  return imageContentTypes.includes(post.contentType) 
 }
