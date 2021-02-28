@@ -25,14 +25,23 @@ export default function AuthorPage(props: Props) {
   const authorUrl = process.env.REACT_APP_API_URL + "/api/author/" + authorId;
   const initialInputState = { displayName: undefined, github: undefined };
   const [author, setAuthor] = useState(initialInputState);
+  const [responseMessage, setResponseMessage] = useState(100);
 
   useEffect(() => {
     axios.get(authorUrl).then(res => {
       setAuthor(res.data);
+      setResponseMessage(200);
     }).catch(err => {
-      console.log("GET ERROR");
+      console.log("ERROR GETTING AUTHOR INFO");
+      setResponseMessage(500);
     })
   }, []);
+
+  if (responseMessage > 299) {
+    return (<Container>
+      <Alert color="danger">An error occurred! Please try again</Alert>
+    </Container>)
+  }
 
   return (
     <Container fluid>
