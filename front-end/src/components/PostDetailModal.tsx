@@ -24,7 +24,7 @@ export default function PostListItem(props:Props) {
     <Modal isOpen={props.isOpen} toggle={props.toggle}>
       <ModalHeader toggle={props.toggle}>{post.title}</ModalHeader>
       <ModalBody>
-        <h6 className="mb-2 text-muted">By: {post.author}</h6>
+        <h6 className="mb-2 text-muted">By: {post.author.displayName}</h6>
         <div>
           <p>{post.description}</p>
           <Content/>
