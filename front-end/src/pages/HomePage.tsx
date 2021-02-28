@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Row, Col, Form, Input, Button } from 'reactstrap';
+import CreateEditPostModal from '../components/CreateEditPostModal';
 import PostListItem from '../components/PostListItem';
 import { Post } from '../types/Post';
 
@@ -11,13 +12,17 @@ export default function HomePage(props:any) {
 
   const [userSearch,setUserSearch] = useState('');
 
-
   const [postEntries, setPostEntries] = useState<Post[]|undefined>(undefined);
+
+  const [isCreatePostModalOpen, setIsCreatePostModalOpen] = useState<boolean>(false);
 
   useEffect(()=>{
     axios.get(process.env.REACT_APP_API_URL + "/api/public-posts/",).then(res => {
       console.log(res.data);
-      setPostEntries(res.data);
+
+      const posts:Post[] = res.data;
+
+      setPostEntries(posts);
     }).catch(err => {
       console.error(err);
     });
@@ -30,6 +35,19 @@ export default function HomePage(props:any) {
   function searchUsers(e:any){
     e.preventDefault();
     props.history.push('/authors/'+userSearch);
+  }
+
+  function CreatePostModal(){
+    return(
+      <React.Fragment>
+        <Button onClick={()=>setIsCreatePostModalOpen(true)}>Create Post</Button>
+        <CreateEditPostModal
+          toggle={()=>setIsCreatePostModalOpen(!isCreatePostModalOpen)}
+          isModalOpen={isCreatePostModalOpen}
+          loggedInUser={props.loggedInUser}
+        />
+      </React.Fragment>
+    )
   }
     
 
@@ -57,7 +75,8 @@ export default function HomePage(props:any) {
         {postListElToDisplay}
       </Col>
       <Col>
-        {props.loggedInUser ? <Button onClick={() => props.history.push('/create_post')}>Create Post</Button> : null}
+        {/* {props.loggedInUser ? <Button onClick={() => props.history.push('/create_post')}>Create Post</Button> : null} */}
+        {props.loggedInUser ? CreatePostModal() : null}
       </Col>
     </Row>
   );
