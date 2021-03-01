@@ -22,7 +22,9 @@ export default function HomePage(props:any) {
 
       const posts:Post[] = res.data;
 
-      setPostEntries(posts);
+      const orderedPosts = posts.reverse();
+
+      setPostEntries(orderedPosts);
     }).catch(err => {
       console.error(err);
     });

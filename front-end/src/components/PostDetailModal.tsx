@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Post } from '../types/Post';
 import { isImage } from '../helpers/ImageHelper';
+import ReactCommonmark from 'react-commonmark';
+import { isCommonmark } from '../helpers/CommonmarkHelper';
 
 interface Props {
   post: Post;
@@ -15,7 +17,12 @@ export default function PostListItem(props:Props) {
   function Content() {
     if (isImage(post)) {
       return <img src={post.content} style={{width:'100%'}}/>
-    } else {
+    } else if (isCommonmark(post)){
+      return <div style={{width:'100%'}}>
+              <ReactCommonmark source={post.content}/>
+            </div>
+    }
+    else {
       return <p style={{width:'100%'}}>{post.content}</p>
     }
   }

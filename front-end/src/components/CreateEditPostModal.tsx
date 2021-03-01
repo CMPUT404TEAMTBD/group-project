@@ -174,7 +174,7 @@ export default function CreateEditPostModal(props: Props){
               </select>
             </FormGroup>
             <FormGroup>
-              <Input type="text" name="Content" placeholder="Content" onChange={e => setContent(e.target.value)} value={content}/>
+              <Input type="textarea" name="Content" placeholder="Content" onChange={e => setContent(e.target.value)} value={content}/>
               <Input type="file" name="File" placeholder="File" onChange={e => fileToImageContent(e.target.files)}/>
             </FormGroup>
             <FormGroup>
