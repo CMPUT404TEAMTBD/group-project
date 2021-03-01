@@ -48,7 +48,8 @@ export default function AuthorPage(props: Props) {
       }
     ).then(res => {
       const posts: Post[] = res.data;
-      setPostEntries(posts);
+      const orderedPosts = posts.reverse();
+      setPostEntries(orderedPosts);
     }).catch(err => {
       console.log("ERROR GETTING POSTS");
       setResponseMessage(500);
@@ -59,7 +60,6 @@ export default function AuthorPage(props: Props) {
     while (!postEntries) {
       return (
         <Card>
-          {/* <CardImg top width="100%" src="/assets/318x180.svg" alt="Card image cap" /> */}
           <CardBody>
             <CardTitle tag="h5">LOADING POSTS</CardTitle>
           </CardBody>
@@ -69,7 +69,6 @@ export default function AuthorPage(props: Props) {
     if (postEntries.length == 0) {
       return (
         <Card>
-          {/* <CardImg top width="100%" src="/assets/318x180.svg" alt="Card image cap" /> */}
           <CardBody>
             <CardTitle tag="h5">No Posts!</CardTitle>
           </CardBody>
@@ -92,7 +91,7 @@ export default function AuthorPage(props: Props) {
       <Row className="justify-content-md-center">
         <Col sm={2}>
           <Card body className="text-center">
-            {/* TODO: maybe add profile pic? uncomment line below */}
+            {/* TODO: maybe add profile pic. uncomment line below */}
             {/* <CardImg top width="100%" src="/assets/318x180.svg" alt="Card image cap" /> */}
             <CardBody>
               <CardTitle tag="h5">{author.displayName}</CardTitle>
