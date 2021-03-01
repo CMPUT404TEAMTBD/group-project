@@ -90,7 +90,7 @@ export default function AuthorPage(props: Props) {
 
   const profilePic = () => {
     if (author?.github?.includes("github.com")) {
-      return <CardImg top width="100%" src={author?.github + ".png"} alt="Card image cap" />
+      return <CardImg top width="100%" src={author.github + ".png"} alt="Card image cap" />
     }
 
     return null
