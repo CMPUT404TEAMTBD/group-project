@@ -85,7 +85,7 @@ export default function AuthorPage(props: Props) {
       )
     }
     return (
-      postEntries.map((post: Post) => <PostListItem post={post} key={post.id} />)
+      postEntries.map((post: Post) => <PostListItem post={post} key={post.id} isEditable={true} loggedInUser={props.loggedInUser} />)
     )
   };
 
