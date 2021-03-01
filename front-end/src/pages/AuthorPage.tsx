@@ -88,6 +88,14 @@ export default function AuthorPage(props: Props) {
     )
   };
 
+  const profilePic = () => {
+    if (author?.github?.includes("github.com")) {
+      return <CardImg top width="100%" src={author?.github + ".png"} alt="Card image cap" />
+    }
+
+    return null
+  }
+
   if (responseMessage > 299) {
     return (<Container>
       <Alert color="danger">An error occurred! Please try again</Alert>
@@ -99,8 +107,7 @@ export default function AuthorPage(props: Props) {
       <Row className="justify-content-md-center">
         <Col sm={2}>
           <Card body className="text-center">
-            {/* TODO: maybe add profile pic. uncomment line below */}
-            {/* <CardImg top width="100%" src="/assets/318x180.svg" alt="Card image cap" /> */}
+            {profilePic()}
             <CardBody>
               <CardTitle tag="h5">{author?.displayName}</CardTitle>
               <CardLink href={author ? author.github : "#"} >GitHub</CardLink>
