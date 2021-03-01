@@ -22,7 +22,6 @@ interface Props {
   loggedInUser: UserLogin | undefined;
 }
 
-// https://react-bootstrap.github.io/layout/grid/
 /*
   AuthorPage will render and display an author's profile - this includes information
   about their user account and all the posts they have made
@@ -66,7 +65,7 @@ export default function AuthorPage(props: Props) {
   /* display a card to show posts loading, otherwise show that the user either has
     no posts or display all posts */
   const postCards = () => {
-    while (!postEntries) {
+    if (!postEntries) {
       return (
         <Card>
           <CardBody>
@@ -104,8 +103,6 @@ export default function AuthorPage(props: Props) {
             {/* <CardImg top width="100%" src="/assets/318x180.svg" alt="Card image cap" /> */}
             <CardBody>
               <CardTitle tag="h5">{author?.displayName}</CardTitle>
-              {/* TODO: decide if we want to display/differentiate between username and display name. Results may vary across servers */}
-              {/* <CardSubtitle tag="h6" className="mb-2 text-muted">@{props.loggedInUser?.username}</CardSubtitle> */}
               <CardLink href={author ? author.github : "#"} >GitHub</CardLink>
             </CardBody>
           </Card>
