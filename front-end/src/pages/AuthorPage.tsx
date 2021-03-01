@@ -25,7 +25,7 @@ interface Props {
 // https://react-bootstrap.github.io/layout/grid/
 /*
   AuthorPage will render and display an author's profile - this includes information
-  about their user account and 
+  about their user account and all the posts they have made
 */
 export default function AuthorPage(props: Props) {
   // if logged in, assign authorUrl
