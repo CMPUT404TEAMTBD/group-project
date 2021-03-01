@@ -61,6 +61,7 @@ export default class NavbarComp extends React.Component {
               // </NavItem>
                 <NavItem onClick={this.close}>
                   <NavLink to="/settings" className="nav-link">Settings</NavLink>
+                  <NavLink to={`/author/${this.props.loggedInUser.authorId}`} className="nav-link">Profile</NavLink>
                   <a onClick={this.logOut}>Log Out</a>
                 </NavItem> :
                 <NavItem onClick={this.close}>
