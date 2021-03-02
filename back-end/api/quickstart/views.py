@@ -78,10 +78,12 @@ class PostListViewSet(viewsets.ModelViewSet):
             authenticated_author = Author.objects.get(user__username=request.user)
             # Check if the authenticated author is the same as the author we're querying for posts.
             if str(authenticated_author.id) == author:
+                # Order by time created https://stackoverflow.com/a/50518728
                 queryset = Post.objects.filter(author=author)
             else:
                 queryset = Post.objects.filter(author=author, visibility="Public", unlisted=False)
 
+            queryset.order_by('-published')
             serializer = PostSerializer(queryset, many=True)
         except (Author.DoesNotExist, Post.DoesNotExist):
             return Response(status=status.HTTP_404_NOT_FOUND)
@@ -109,7 +111,7 @@ class PublicPostListViewSet(viewsets.ModelViewSet):
     def list(self, request):
         try:
             # TODO: Set up pagination: https://www.django-rest-framework.org/api-guide/pagination/
-            queryset = Post.objects.filter(visibility='Public', unlisted=False)
+            queryset = Post.objects.filter(visibility='Public', unlisted=False).order_by('-published')
             serializer = PostSerializer(queryset, many=True)
         except Post.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
