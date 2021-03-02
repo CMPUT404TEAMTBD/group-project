@@ -62,6 +62,12 @@ export default function AuthorPage(props: Props) {
     })
   }, []);
 
+  function removeFromFeed(post: Post) {
+    if(postEntries !== undefined){
+      setPostEntries(postEntries.filter((p) => { return post.id !== p.id}))
+    }
+  }
+
   /* display a card to show posts loading, otherwise show that the user either has
     no posts or display all posts */
   const postCards = () => {
@@ -84,7 +90,7 @@ export default function AuthorPage(props: Props) {
       )
     }
     return (
-      postEntries.map((post: Post) => <PostListItem post={post} key={post.id} isEditable={true} loggedInUser={props.loggedInUser} />)
+      postEntries.map((post: Post) => <PostListItem post={post} key={post.id} isEditable={true} loggedInUser={props.loggedInUser} removeFromFeed={removeFromFeed}/>)
     )
   };
 

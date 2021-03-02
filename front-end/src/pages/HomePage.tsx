@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Row, Col, Form, Input, Button } from 'reactstrap';
 import CreateEditPostModal from '../components/CreateEditPostModal';
+import DeletePostModal from '../components/DeleteModal';
 import PostListItem from '../components/PostListItem';
 import { Post } from '../types/Post';
 
@@ -45,6 +46,12 @@ export default function HomePage(props:any) {
     }
   }
 
+  function removeFromFeed(postID: string) {
+    if(postEntries !== undefined){
+      setPostEntries(postEntries.filter((p) => { return postID !== p.id}))
+    }
+  }
+
   function CreatePostModal(){
     return(
       <React.Fragment>
@@ -67,7 +74,7 @@ export default function HomePage(props:any) {
     postListElToDisplay = <p>No Entries Found</p>;
   } else {
     postListElToDisplay = postEntries.map((post:Post)=>
-      <PostListItem post={post} key={post.id} isEditable={true} loggedInUser={props.loggedInUser}/>
+      <PostListItem post={post} key={post.id} isEditable={true} isDeletable={true} loggedInUser={props.loggedInUser} removeFromFeed={removeFromFeed}/>
     );
   }
   console.log(postListElToDisplay)
@@ -84,7 +91,6 @@ export default function HomePage(props:any) {
         {postListElToDisplay}
       </Col>
       <Col>
-        {/* {props.loggedInUser ? <Button onClick={() => props.history.push('/create_post')}>Create Post</Button> : null} */}
         {props.loggedInUser ? CreatePostModal() : null}
       </Col>
     </Row>
