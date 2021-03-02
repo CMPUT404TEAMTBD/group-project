@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { UserLogin } from '../types/UserLogin';
+import PostList from '../components/PostList';
 import { Post } from '../types/Post';
 import {
   Col,
@@ -62,38 +63,6 @@ export default function AuthorPage(props: Props) {
     })
   }, []);
 
-  function removeFromFeed(post: Post) {
-    if(postEntries !== undefined){
-      setPostEntries(postEntries.filter((p) => { return post.id !== p.id}))
-    }
-  }
-
-  /* display a card to show posts loading, otherwise show that the user either has
-    no posts or display all posts */
-  const postCards = () => {
-    if (!postEntries) {
-      return (
-        <Card>
-          <CardBody>
-            <CardTitle tag="h5">LOADING POSTS</CardTitle>
-          </CardBody>
-        </Card>
-      )
-    }
-    if (postEntries.length == 0) {
-      return (
-        <Card>
-          <CardBody>
-            <CardTitle tag="h5">No Posts!</CardTitle>
-          </CardBody>
-        </Card>
-      )
-    }
-    return (
-      postEntries.map((post: Post) => <PostListItem post={post} key={post.id} isEditable={true} loggedInUser={props.loggedInUser} removeFromFeed={removeFromFeed}/>)
-    )
-  };
-
   const profilePic = () => {
     if (author?.github?.includes("github.com")) {
       return <CardImg top width="100%" src={author.github + ".png"} alt="Card image cap" />
@@ -120,9 +89,7 @@ export default function AuthorPage(props: Props) {
             </CardBody>
           </Card>
         </Col>
-        <Col sm={5}>
-          {postCards()}
-        </Col>
+        {<PostList postEntries={postEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} />}
       </Row>
     </Container>
   );
