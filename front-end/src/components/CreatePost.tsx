@@ -1,26 +1,26 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Alert, Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
-import { Post } from '../types/Post';
+import { Post, PostContentType, PostVisibility } from '../types/Post';
 import { Form, Input } from 'reactstrap';
 
 const CreatePostComponent = (props: any) => {
 
     const [title, setTitle] = useState('');
     const [desc, setDesc] = useState('');
-    const [contentType, setContentType] = useState('Text');
+    const [contentType, setContentType] = useState(PostContentType.PLAIN_TEXT);
     const [content, setContent] = useState('');
     const [categories, setCategories] = useState<string[]>([""])
-    const [visibility, setVisibility] = useState('Public');
+    const [visibility, setVisibility] = useState(PostVisibility.PUBLIC);
     const [unlisted, setUnlisted] = useState(false);
     const [showError, setShowError] = useState(false);
 
     function changeVisibility(isChecked: boolean) {
         if (isChecked) {
-            setVisibility("Friends")
+            setVisibility(PostVisibility.FRIENDS)
         }
         else {
-            setVisibility("Public")
+            setVisibility(PostVisibility.PUBLIC)
         }
     }
 
@@ -70,12 +70,12 @@ const CreatePostComponent = (props: any) => {
                 <Input type="text" name="Title" placeholder="Title" onChange={e => setTitle(e.target.value)}/>
                 <Input type="text" name="Description" placeholder="Description" onChange={e => setDesc(e.target.value)}/>
                 <Label for="Content Type">Content Type</Label>
-                <select name="Content Type" onChange={e => setContentType(e.target.value)}>
-                    <option value="text/markdown">text/markdown</option>
-                    <option value="text/plain">text/plain</option>
-                    <option value="application/base64">application/base64</option>
-                    <option value="image/png;base64">image/png</option>
-                    <option value="image/jpeg;base64">image/jpeg</option>
+                <select name="Content Type" onChange={e => setContentType(e.target.value as PostContentType)}>
+                    <option value={PostContentType.MARKDOWN}>text/markdown</option>
+                    <option value={PostContentType.PLAIN_TEXT}>text/plain</option>
+                    <option value={PostContentType.APPLICATION}>application/base64</option>
+                    <option value={PostContentType.PNG}>image/png</option>
+                    <option value={PostContentType.JPEG}>image/jpeg</option>
                 </select>
                 <Input type="text" name="Content" placeholder="Content" onChange={e => setContent(e.target.value)}/>
                 <Input type="text" name="Categories" placeholder="Categories" onChange={e => parseCategories(e.target.value)}/>

@@ -32,7 +32,7 @@ class GetPublicPosts(TestCase):
   def tests_get_all_public_posts(self):
     response = client.get(f'/api/public-posts/')
 
-    posts = Post.objects.filter(visibility='Public', unlisted=False)
+    posts = Post.objects.filter(visibility='Public', unlisted=False).order_by('-published')
 
     serializer = PostSerializer(posts, many=True)
 
