@@ -21,7 +21,7 @@ export default function PostListItem(props:Props) {
         {/* <CardImg top width="100%" src="/assets/318x180.svg" alt="Card image cap" /> */}
         <CardBody onClick={()=>setIsModalOpen(true)} style={{cursor: 'pointer'}}>
           <CardTitle tag="h5">{post.title}</CardTitle>
-          <CardSubtitle tag="h6" className="mb-2 text-muted">By: {post.author}</CardSubtitle>
+          <CardSubtitle tag="h6" className="mb-2 text-muted">By: {post.author.displayName}</CardSubtitle>
           <CardText>{post.description}</CardText>
         </CardBody>
       </Card>

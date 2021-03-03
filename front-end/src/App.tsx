@@ -9,9 +9,10 @@ import NotFoundPage from './pages/NotFoundPage';
 import AuthPage from './pages/AuthPage';
 import { LoggedInUserContext } from './contexts/LoggedInUserContext';
 import { UserLogin } from './types/UserLogin';
-import UserPage from './pages/UserPage';
+import AuthorPage from './pages/AuthorPage';
 import SettingsPage from './pages/SettingsPage';
 import CreatePostComponent from './components/CreatePost';
+import AuthorDetail from './pages/AuthorDetail';
 
 
 /*
@@ -33,10 +34,10 @@ function App() {
             <Switch>
               <Route exact path="/" render={(props) => <HomePage {...props} loggedInUser={loggedInUser} />} />
               <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} />} />
-              <Route path="/user" component={UserPage}/>
+              {loggedInUser && <Route path={`/author/${loggedInUser.authorId}`} render={(props) => <AuthorPage {...props} loggedInUser={loggedInUser} />} />}
               {/* TODO: hide settings page if not logged in */}
               <Route path="/settings" render={(props) => <SettingsPage loggedInUser={loggedInUser} />} />
-              <Route path="/create_post" component={CreatePostComponent}/>
+              <Route path="/author_detail/:id" render={(props) => <AuthorDetail {...props}/>} />
               <Route path="/create_post" render={(props) => <CreatePostComponent {...props} loggedInUser={loggedInUser} />} />
               <Route component={NotFoundPage} />
             </Switch>

@@ -30,22 +30,21 @@ def get_test_comment_fields(i=1):
     'contentType': 'text/plain',
   }
 
-def get_test_post_fields(i=1, author="testauthorid", visibility="Public"):
+def get_test_post_fields(i=1, visibility="Public", unlisted=False):
   return {
     'title': f'testpost{i}',
     'description': f'i am test post {i}',
     'source': f'source post id{i}',
     'origin': f'origin post id{i}',
     'visibility': visibility,
-    'unlisted': True,
-    'author': author,
+    'unlisted': unlisted,
     'contentType': 'text/plain',
     'content': 'Hello, I am a test post',
     'categories': '["Testing"]',
     'commentLink': 'link to comments'
   }
 
-def get_test_partial_post_fields(i=1, author="testauthorid"):
+def get_test_partial_post_fields(i=1):
     return {
     'title': f'testpost{i}',
     'description': f'i am test post {i}',
