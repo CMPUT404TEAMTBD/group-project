@@ -56,7 +56,7 @@ export default function DeletePostModal(props: Props){
     <ModalHeader toggle={props.toggle}>{"Delete post"}</ModalHeader>
     <ModalBody>
       <div>
-          {showError ? <Alert>Error in deleting post</Alert> : null}
+          {showError ? <Alert color="danger">Error in deleting post</Alert> : null}
           {showError ? null : <Button onClick={(e) => deletePost(e)}>Yes</Button>}
           {showError ? null : <Button onClick={() => {props.toggle()}}>No</Button>}
       </div>
