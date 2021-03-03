@@ -15,12 +15,8 @@ export default function HomePage(props:any) {
   useEffect(()=>{
     axios.get(process.env.REACT_APP_API_URL + "/api/public-posts/",).then(res => {
       console.log(res.data);
-
-      const posts:Post[] = res.data;
-
-      const orderedPosts = posts.reverse();
-
-      setPostEntries(orderedPosts);
+      const posts: Post[] = res.data;
+      setPostEntries(posts);
     }).catch(err => {
       console.error(err);
     });

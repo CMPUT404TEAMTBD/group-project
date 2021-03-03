@@ -55,8 +55,7 @@ export default function AuthorPage(props: Props) {
       }
     ).then(res => {
       const posts: Post[] = res.data;
-      const orderedPosts = posts.reverse();
-      setPostEntries(orderedPosts);
+      setPostEntries(posts);
     }).catch(err => {
       console.log("ERROR GETTING POSTS");
       setResponseMessage(500);
