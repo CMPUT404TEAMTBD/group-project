@@ -50,12 +50,13 @@ export default function PostList(props:any) {
   return (
     <Col>
       <Col>
+        {props.loggedInUser ? CreatePostModal() : null}
+      </Col>
+      <Col>
         <h3>Feed</h3>
         {postListElToDisplay}
       </Col>
-      <Col>
-        {props.loggedInUser ? CreatePostModal() : null}
-      </Col>
+      
     </Col>
     );
 }
