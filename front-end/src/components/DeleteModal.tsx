@@ -12,7 +12,7 @@ interface Props {
 }
 
 /**
- * If editFields is not undefined, then this modal will act as an editing modal
+ * Delete Post modal, confirmation to delete post as well as removing from list on success
  * @param props 
  */
 export default function DeletePostModal(props: Props){
@@ -29,25 +29,24 @@ export default function DeletePostModal(props: Props){
         }
       }
 
-
+      // Send DELETE request to delete post
       axios.delete(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.postID, config)
         .then(res => {
           handleRes(res)
         }).catch(error => {
           setShowError(true)
         })
-      
-    
   }
 
   function handleRes(res:AxiosResponse){
-    if (res.status >= 200) {
-      console.log("success")
+    if (res.status === 204) {
+      // Successfully deleted post
       if(props.removeFromFeed !== undefined){
         props.removeFromFeed(props.postID)
         props.toggle()
       }
     } else if (res.status >= 400) {
+      // Error in deleting post
       setShowError(true)
     }
   }
@@ -62,9 +61,6 @@ export default function DeletePostModal(props: Props){
           {showError ? null : <Button onClick={() => {props.toggle()}}>No</Button>}
       </div>
     </ModalBody>
-    <ModalFooter>
-      
-    </ModalFooter>
   </Modal>
   )
 }

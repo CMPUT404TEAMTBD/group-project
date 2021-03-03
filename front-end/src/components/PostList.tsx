@@ -1,26 +1,39 @@
 import React, { useState } from 'react';
 import { Row, Col, Button } from 'reactstrap';
+import { UserLogin } from '../types/UserLogin';
 import CreateEditPostModal from '../components/CreateEditPostModal';
 import PostListItem from '../components/PostListItem';
 import { Post } from '../types/Post';
 
+interface Props {
+  postEntries?: Post[];
+  setPostEntries?: Function;
+  loggedInUser?: UserLogin;
+}
 
+/**
+ * Post list component to show list of posts
+ * @param props 
+ */
 export default function PostList(props:any) {
 
   const [isCreatePostModalOpen, setIsCreatePostModalOpen] = useState<boolean>(false);
 
+  // Add new post to PostList
   function prependToFeed(post:Post){
     if(props.postEntries !== undefined){
       props.setPostEntries([post, ...props.postEntries])
     }
   }
-
+    
+  // Remove post with id postID from list
   function removeFromFeed(postID: string) {
     if(props.postEntries !== undefined){
       props.setPostEntries(props.postEntries.filter((p: Post) => { return postID !== p.id}))
     }
   }
 
+  // Create post button
   function CreatePostModal(){
     return(
       <React.Fragment>
@@ -56,7 +69,6 @@ export default function PostList(props:any) {
         <h3>Feed</h3>
         {postListElToDisplay}
       </Col>
-      
     </Col>
     );
 }
