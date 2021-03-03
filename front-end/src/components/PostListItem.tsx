@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, CardBody, CardLink, CardSubtitle, CardText, CardTitle } from 'reactstrap';
+import { Card, CardBody, CardLink, CardSubtitle, CardText, CardTitle } from 'reactstrap';
 import { Post } from '../types/Post';
 import { UserLogin } from '../types/UserLogin';
 import CreateEditPostModal from './CreateEditPostModal';
@@ -8,15 +8,13 @@ import PostDetailModal from './PostDetailModal';
 
 interface Props {
   post: Post;
-  // true if the user can edit this post
-  isEditable?: boolean;
-  // true if the user can delete the post
-  isDeletable?: boolean;
   loggedInUser?: UserLogin;
   removeFromFeed: Function;
 }
 
 export default function PostListItem(props:Props) {
+
+  const isAuthorPost: boolean = (props.loggedInUser ? props.loggedInUser.authorId : "") === props.post.author.id;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -26,13 +24,12 @@ export default function PostListItem(props:Props) {
   const toggleEdit = () => setIsEditModalOpen(!isEditModalOpen);
   const toggleDelete = () => setIsDeleteModalOpen(!isDeleteModalOpen);
 
-  const EditCardLink = () => props.loggedInUser !== undefined && props.isEditable ? <CardLink onClick={()=>{setIsEditModalOpen(true);console.log("DDSDSSDF")}}>Edit</CardLink> : null
-  const DeleteCardLink = () => props.loggedInUser !== undefined && props.isDeletable ? <CardLink onClick={()=>{setIsDeleteModalOpen(true);}}>Delete</CardLink> : null
+  const EditCardLink = () => props.loggedInUser !== undefined && isAuthorPost ? <CardLink onClick={()=>{setIsEditModalOpen(true);}}>Edit</CardLink> : null
+  const DeleteCardLink = () => props.loggedInUser !== undefined && isAuthorPost ? <CardLink onClick={()=>{setIsDeleteModalOpen(true);}}>Delete</CardLink> : null
+ 
 
-  if(props.isEditable || props.isDeletable){
-    if(!props.loggedInUser){
-      console.error('You must supply the logged in user if you are editing or deleting!')
-    }
+  if(!props.loggedInUser){
+    console.error('You must supply the logged in user if you are editing or deleting!')
   }
 
   const post: Post = props.post;
@@ -50,12 +47,12 @@ export default function PostListItem(props:Props) {
         </CardBody>
       </Card>
       <PostDetailModal post={post} toggle={toggle} isOpen={isModalOpen}/>
-      {props.loggedInUser !== undefined && props.isEditable? <CreateEditPostModal 
+      {props.loggedInUser !== undefined && isAuthorPost ? <CreateEditPostModal 
                                             loggedInUser={props.loggedInUser}
                                             toggle={toggleEdit}
                                             isModalOpen={isEditModalOpen}
                                             editFields={props.post}/> : null}
-      {props.loggedInUser !== undefined ? <DeletePostModal 
+      {props.loggedInUser !== undefined && isAuthorPost ? <DeletePostModal 
                                             loggedInUser={props.loggedInUser}
                                             isModalOpen={isDeleteModalOpen}
                                             toggle={toggleDelete}
