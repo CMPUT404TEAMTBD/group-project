@@ -7,7 +7,7 @@ import { Post } from '../types/Post';
 
 interface Props {
   postEntries?: Post[];
-  setPostEntries?: Function;
+  setPostEntries: Function;
   loggedInUser?: UserLogin;
 }
 
@@ -15,7 +15,7 @@ interface Props {
  * Post list component to show list of posts
  * @param props 
  */
-export default function PostList(props:any) {
+export default function PostList(props:Props) {
 
   const [isCreatePostModalOpen, setIsCreatePostModalOpen] = useState<boolean>(false);
 
@@ -41,7 +41,7 @@ export default function PostList(props:any) {
         <CreateEditPostModal
           toggle={()=>setIsCreatePostModalOpen(!isCreatePostModalOpen)}
           isModalOpen={isCreatePostModalOpen}
-          loggedInUser={props.loggedInUser}
+          loggedInUser={props.loggedInUser as UserLogin}
           prependToFeed={prependToFeed}
         />
       </React.Fragment>
