@@ -8,7 +8,7 @@ from quickstart.tests.helper_test import get_test_comment_fields
 client = Client()
 
 class GetAllCommentsTest(TestCase):
-  """ Test module for GET all comments for a post API """
+  """Tests for getting all comments of a given post at endpoint /api/author/<str:author>/posts/<str:post>/comments/"""
 
   def setUp(self):
     self.test_post_id = 1
@@ -39,7 +39,7 @@ class GetAllCommentsTest(TestCase):
 
 
 class CreateCommentTest(TestCase):
-  """ Test module for creating comments for a post API """
+  """Tests for POST'ing (creating) a comment for a given post at endpoint"""
 
   def setUp(self):
     self.payload = get_test_comment_fields(1)

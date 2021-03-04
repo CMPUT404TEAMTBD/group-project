@@ -1,8 +1,10 @@
+"""
+admin.py registers models so that they can be created/modified/deleted from the admin page.
+"""
 from django.contrib import admin
 
 from .models import Author, Post, Follow, Comment, Like, Inbox
 
-# Register your models here.
 admin.site.register(Author)
 admin.site.register(Post)
 admin.site.register(Comment)

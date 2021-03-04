@@ -4,7 +4,7 @@ from types import SimpleNamespace
 from quickstart.tests.helper_test import get_test_comment_fields
 
 class CreateComment(TestCase):
-  """Tests for creating an comment."""
+  """Tests for creating a Comment."""
   def setUp(self): 
     self.fields = SimpleNamespace(**get_test_comment_fields())
     self.comment = Comment.objects.create(**vars(self.fields), postId='testPostId')

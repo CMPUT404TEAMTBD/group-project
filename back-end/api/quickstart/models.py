@@ -3,7 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-# Create your models here.
+
 class Author(models.Model):
   # TODO: Null and blank for quicker testing purposes
   user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -33,8 +33,6 @@ class Post(models.Model):
   contentType = models.TextField()
   content = models.TextField(blank=True)
   categories = models.JSONField()
-  # cannot store time as IOS 8601 as per spec so when interacting will need parse (i.e using django.utils.dateparse)
-  # TODO: defualt is broken maybe change to DateField
   published = models.DateTimeField(default=timezone.now, editable=False)
   commentLink = models.TextField(default='')
 

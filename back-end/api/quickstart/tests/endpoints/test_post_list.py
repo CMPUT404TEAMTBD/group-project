@@ -12,6 +12,7 @@ from quickstart.tests.helper_test import get_test_author_fields, get_test_post_f
 client = Client()
 
 class GetPosts(TestCase):
+  """Tests to GET all posts for an Author, at endpoint api/author/<str:author>/posts/"""
   def setUp(self):
     self.auth_client = APIClient()
 
@@ -57,7 +58,7 @@ class GetPosts(TestCase):
 
 
 class CreatePost(TestCase):
-  
+  """Tests to POST (create) a new Post at endpoint api/author/<str:author>/posts/"""
   def setUp(self):
     self.auth_client = APIClient()
 
