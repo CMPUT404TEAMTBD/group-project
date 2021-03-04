@@ -9,8 +9,6 @@ from quickstart import views
 
 # Debug site/endpoints that DRF helps us implement.
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'groups', views.GroupViewSet)
 router.register(r'authors', views.AuthorViewSet)
 router.register(r'posts', views.PostViewSet)
 router.register(r'comments', views.CommentViewSet)
