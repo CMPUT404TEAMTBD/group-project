@@ -20,7 +20,15 @@ export const imageContentTypes: PostContentType[] =
   PostContentType.JPEG
 ]
 
-export interface Post {
+
+/**
+ * Used for post content elements
+ */
+export interface PostContent {
+  content: string
+  contentType: PostContentType
+}
+export interface Post extends PostContent {
   id: string
   type: string
   title: string
@@ -30,8 +38,6 @@ export interface Post {
   visibility: PostVisibility
   unlisted: boolean
   author: Author
-  content: string
-  contentType: PostContentType
   categories: string[] // May need to change this later at some point. I'm not super worried about nested objects currently
   published: string
   count: number

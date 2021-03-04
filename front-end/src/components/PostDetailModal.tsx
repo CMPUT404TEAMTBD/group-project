@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Post } from '../types/Post';
-import { isImage } from '../helpers/ImageHelper';
-import ReactCommonmark from 'react-commonmark';
-import { isCommonmark } from '../helpers/CommonmarkHelper';
+import PostContent from './PostContentEl';
 
 interface Props {
   post: Post;
@@ -14,19 +12,6 @@ interface Props {
 export default function PostDetailModal(props:Props) {
   const post: Post = props.post;
 
-  function Content() {
-    if (isImage(post)) {
-      return <img src={post.content} style={{width:'100%'}}/>
-    } else if (isCommonmark(post)){
-      return <div style={{width:'100%'}}>
-              <ReactCommonmark source={post.content}/>
-            </div>
-    }
-    else {
-      return <p style={{width:'100%'}}>{post.content}</p>
-    }
-  }
-
   return (
     <Modal isOpen={props.isOpen} toggle={props.toggle}>
       <ModalHeader toggle={props.toggle}>{post.title}</ModalHeader>
@@ -34,7 +19,7 @@ export default function PostDetailModal(props:Props) {
         <h6 className="mb-2 text-muted">By: {post.author.displayName}</h6>
         <div>
           <p>{post.description}</p>
-          <Content/>
+          <PostContent postContent={post} isPreview={false}/>
         </div>
       </ModalBody>
       <ModalFooter>

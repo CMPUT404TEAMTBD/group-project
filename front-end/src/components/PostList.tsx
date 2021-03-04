@@ -42,7 +42,7 @@ export default function PostList(props:Props) {
   // Create post button
   function CreatePostModal(){
     return(
-      <React.Fragment>
+      <>
         <Button onClick={()=>setIsCreatePostModalOpen(true)}>Create Post</Button>
         <CreateEditPostModal
           toggle={()=>setIsCreatePostModalOpen(!isCreatePostModalOpen)}
@@ -51,7 +51,7 @@ export default function PostList(props:Props) {
           prependToFeed={prependToFeed}
           modifyInFeed={modifyInFeed}
         />
-      </React.Fragment>
+      </>
     )
   }
 
@@ -62,7 +62,7 @@ export default function PostList(props:Props) {
     postListElToDisplay = <p>No Entries Found</p>;
   } else {
     postListElToDisplay = props.postEntries.map((post:Post)=>
-      <PostListItem post={post} key={post.id} isEditable={true} isDeletable={true} loggedInUser={props.loggedInUser} removeFromFeed={removeFromFeed} modifyInFeed={modifyInFeed}/>
+      <PostListItem post={post} key={post.id} loggedInUser={props.loggedInUser} removeFromFeed={removeFromFeed} modifyInFeed={modifyInFeed}/>
     );
   }
   console.log(postListElToDisplay);

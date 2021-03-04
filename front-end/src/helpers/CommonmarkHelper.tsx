@@ -1,5 +1,5 @@
-import { Post, PostContentType } from '../types/Post';
+import { PostContentType, PostContent } from '../types/Post';
 
-export function isCommonmark(post: Post): boolean {
+export function isCommonmark(post: PostContent): boolean {
   return post.contentType === PostContentType.MARKDOWN
 }
