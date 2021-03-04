@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Card, CardBody, CardLink, CardSubtitle, CardText, CardTitle } from 'reactstrap';
 import { Post } from '../types/Post';
 import { UserLogin } from '../types/UserLogin';
-import ContentPreview from './PostContentEl';
+import PostContentEl from './PostContentEl';
 import CreateEditPostModal from './CreateEditPostModal';
 import DeletePostModal from './DeleteModal';
 import PostDetailModal from './PostDetailModal';
@@ -46,7 +46,7 @@ export default function PostListItem(props:Props) {
           <CardTitle onClick={()=>setIsModalOpen(true)} tag="h5" style={{cursor: 'pointer'}}>{post.title}</CardTitle>
           <CardSubtitle tag="h6" className="mb-2 text-muted">By: {post.author.displayName}</CardSubtitle>
           <CardText onClick={()=>setIsModalOpen(true)}>{post.description}</CardText>
-          <ContentPreview postContent={post} isPreview={true}/>
+          <PostContentEl postContent={post} isPreview={true}/>
           {EditCardLink()}
           {DeleteCardLink()}
         </CardBody>
