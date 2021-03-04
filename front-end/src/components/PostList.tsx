@@ -36,7 +36,7 @@ export default function PostList(props:Props) {
   // Create post button
   function CreatePostModal(){
     return(
-      <React.Fragment>
+      <>
         <Button onClick={()=>setIsCreatePostModalOpen(true)}>Create Post</Button>
         <CreateEditPostModal
           toggle={()=>setIsCreatePostModalOpen(!isCreatePostModalOpen)}
@@ -44,7 +44,7 @@ export default function PostList(props:Props) {
           loggedInUser={props.loggedInUser as UserLogin}
           prependToFeed={prependToFeed}
         />
-      </React.Fragment>
+      </>
     )
   }
 
