@@ -1,7 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import React, { useState } from "react";
 import { Alert, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { preProcessFile } from "typescript";
 import { Post } from "../types/Post";
 import { UserLogin } from "../types/UserLogin";
 
@@ -14,6 +13,8 @@ interface Props {
   editFields?: Post
   // Used to append the created post to the feed. Otherwise the feed will be outdated
   prependToFeed?: Function
+  // Used to edit an existing post in the feed
+  modifyInFeed?: Function
 }
 
 /**
@@ -121,14 +122,18 @@ export default function CreateEditPostModal(props: Props){
     if (res.status >= 300) {
       setShowError(true)
     } else if (res.status >= 200) {
+      const post:Post = res.data;
       if(isCreate){
-        const post:Post = res.data;
         if(props.prependToFeed !== undefined){
           props.prependToFeed(post)
         }
         resetFormAndToggle()
       } else {
-        // We do not want to wipe the fields on our form when we edit
+        // We do not want to wipe the fields on our form when we edit,
+        // or else we lose all of the loaded post information from the API
+        if(props.modifyInFeed !== undefined){
+          props.modifyInFeed(post)
+        }
         props.toggle()
       }
     }

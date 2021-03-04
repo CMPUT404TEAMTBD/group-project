@@ -33,6 +33,12 @@ export default function PostList(props:Props) {
     }
   }
 
+  function modifyInFeed(post:Post){
+    if(props.postEntries !== undefined){
+      props.setPostEntries(props.postEntries.map(original => original.id === post.id ? post : original))
+    }
+  }
+
   // Create post button
   function CreatePostModal(){
     return(
@@ -43,6 +49,7 @@ export default function PostList(props:Props) {
           isModalOpen={isCreatePostModalOpen}
           loggedInUser={props.loggedInUser as UserLogin}
           prependToFeed={prependToFeed}
+          modifyInFeed={modifyInFeed}
         />
       </React.Fragment>
     )
@@ -55,7 +62,7 @@ export default function PostList(props:Props) {
     postListElToDisplay = <p>No Entries Found</p>;
   } else {
     postListElToDisplay = props.postEntries.map((post:Post)=>
-      <PostListItem post={post} key={post.id} isEditable={true} isDeletable={true} loggedInUser={props.loggedInUser} removeFromFeed={removeFromFeed}/>
+      <PostListItem post={post} key={post.id} isEditable={true} isDeletable={true} loggedInUser={props.loggedInUser} removeFromFeed={removeFromFeed} modifyInFeed={modifyInFeed}/>
     );
   }
   console.log(postListElToDisplay);
