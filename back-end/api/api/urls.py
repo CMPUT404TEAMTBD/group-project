@@ -97,7 +97,7 @@ likes_comment = views.LikesCommentViewSet.as_view({
 # Endpoint: /api/author/{AUTHOR_ID}/liked
 # GET list what public things AUTHOR_ID liked
 liked = views.LikedViewSet.as_view({
-    'get': 'list'
+    'get': 'retrieve'
 })
 
 # Endpoint: /api/author/{AUTHOR_ID}/inbox
