@@ -55,7 +55,7 @@ export default function PostList(props:Props) {
     postListElToDisplay = <p>No Entries Found</p>;
   } else {
     postListElToDisplay = props.postEntries.map((post:Post)=>
-      <PostListItem post={post} key={post.id} isEditable={true} isDeletable={true} loggedInUser={props.loggedInUser} removeFromFeed={removeFromFeed}/>
+      <PostListItem post={post} key={post.id} loggedInUser={props.loggedInUser} removeFromFeed={removeFromFeed}/>
     );
   }
   console.log(postListElToDisplay);
