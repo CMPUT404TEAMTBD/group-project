@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, Card, CardBody, CardLink, CardSubtitle, CardText, CardTitle } from 'reactstrap';
 import { Post } from '../types/Post';
 import { UserLogin } from '../types/UserLogin';
+import ContentPreview from './PostContentEl';
 import CreateEditPostModal from './CreateEditPostModal';
 import DeletePostModal from './DeleteModal';
 import PostDetailModal from './PostDetailModal';
@@ -41,10 +42,11 @@ export default function PostListItem(props:Props) {
       <Card>
         {/* TODO: Post image here? */}
         {/* <CardImg top width="100%" src="/assets/318x180.svg" alt="Card image cap" /> */}
-        <CardBody style={{cursor: 'pointer'}}>
-          <CardTitle onClick={()=>setIsModalOpen(true)} tag="h5">{post.title}</CardTitle>
+        <CardBody>
+          <CardTitle onClick={()=>setIsModalOpen(true)} tag="h5" style={{cursor: 'pointer'}}>{post.title}</CardTitle>
           <CardSubtitle tag="h6" className="mb-2 text-muted">By: {post.author.displayName}</CardSubtitle>
           <CardText onClick={()=>setIsModalOpen(true)}>{post.description}</CardText>
+          <ContentPreview postContent={post} isPreview={true}/>
           {EditCardLink()}
           {DeleteCardLink()}
         </CardBody>

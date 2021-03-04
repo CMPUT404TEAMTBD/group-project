@@ -1,9 +1,9 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import React, { useState } from "react";
 import { Alert, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { preProcessFile } from "typescript";
-import { Post } from "../types/Post";
+import { Post, PostContent, PostContentType, PostVisibility } from "../types/Post";
 import { UserLogin } from "../types/UserLogin";
+import PostContentEl from "./PostContentEl";
 
 interface Props {
   loggedInUser: UserLogin
@@ -25,10 +25,10 @@ export default function CreateEditPostModal(props: Props){
   const emptyPostFields = {
     title:'',
     description:'',
-    contentType:'text/plain',
+    contentType: PostContentType.PLAIN_TEXT,
     content:'',
     categories:[''],
-    visibility:'Public',
+    visibility: PostVisibility.PUBLIC,
     unlisted:false
   }
 
@@ -46,10 +46,10 @@ export default function CreateEditPostModal(props: Props){
 
   function changeVisibility(isChecked: boolean) {
       if (isChecked) {
-          setVisibility("Friends")
+          setVisibility(PostVisibility.FRIENDS)
       }
       else {
-          setVisibility("Public")
+          setVisibility(PostVisibility.PUBLIC)
       }
   }
   
@@ -68,7 +68,7 @@ export default function CreateEditPostModal(props: Props){
     setTitle(emptyPostFields.title)
     setDesc(emptyPostFields.description)
     setContentType(emptyPostFields.contentType)
-    setContent(emptyPostFields.contentType)
+    setContent(emptyPostFields.contentType as PostContentType)
     setCategories(emptyPostFields.categories)
     setVisibility(emptyPostFields.visibility)
     setUnlisted(emptyPostFields.unlisted)
@@ -134,7 +134,7 @@ export default function CreateEditPostModal(props: Props){
     }
   }
 
-  //Code from Дмитрий Васильев, https://stackoverflow.com/questions/36280818/how-to-convert-file-to-base64-in-javascript
+  // Code from Дмитрий Васильев, https://stackoverflow.com/questions/36280818/how-to-convert-file-to-base64-in-javascript
   const toBase64 = (file:File) => new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -148,6 +148,11 @@ export default function CreateEditPostModal(props: Props){
       const result: any = await toBase64(files[0])
       setContent(result)
     }
+  }
+
+  const postContent:PostContent = {
+    contentType:contentType,
+    content:content
   }
 
   return (
@@ -165,12 +170,12 @@ export default function CreateEditPostModal(props: Props){
             </FormGroup>
             <FormGroup>
               <Label for="Content Type">Content Type</Label>
-              <select name="Content Type" onChange={e => setContentType(e.target.value)} value={contentType}>
-                <option value="text/plain">text/plain</option>
-                <option value="text/markdown">text/markdown</option>
-                <option value="application/base64">application/base64</option>
-                <option value="image/png;base64">image/png</option>
-                <option value="image/jpeg;base64">image/jpeg</option>
+              <select name="Content Type" onChange={e => setContentType(e.target.value as PostContentType)} value={contentType}>
+                <option value={PostContentType.PLAIN_TEXT}>text/plain</option>
+                <option value={PostContentType.MARKDOWN}>text/markdown</option>
+                <option value={PostContentType.APPLICATION}>application/base64</option>
+                <option value={PostContentType.PNG}>image/png</option>
+                <option value={PostContentType.JPEG}>image/jpeg</option>
               </select>
             </FormGroup>
             <FormGroup>
@@ -181,7 +186,7 @@ export default function CreateEditPostModal(props: Props){
               <Input type="text" name="Categories" placeholder="Categories" onChange={e => parseCategories(e.target.value)} value={categories.join(' ')}/>
             </FormGroup>
             <FormGroup>
-              <Input id="Visibility" type="checkbox" name="Visibility" placeholder="Visibility" onChange={e => changeVisibility(e.target.checked)} defaultChecked={visibility==="Friends"}/>
+              <Input id="Visibility" type="checkbox" name="Visibility" placeholder="Visibility" onChange={e => changeVisibility(e.target.checked)} defaultChecked={visibility===PostVisibility.FRIENDS}/>
               <Label for="Visibility">Private</Label>
               <Input id="Unlisted" type="checkbox" name="Unlisted" placeholder="Unlisted" onChange={e => setUnlisted(e.target.checked)} defaultChecked={unlisted}/>
               <Label for="Unlisted">Unlisted</Label>
@@ -190,6 +195,7 @@ export default function CreateEditPostModal(props: Props){
               <input type="submit" value="Submit" />
             </FormGroup>
           </Form>
+          <PostContentEl postContent={postContent} isPreview={false}/>
       </div>
     </ModalBody>
     <ModalFooter>
