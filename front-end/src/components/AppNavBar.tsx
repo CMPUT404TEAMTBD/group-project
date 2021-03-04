@@ -28,7 +28,7 @@ export default function AppNavBar(props: Props) {
 
   function loggedIn() {
     return (
-      <div>
+      <>
         <NavItem onClick={close}>
           <NavLink to="/settings" className="nav-link">Settings</NavLink>
         </NavItem>
@@ -38,7 +38,7 @@ export default function AppNavBar(props: Props) {
         <NavItem onClick={close}>
           <NavLink to="/" className="nav-link" onClick={() => logOut()}>Log Out</NavLink>
         </NavItem>
-      </div>
+      </>
     )
   }
 
@@ -48,7 +48,7 @@ export default function AppNavBar(props: Props) {
         <NavbarToggler onClick={toggle} />
         <NavLink to="/" className="navbar-brand font-title">
           🗑🔥
-                </NavLink>
+        </NavLink>
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
             {
