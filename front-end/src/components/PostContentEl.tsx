@@ -19,7 +19,7 @@ export default function PostContentEl(props:Props) {
     const content = shouldBeTruncated ? `${props.postContent.content.slice(0,MAX_PREVIEW_LENGTH-1)}...`
                                     : props.postContent.content
     if (isCommonmark(props.postContent)){
-      return <div style={{width:'100%'}}>
+      return <div style={{width:'100%', wordWrap:"break-word"}}>
               <ReactCommonmark source={content}/>
             </div>
     }
