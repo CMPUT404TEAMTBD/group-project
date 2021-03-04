@@ -1,3 +1,7 @@
+"""
+signals.py hooks into specific events that we care about.
+In our case, we create a corresponding Author object after a user registers successfully.
+"""
 import uuid
 
 from allauth.account.signals import user_signed_up

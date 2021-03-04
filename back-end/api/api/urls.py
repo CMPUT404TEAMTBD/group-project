@@ -1,36 +1,43 @@
+"""
+urls.py defines all the endpoints of our API service, as defined in the project requirements spec.
+It also contains some extra endpoints for our own front-end client to use.
+"""
 from django.urls import include, path
 from django.contrib import admin
 from rest_framework import routers
 from quickstart import views
 
+# Debug site/endpoints that DRF helps us implement.
 router = routers.DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'groups', views.GroupViewSet)
 router.register(r'authors', views.AuthorViewSet)
 router.register(r'posts', views.PostViewSet)
-router.register(r'public-posts', views.PublicPostListViewSet)
 router.register(r'comments', views.CommentViewSet)
 router.register(r'followers', views.FollowersViewSet)
-router.register(r'likes', views.LikesPostViewSet)
 router.register(r'liked', views.LikedViewSet)
-# No need to register LikesCommentViewSet since the LikesPostViewSet shows the same objects.
 router.register(r'inbox', views.InboxViewSet)
 
-# Manually bind viewsets instead of using the router so that we can use POST for updates.
-# Also allows us to be more flexible with our URL endpoints.
-# Referenced Lucas Weyne's code at https://stackoverflow.com/a/53991768
+# Referenced Lucas Weyne's code at https://stackoverflow.com/a/53991768 for the below ViewSets.
+# For our endpoints below that return a list of objects it is more proper to use 'get': 'list', 
+# but using retrieve  allows DRF to use the ViewSets' list method for the debug endpoints above. 
+
+# Endpoint: /api/author/{AUTHOR_ID}/
+# GET: retrieve their profile
+# POST: update profile
 author = views.AuthorViewSet.as_view({
     'get': 'retrieve',
     'post': 'partial_update',
-    # TODO: remove put: create once we no longer need a dev shortcut to create authors, 
-    # because user creation should be handled with the built in User model. 
-    'put': 'create'
 })
 
+# Custom endpoint for retrieving an Author object from a Django User object.
 auth_user = views.AuthUserViewSet.as_view({
     'get': 'retrieve'
 })
 
+# Endpoint: /api/author/{AUTHOR_ID}/posts/{POST_ID}
+# GET get the public post
+# POST update the post (must be authenticated)
+# DELETE remove the post
+# PUT create a post with that post_id
 posts = views.PostViewSet.as_view({
     'get': 'retrieve',
     'post': 'update',
@@ -38,62 +45,81 @@ posts = views.PostViewSet.as_view({
     'put': 'create'
 })
 
+# Custom endpoint for retrieving all posts marked as public.
 public_posts_list = views.PublicPostListViewSet.as_view({
     'get': 'list'
 })
 
+# Endpoint: /api/author/{AUTHOR_ID}/posts/
+# GET get recent posts of author (paginated)
+# POST create a new post but generate a post_id
 posts_list = views.PostListViewSet.as_view({
     'get': 'list',
     'post': 'create'
 })
 
-# Should be 'get': 'list', but leave it as retrieve so that the debug site still works.
+# Endpoint: /api/author/{AUTHOR_ID}/posts/{POST_ID}/comments
+# GET get comments of the post
+# POST if you post an object of “type”:”comment”, it will add your comment to the post
 comments = views.CommentViewSet.as_view({
     'get': 'retrieve',
     'post': 'create'
 })
 
+# Endpoint: /api/author/{AUTHOR_ID}/followers
+# GET: get a list of authors who are their followers
 followers_list = views.FollowersListViewSet.as_view({
     'get': 'list'
 })
 
+# Endpoint: /api/author/{AUTHOR_ID}/followers/{FOREIGN_AUTHOR_ID}
+# DELETE: remove a follower
+# PUT: Add a follower (must be authenticated)
+# GET check if follower
 followers = views.FollowersViewSet.as_view({
     'delete': 'destroy',
     'put': 'create',
     'get': 'retrieve'
 })
 
-# Should be 'get': 'list', but leave it as retrieve so that the debug site still works.
+# Endpoint: /api/author/{AUTHOR_ID}/post/{POST_ID}/likes
+# GET a list of likes from other authors on AUTHOR_ID's post POST_ID
 likes_post = views.LikesPostViewSet.as_view({
     'get': 'retrieve'
 })
 
-# Should be 'get': 'list', but leave it as retrieve so that the debug site still works.
+# Endpoint: /api/author/{AUTHOR_ID}/post/{POST_ID}/comments/{COMMENT_ID}/likes
+# GET a list of likes from other authors on author_id’s post post_id comment comment_id
 likes_comment = views.LikesCommentViewSet.as_view({
     'get': 'retrieve'
 })
 
-
-#GET list what public things author_id liked
+# Endpoint: /api/author/{AUTHOR_ID}/liked
+# GET list what public things AUTHOR_ID liked
 liked = views.LikedViewSet.as_view({
-    'get': 'list'
+    'get': 'retrieve'
 })
 
-
+# Endpoint: /api/author/{AUTHOR_ID}/inbox
+# GET: if authenticated get a list of posts sent to {AUTHOR_ID}
+# POST: send a post/follow/like to the author's inbox
+# DELETE: clear the inbox
 inbox = views.InboxViewSet.as_view({
     'get': 'retrieve',
     'post': 'update',
     'delete': 'destroy'
 })
 
-
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
+# Define all our endpoint paths.
 urlpatterns = [
+    # Path used for debugging endpoints
     path('api/', include(router.urls)),
+    # Paths used for registration
     path('api/rest-auth/', include('rest_auth.urls')),
     path('api/rest-auth/registration/', include('rest_auth.registration.urls')),
+    # Path for the admin site
     path('api/admin/', admin.site.urls),
+    # Paths for all our API endpoints
     path('api/author/<str:id>/', author, name='author'),
     path('api/public-posts/', public_posts_list, name='public-posts-list'),
     path('api/auth-user/<str:username>/', auth_user, name='auth-user'),

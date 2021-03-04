@@ -1,5 +1,3 @@
-"""Tests for the /api/author/{AUTHOR_ID}/posts/ endpoint.
-Referenced https://realpython.com/test-driven-development-of-a-django-restful-api/"""
 from rest_framework import status
 from django.test import TestCase, Client
 from quickstart.models import Author, Post
@@ -9,6 +7,7 @@ from quickstart.tests.helper_test import get_test_author_fields, get_test_post_f
 client = Client()
 
 class GetPublicPosts(TestCase):
+  """Tests for getting all public posts at endpoint api/author/<str:author>/posts/<str:id>."""
   def setUp(self):
     self.author1 = Author.objects.create(**get_test_author_fields())
     self.author2 = Author.objects.create(**get_test_author_fields())

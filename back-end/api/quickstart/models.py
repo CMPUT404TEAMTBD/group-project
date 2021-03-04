@@ -1,11 +1,16 @@
+"""
+models.py contain all of our Django models, which we return in our API endpoints.
+They were modelled after the objects defined in the project requirements spec.
+https://github.com/CMPUT404W21T02/CMPUT404-project-socialdistribution/blob/master/project.org
+"""
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-# Create your models here.
+# Represents a user on our site, that can make posts, friends, and like and comment on other posts.
 class Author(models.Model):
-  # TODO: Null and blank for quicker testing purposes
+  # User being null and blank allows Author to be created without a User object in tests.
   user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   type = 'author'
@@ -14,7 +19,7 @@ class Author(models.Model):
   url = models.TextField()
   github = models.TextField()
 
-
+# Posts are used to share information (text, images, or markdown) to other Authors.
 class Post(models.Model):
 
   class Visibility(models.TextChoices):
@@ -33,11 +38,10 @@ class Post(models.Model):
   contentType = models.TextField()
   content = models.TextField(blank=True)
   categories = models.JSONField()
-  # cannot store time as IOS 8601 as per spec so when interacting will need parse (i.e using django.utils.dateparse)
-  # TODO: defualt is broken maybe change to DateField
   published = models.DateTimeField(default=timezone.now, editable=False)
   commentLink = models.TextField(default='')
 
+# An Author can communicate with other Authors by commenting on posts. 
 class Comment(models.Model):
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   type = 'comment'
@@ -47,13 +51,14 @@ class Comment(models.Model):
   contentType = models.TextField()
   published = models.DateTimeField(default=timezone.now, editable=False)
 
-
+# Author A can send a Follow request to Author B when they want to
+# be constantly informed on whatever Author B is posting.
 class Follow(models.Model):
   receiver = models.TextField()
   sender = models.TextField()
   approved = models.BooleanField()
 
-
+# Represents a Like on a post or comment.
 class Like(models.Model):
   context = models.TextField()
   summary = models.TextField()
@@ -61,7 +66,8 @@ class Like(models.Model):
   author = models.TextField()
   object = models.TextField()
   
-
+# Every Author has an Inbox, which is where they receive notifications about recent activity
+# on their own posts, or posts of Authors they're following.
 class Inbox(models.Model):
   type = 'inbox'
   author = models.TextField(primary_key=True)

@@ -1,3 +1,6 @@
+"""
+mixins.py defines custom classes that our endpoints can use to filter/lookup objects.
+"""
 from django.shortcuts import get_object_or_404
 
 class MultipleFieldLookupMixin(object):

@@ -1,30 +1,16 @@
+"""
+views.py defines the code that is run upon receiving a request to our endpoints, whose URLs are defined in urls.py.
+Some endpoint handlers have been omitted, meaning that the DRF default code is sufficient.
+"""
 from django.contrib.auth.models import User, Group
 from .models import Author, Post, Follow, Comment, Like, Inbox
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from quickstart.serializers import UserSerializer, GroupSerializer, AuthorSerializer, PostSerializer, FollowSerializer, CommentSerializer, LikeSerializer, InboxSerializer
+from quickstart.serializers import AuthorSerializer, PostSerializer, FollowSerializer, CommentSerializer, LikeSerializer, InboxSerializer
 from .mixins import MultipleFieldLookupMixin
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
-    # permission_classes = [permissions.IsAuthenticated]
-
-
-class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-    # permission_classes = [permissions.IsAuthenticated]
 
 
 class AuthorViewSet(viewsets.ModelViewSet):
@@ -224,10 +210,10 @@ class LikedViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows getting a list of public things author_id liked
     """
-    queryset = Like.objects.all() #used for default behaviour
+    queryset = Like.objects.all()
     serializer_class = LikeSerializer
 
-    def list(self, request, author):
+    def retrieve(self, request, author):
         liked = Like.objects.filter(author=author)
         serializer = LikeSerializer(liked, many=True)
 
