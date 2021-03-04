@@ -38,27 +38,27 @@ export default function HomePage(props:any) {
   function searchUsers(e:any){
     e.preventDefault();
     const URL = process.env.REACT_APP_API_URL + "/api/authors/";
-    ReactDOM.render(<AuthorList url = {{searchURL: URL}}/>, document.getElementById("belowRoot")); 
+    ReactDOM.render(<AuthorList url = {{searchURL: URL}} displayName = {{searchDisplayName:userSearch}} />, document.getElementById("root")) 
   }
   
   function result(){
     if (userSearch){
       return (
-        <>
-        <p>
-          {userSearch['id']}
-        </p>
-        <p>
-          {userSearch['displayName']}
-        </p>
-        <p>
-          {userSearch['url']}
-        </p>
-        <p>
-          {userSearch['github']}
-        </p>
-        
-        </>
+        <div>
+          <p>
+            {userSearch['id']}
+          </p>
+          <p>
+            {userSearch['displayName']}
+          </p>
+          <p>
+            {userSearch['url']}
+          </p>
+          <p>
+            {userSearch['github']}
+          </p>
+          
+        </div>
       )
       
     }
