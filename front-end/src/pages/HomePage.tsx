@@ -2,18 +2,13 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Form, Input } from 'reactstrap';
 import PostList from '../components/PostList';
+import { Author } from '../types/Author';
 import { Post } from '../types/Post';
-interface userProps {
-  url: string;
-  displayName: string;
-  id: string;
-  github: string;
-}
 
 // https://stackoverflow.com/questions/44118060/react-router-dom-with-typescript/44571743
 export default function HomePage(props:any) {
 
-  const [userSearch,setUserSearch] = useState<userProps>();
+  const [userSearch,setUserSearch] = useState<string>();
   const [postEntries, setPostEntries] = useState<Post[]|undefined>(undefined);
 
   useEffect(()=>{
