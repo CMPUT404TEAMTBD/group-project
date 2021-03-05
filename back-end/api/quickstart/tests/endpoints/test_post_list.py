@@ -37,7 +37,6 @@ class GetPosts(TestCase):
     
     posts = Post.objects.filter(author=self.author1.id).order_by('-published')
     serializer = PostSerializer(posts, many=True)
-
     self.assertEqual(response.data, serializer.data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
 

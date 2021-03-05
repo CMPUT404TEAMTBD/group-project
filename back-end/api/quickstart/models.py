@@ -22,6 +22,9 @@ class Author(models.Model):
 # Posts are used to share information (text, images, or markdown) to other Authors.
 class Post(models.Model):
 
+  class Meta:
+        ordering = ['-published']
+
   class Visibility(models.TextChoices):
     PUBLIC = 'Public'
     FRIENDS = 'Friends'
