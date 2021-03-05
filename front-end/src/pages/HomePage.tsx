@@ -8,7 +8,7 @@ import { Post } from '../types/Post';
 // https://stackoverflow.com/questions/44118060/react-router-dom-with-typescript/44571743
 export default function HomePage(props:any) {
 
-  const [userSearch,setUserSearch] = useState<string>();
+  const [userSearch,setUserSearch] = useState<string>('');
   const [postEntries, setPostEntries] = useState<Post[]|undefined>(undefined);
 
   useEffect(()=>{
