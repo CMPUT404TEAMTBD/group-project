@@ -13,12 +13,13 @@ Group members:
 Assuming you already postgres installed and a superuser created, first create a postgres database for our server:
 ```bash
 psql 
-CREATE DATABASE myproject
+CREATE DATABASE myproject; # Inside psql shell
 ```
 Next, setup a virtual environment and install requirements:
 ```bash
 cd back-end/
 virtualenv venv --python=python3
+source venv/bin/activate # Assuming Linux/MacOS
 pip install -r requirements.txt
 cd api/
 python manage.py migrate
