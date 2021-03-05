@@ -48,7 +48,7 @@ export default function AppNavBar(props: Props) {
         <NavbarToggler onClick={toggle} />
         <NavLink to="/" className="navbar-brand font-title">
           🗑🔥
-                </NavLink>
+        </NavLink>
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
             {

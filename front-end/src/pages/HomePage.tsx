@@ -1,11 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import ReactDOM from "react-dom"
-import { RouteComponentProps } from 'react-router-dom';
-import { Row, Col, Form, Input, Button } from 'reactstrap';
+import { Row, Col, Form, Input } from 'reactstrap';
 import PostList from '../components/PostList';
 import { Post } from '../types/Post';
-import AuthorList from "../components/AuthorList"
 interface userProps {
   url: string;
   displayName: string;
@@ -33,44 +30,12 @@ export default function HomePage(props:any) {
     setUserSearch(e.target.value);
   }
 
-  
   //search for authors with the same displayName
   function searchUsers(e:any){
     e.preventDefault();
-    const URL = process.env.REACT_APP_API_URL + "/api/authors/";
-    ReactDOM.render(<AuthorList url = {{searchURL: URL}} displayName = {{searchDisplayName:userSearch}} />, document.getElementById("root")) 
+    props.history.push(`/authors/${userSearch}`);
   }
   
-  function result(){
-    if (userSearch){
-      return (
-        <div>
-          <p>
-            {userSearch['id']}
-          </p>
-          <p>
-            {userSearch['displayName']}
-          </p>
-          <p>
-            {userSearch['url']}
-          </p>
-          <p>
-            {userSearch['github']}
-          </p>
-          
-        </div>
-      )
-      
-    }
-
-    else{
-      <p>
-        No result
-      </p>
-    }
-
-  }
-
   return (
     <Row>
       <Col>
