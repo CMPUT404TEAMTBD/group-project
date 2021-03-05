@@ -13,12 +13,13 @@ Group members:
 Assuming you already postgres installed and a superuser created, first create a postgres database for our server:
 ```bash
 psql 
-CREATE DATABASE myproject
+CREATE DATABASE myproject; # Inside psql shell
 ```
 Next, setup a virtual environment and install requirements:
 ```bash
-virtualenv venv --python=python3
 cd back-end/
+virtualenv venv --python=python3
+source venv/bin/activate # Assuming Linux/MacOS
 pip install -r requirements.txt
 cd api/
 python manage.py migrate
@@ -30,6 +31,7 @@ python manage.py runserver
 
 # Front-end setup
 Our front-end is a React app, which can be started using the following commands.
+Ensure that the back-end is also running, or else the front-end will just display a blank page.
 After running the following commands, you can access the front-end at [http://localhost:3000/](http://localhost:3000/) by default.
 ```bash
 cd front-end
