@@ -22,6 +22,10 @@ class Author(models.Model):
 # Posts are used to share information (text, images, or markdown) to other Authors.
 class Post(models.Model):
 
+  # Sorting post by newest first taken from: https://stackoverflow.com/a/6686363
+  class Meta:
+        ordering = ['-published']
+
   class Visibility(models.TextChoices):
     PUBLIC = 'Public'
     FRIENDS = 'Friends'

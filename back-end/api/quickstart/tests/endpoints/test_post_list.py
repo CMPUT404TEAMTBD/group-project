@@ -35,9 +35,8 @@ class GetPosts(TestCase):
     self.auth_client.force_authenticate(user=self.user1)
     response = self.auth_client.get(f'/api/author/{self.author1.id}/posts/')
     
-    posts = Post.objects.filter(author=self.author1.id).order_by('-published')
+    posts = Post.objects.filter(author=self.author1.id)
     serializer = PostSerializer(posts, many=True)
-
     self.assertEqual(response.data, serializer.data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -45,7 +44,7 @@ class GetPosts(TestCase):
     self.auth_client.force_authenticate(user=self.user2)
     response = self.auth_client.get(f'/api/author/{self.author1.id}/posts/')
     
-    posts = Post.objects.filter(author=self.author1.id, visibility="Public", unlisted=False).order_by('-published')
+    posts = Post.objects.filter(author=self.author1.id, visibility="Public", unlisted=False)
     serializer = PostSerializer(posts, many=True)
 
     self.assertEqual(response.data, serializer.data)
