@@ -4,12 +4,17 @@ import { Row, Col, Form, Input } from 'reactstrap';
 import PostList from '../components/PostList';
 import { Post } from '../types/Post';
 
+/**
+ * Renders the homepage which will display a stream of public posts
+ * @param props 
+ */
 // https://stackoverflow.com/questions/44118060/react-router-dom-with-typescript/44571743
 export default function HomePage(props:any) {
 
   const [userSearch,setUserSearch] = useState<string>('');
   const [postEntries, setPostEntries] = useState<Post[]|undefined>(undefined);
 
+  // get all public posts
   useEffect(()=>{
     axios.get(process.env.REACT_APP_API_URL + "/api/public-posts/",).then(res => {
       console.log(res.data);
@@ -20,11 +25,12 @@ export default function HomePage(props:any) {
     });
   },[]);
 
+  // update on search
   function onUserSearchChange(e:any){
     setUserSearch(e.target.value);
   }
 
-  //search for authors with the same displayName
+  // search for authors with the same displayName
   function searchUsers(e:any){
     e.preventDefault();
     props.history.push(`/authors/${userSearch}`);

@@ -14,6 +14,10 @@ interface Props {
   modifyInFeed: Function
 }
 
+/**
+ * Post list item component to show a preview for an individual post on a stream
+ * @param props 
+ */
 export default function PostListItem(props:Props) {
 
   const isAuthorPost: boolean = (props.loggedInUser ? props.loggedInUser.authorId : "") === props.post.author.id;

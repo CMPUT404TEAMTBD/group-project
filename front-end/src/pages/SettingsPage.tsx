@@ -15,6 +15,11 @@ interface Props {
     loggedInUser: UserLogin | undefined;
 }
 
+/**
+ * Renders Settings Page where an author can change their display name
+ * and/or GitHub URL. 
+ * @param props
+ */
 const SettingsPage = (props: Props) => {
     // https://reactstrap.github.io/components/form/#app
     // https://medium.com/better-programming/easily-create-a-form-with-react-hooks-1cab17e2be0d
@@ -28,6 +33,7 @@ const SettingsPage = (props: Props) => {
     const [unchangedData, setUnchangedData] = useState(initialInputState);
     const [responseMessage, setResponseMessage] = useState(100);
 
+    // get current author data
     function getAuthorData() {
         axios.get(authorUrl).then(res => {
             setUnchangedData(res.data);
@@ -40,6 +46,8 @@ const SettingsPage = (props: Props) => {
         setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
     };
 
+    // on submitting any changes, update the author's display name
+    // and/or GitHub URL. Blank inputs will not change the corresponding field(s)
     const handleSubmit = (e: any) => {
         e.preventDefault();
         getAuthorData();
@@ -60,6 +68,7 @@ const SettingsPage = (props: Props) => {
         }
     };
 
+    // display alerts approrpiate to HTTP response(s)
     function displayResponse() {
         if (responseMessage > 499) {
             return <Alert color="danger">Error! Please try again</Alert>

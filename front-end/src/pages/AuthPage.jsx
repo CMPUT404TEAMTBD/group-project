@@ -12,6 +12,8 @@ import Alert from "reactstrap/es/Alert";
  * Component originally from
  * https://github.com/ChrisChrisLoLo/CoursePlusPlus/blob/master/frontend/src/components/auth/index.js
  * by ChrisChrisLoLo
+ * 
+ * Renders login/registration page
  */
 
 export default class AuthPage extends React.Component {

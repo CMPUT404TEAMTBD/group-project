@@ -11,6 +11,10 @@ interface Props {
 
 const MAX_PREVIEW_LENGTH = 50;
 
+/**
+ * Element to handle appropriately displaying content type of a post
+ * @param props 
+ */
 export default function PostContentEl(props:Props) {
   if (isImage(props.postContent)) {
     return <img src={props.postContent.content} style={{width:'100%'}}/>

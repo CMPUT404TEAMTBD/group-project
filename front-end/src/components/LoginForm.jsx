@@ -16,6 +16,9 @@ import axios from "axios";
  * Originally from
  * https://github.com/ChrisChrisLoLo/CoursePlusPlus/blob/master/frontend/src/components/auth/LoginForm.js
  * by ChrisChrisLoLo
+ * 
+ * Login form to allow authors to login if they have an existing account
+ * @param props
  */
 
 export default class LoginForm extends React.Component {
@@ -28,6 +31,7 @@ export default class LoginForm extends React.Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
   }
 
+  // attempt a login request to the Django server
   attemptLogin(e) {
     axios.post(process.env.REACT_APP_API_URL + "/api/rest-auth/login/", {
       username: this.state.username,
