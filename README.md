@@ -17,8 +17,8 @@ CREATE DATABASE myproject
 ```
 Next, setup a virtual environment and install requirements:
 ```bash
-virtualenv venv --python=python3
 cd back-end/
+virtualenv venv --python=python3
 pip install -r requirements.txt
 cd api/
 python manage.py migrate
