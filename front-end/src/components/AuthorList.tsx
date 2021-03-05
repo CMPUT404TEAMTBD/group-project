@@ -7,9 +7,13 @@ interface Props {
 }
 
 export default function AuthorList(props: Props) {
+
   return (
     <>
-      {props.authorList.map((author: Author) => <AuthorListItem author={author}></AuthorListItem>)}
+      {props.authorList.length !== 0 ?
+       props.authorList.map((author: Author) => <AuthorListItem author={author}></AuthorListItem>):
+       <h4>No Authors Found :(</h4>
+      }
     </>
   )
 }
