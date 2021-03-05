@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Form, Input } from 'reactstrap';
 import PostList from '../components/PostList';
-import { Author } from '../types/Author';
 import { Post } from '../types/Post';
 
 // https://stackoverflow.com/questions/44118060/react-router-dom-with-typescript/44571743
