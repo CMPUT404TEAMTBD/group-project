@@ -11,6 +11,7 @@ interface Props {
   post: Post;
   loggedInUser?: UserLogin;
   removeFromFeed: Function;
+  modifyInFeed: Function
 }
 
 export default function PostListItem(props:Props) {
@@ -53,7 +54,9 @@ export default function PostListItem(props:Props) {
                                             loggedInUser={props.loggedInUser}
                                             toggle={toggleEdit}
                                             isModalOpen={isEditModalOpen}
-                                            editFields={props.post}/> : null}
+                                            editFields={props.post}
+                                            modifyInFeed={props.modifyInFeed}
+                                            /> : null}
       {props.loggedInUser !== undefined && isAuthorPost ? <DeletePostModal 
                                             loggedInUser={props.loggedInUser}
                                             isModalOpen={isDeleteModalOpen}

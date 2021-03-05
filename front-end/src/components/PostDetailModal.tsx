@@ -9,7 +9,7 @@ interface Props {
   isOpen: boolean;
 }
 
-export default function PostListItem(props:Props) {
+export default function PostDetailModal(props:Props) {
   const post: Post = props.post;
 
   return (
