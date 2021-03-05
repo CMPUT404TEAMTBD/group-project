@@ -4,6 +4,10 @@ import { Alert, Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reacts
 import { Post, PostContentType, PostVisibility } from '../types/Post';
 import { Form, Input } from 'reactstrap';
 
+/**
+ * Component for creating a new post
+ * @param props
+ */
 const CreatePostComponent = (props: any) => {
 
     const [title, setTitle] = useState('');
@@ -15,6 +19,7 @@ const CreatePostComponent = (props: any) => {
     const [unlisted, setUnlisted] = useState(false);
     const [showError, setShowError] = useState(false);
 
+    // Toggle the visiblility of a post
     function changeVisibility(isChecked: boolean) {
         if (isChecked) {
             setVisibility(PostVisibility.FRIENDS)
@@ -24,11 +29,13 @@ const CreatePostComponent = (props: any) => {
         }
     }
 
+    // Parse the categories a post is related to
     function parseCategories(categories: string) {
         let parsed: string[] = categories.split(" ")
         setCategories(parsed);
     }
 
+    // Create a post by sending a POST request
     function sendPost(e:any) {
         e.preventDefault();
 

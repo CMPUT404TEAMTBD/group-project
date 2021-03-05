@@ -5,6 +5,10 @@ import { Row, Col } from 'reactstrap';
 import AuthorList from "../components/AuthorList"
 import { Author } from '../types/Author';
 
+/**
+ * Render list of search results when searching for an author by display name
+ * @param props 
+ */
 export default function AuthorResultsPage(props:RouteComponentProps) {
 
   interface ParamTypes {
@@ -15,6 +19,7 @@ export default function AuthorResultsPage(props:RouteComponentProps) {
 
   const [authors, setAuthors] = useState<Author[]>([]);
 
+  // get all authors and filter through to find the one we're searching for
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/api/authors/`)
     .then(response => {

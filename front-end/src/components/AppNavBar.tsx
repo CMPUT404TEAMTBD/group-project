@@ -18,6 +18,11 @@ interface Props {
  * Originally from 
  * https://github.com/ChrisChrisLoLo/CoursePlusPlus/blob/master/frontend/src/components/NavbarComp.js
  * by ChrisChrisLoLo
+ * 
+ * App Navbar renders the navbar at the top of the page
+ * Buttons to pages accessible to a registered author are displayed if logged in
+ * Otherwise, only a log in button is displayed
+ * @param props
  */
 export default function AppNavBar(props: Props) {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,6 +31,7 @@ export default function AppNavBar(props: Props) {
   const close = () => setIsOpen(false);
   const logOut = () => props.setLoggedInUser(undefined);
 
+  // display pages accessible to a logged in author
   function loggedIn() {
     return (
       <>

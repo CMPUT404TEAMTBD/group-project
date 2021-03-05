@@ -6,6 +6,10 @@ interface Props {
   authorList: Author[]
 }
 
+/**
+ * Author list component to show list of authors
+ * @param props
+ */
 export default function AuthorList(props: Props) {
 
   return (

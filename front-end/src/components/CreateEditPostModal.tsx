@@ -17,6 +17,7 @@ interface Props {
 }
 
 /**
+ * Create Post or Edit Post Modal for creating and editing posts
  * If editFields is not undefined, then this modal will act as an editing modal
  * @param props 
  */

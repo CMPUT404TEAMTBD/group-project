@@ -17,6 +17,9 @@ import axios from "axios";
  * Originally from
  * https://github.com/ChrisChrisLoLo/CoursePlusPlus/blob/master/frontend/src/components/auth/RegisterForm.js
  * by ChrisChrisLoLo
+ * 
+ * Registration form to allow authors to register if they don't have an existing account
+ * @param props
  */
 
 export default class RegisterForm extends React.Component {

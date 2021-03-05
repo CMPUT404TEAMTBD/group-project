@@ -23,10 +23,11 @@ interface Props {
   loggedInUser: UserLogin | undefined;
 }
 
-/*
-  AuthorPage will render and display an author's profile - this includes information
-  about their user account and all the posts they have made
-*/
+/**
+ * Author Page will render and display an author's profile - this includes information
+ * about their user account and all the posts they have made
+ * @param props 
+ */
 export default function AuthorPage(props: Props) {
   // if logged in, assign authorUrl
   const authorId = props.loggedInUser ? props.loggedInUser.authorId + "/" : "";
@@ -62,6 +63,7 @@ export default function AuthorPage(props: Props) {
     })
   }, []);
 
+  // Author's profile pic will be the same one from their GitHub
   const profilePic = () => {
     if (author?.github?.includes("github.com")) {
       return <CardImg top width="100%" src={author.github + ".png"} alt="Card image cap" />
