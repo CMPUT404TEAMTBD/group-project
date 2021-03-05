@@ -13,7 +13,7 @@ interface Props {
  * Post Details Modal to show the details of an individual post on a stream
  * @param props 
  */
-export default function PostListItem(props:Props) {
+export default function PostDetailModal(props:Props) {
   const post: Post = props.post;
 
   return (
