@@ -12,7 +12,7 @@ interface Props {
 const MAX_PREVIEW_LENGTH = 50;
 
 /**
- * Post content element for displaying the contents of a post
+ * Element to handle appropriately displaying content type of a post
  * @param props 
  */
 export default function PostContentEl(props:Props) {
