@@ -31,6 +31,7 @@ python manage.py runserver
 
 # Front-end setup
 Our front-end is a React app, which can be started using the following commands.
+Ensure that the back-end is also running, or else the front-end will just display a blank page.
 After running the following commands, you can access the front-end at [http://localhost:3000/](http://localhost:3000/) by default.
 ```bash
 cd front-end
