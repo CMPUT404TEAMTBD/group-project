@@ -1,15 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
-import { Row, Col, Form, Input, Button } from 'reactstrap';
+import { Row, Col, Form, Input } from 'reactstrap';
 import PostList from '../components/PostList';
 import { Post } from '../types/Post';
-
 
 // https://stackoverflow.com/questions/44118060/react-router-dom-with-typescript/44571743
 export default function HomePage(props:any) {
 
-  const [userSearch,setUserSearch] = useState('');
+  const [userSearch,setUserSearch] = useState<string>('');
   const [postEntries, setPostEntries] = useState<Post[]|undefined>(undefined);
 
   useEffect(()=>{
@@ -26,11 +24,12 @@ export default function HomePage(props:any) {
     setUserSearch(e.target.value);
   }
 
+  //search for authors with the same displayName
   function searchUsers(e:any){
     e.preventDefault();
-    props.history.push('/authors/'+userSearch);
+    props.history.push(`/authors/${userSearch}`);
   }
-
+  
   return (
     <Row>
       <Col>

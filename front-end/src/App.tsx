@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
 import './App.scss';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { Container } from 'reactstrap';
@@ -12,6 +11,7 @@ import { UserLogin } from './types/UserLogin';
 import AuthorPage from './pages/AuthorPage';
 import SettingsPage from './pages/SettingsPage';
 import CreatePostComponent from './components/CreatePost';
+import AuthorResultsPage from './pages/AuthorResultsPage';
 
 
 /*
@@ -37,6 +37,8 @@ function App() {
               {/* TODO: hide settings page if not logged in */}
               <Route path="/settings" render={(props) => <SettingsPage loggedInUser={loggedInUser} />} />
               <Route path="/create_post" render={(props) => <CreatePostComponent {...props} loggedInUser={loggedInUser} />} />
+              <Route path="/authors/:displayName" render={(props) => <AuthorResultsPage {...props}/>}/>
+  
               <Route component={NotFoundPage} />
             </Switch>
           </Container>
