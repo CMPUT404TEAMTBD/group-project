@@ -33,7 +33,7 @@ function App() {
             <Switch>
               <Route exact path="/" render={(props) => <HomePage {...props} loggedInUser={loggedInUser} />} />
               <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} />} />
-              {loggedInUser && <Route path={`/author/${loggedInUser.authorId}`} render={(props) => <AuthorPage {...props} loggedInUser={loggedInUser} />} />}
+              <Route path="/author/:authorId" render={(props) => <AuthorPage {...props} loggedInUser={loggedInUser}/>}/>
               {/* TODO: hide settings page if not logged in */}
               <Route path="/settings" render={(props) => <SettingsPage loggedInUser={loggedInUser} />} />
               <Route path="/create_post" render={(props) => <CreatePostComponent {...props} loggedInUser={loggedInUser} />} />

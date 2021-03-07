@@ -18,20 +18,23 @@ import {
 } from 'reactstrap';
 import PostListItem from '../components/PostListItem';
 import { Author } from '../types/Author';
+import { RouteComponentProps } from 'react-router-dom';
+import { LoggedInUserContext } from '../contexts/LoggedInUserContext';
 
-interface Props {
-  loggedInUser: UserLogin | undefined;
-}
+// interface Props {
+//   props: RouteComponentProps;
+//   loggedInUser: UserLogin | undefined;
+// }
 
 /**
  * Author Page will render and display an author's profile - this includes information
  * about their user account and all the posts they have made
  * @param props 
  */
-export default function AuthorPage(props: Props) {
-  // if logged in, assign authorUrl
-  const authorId = props.loggedInUser ? props.loggedInUser.authorId + "/" : "";
-  const authorUrl = process.env.REACT_APP_API_URL + "/api/author/" + authorId;
+// TODO:  - fix navigating from other author --> profile button (self)
+//        - hide "create post" on own profile page?
+export default function AuthorPage(props: any) {
+  const authorUrl = process.env.REACT_APP_API_URL + "/api" + props.location.pathname;
   const [author, setAuthor] = useState<Author|undefined>(undefined);
   const [responseMessage, setResponseMessage] = useState(100);
   const [postEntries, setPostEntries] = useState<Post[] | undefined>(undefined);
@@ -47,11 +50,12 @@ export default function AuthorPage(props: Props) {
       setResponseMessage(500);
     })
 
-    axios.get(process.env.REACT_APP_API_URL + "/api/author/" + authorId + "posts/",
+    if (props.loggedInUser && props.location.pathname.includes(props.loggedInUser?.authorId)) {
+      axios.get(authorUrl + "/posts/",
       {
         auth: { // authenticate the GET request
-          username: props.loggedInUser ? props.loggedInUser.username : "",
-          password: props.loggedInUser ? props.loggedInUser.password : "",
+          username: props.loggedInUser.username,
+          password: props.loggedInUser.password,
         }
       }
     ).then(res => {
@@ -61,6 +65,7 @@ export default function AuthorPage(props: Props) {
       console.log("ERROR GETTING POSTS");
       setResponseMessage(500);
     })
+    };
   }, []);
 
   // Author's profile pic will be the same one from their GitHub
@@ -78,6 +83,12 @@ export default function AuthorPage(props: Props) {
     </Container>)
   }
 
+  const displayPosts = () => {
+    if (props.loggedInUser && author?.id.includes(props.loggedInUser.authorId)) {
+      return <PostList postEntries={postEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} />
+    }
+  }
+
   return (
     <Container fluid>
       <Row className="justify-content-md-center">
@@ -90,7 +101,7 @@ export default function AuthorPage(props: Props) {
             </CardBody>
           </Card>
         </Col>
-        {<PostList postEntries={postEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} />}
+        {author && displayPosts()}
       </Row>
     </Container>
   );
