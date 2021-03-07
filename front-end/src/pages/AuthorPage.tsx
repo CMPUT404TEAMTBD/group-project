@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { UserLogin } from '../types/UserLogin';
 import PostList from '../components/PostList';
 import { Post } from '../types/Post';
 import {
@@ -16,26 +15,16 @@ import {
   CardText,
   CardLink,
 } from 'reactstrap';
-import PostListItem from '../components/PostListItem';
 import { Author } from '../types/Author';
-import { RouteComponentProps } from 'react-router-dom';
-import { LoggedInUserContext } from '../contexts/LoggedInUserContext';
-
-// interface Props {
-//   props: RouteComponentProps;
-//   loggedInUser: UserLogin | undefined;
-// }
 
 /**
  * Author Page will render and display an author's profile - this includes information
  * about their user account and all the posts they have made
  * @param props 
  */
-// TODO:  - fix navigating from other author --> profile button (self)
-//        - hide "create post" on own profile page?
 export default function AuthorPage(props: any) {
   const authorUrl = process.env.REACT_APP_API_URL + "/api" + props.location.pathname;
-  const [author, setAuthor] = useState<Author|undefined>(undefined);
+  const [author, setAuthor] = useState<Author | undefined>(undefined);
   const [responseMessage, setResponseMessage] = useState(100);
   const [postEntries, setPostEntries] = useState<Post[] | undefined>(undefined);
 
@@ -50,21 +39,22 @@ export default function AuthorPage(props: any) {
       setResponseMessage(500);
     })
 
-    if (props.loggedInUser && props.location.pathname.includes(props.loggedInUser?.authorId)) {
+    // Only get stream if you're viewing your own profile
+    if (props.loggedInUser && props.location.pathname.includes(props.loggedInUser.authorId)) {
       axios.get(authorUrl + "/posts/",
-      {
-        auth: { // authenticate the GET request
-          username: props.loggedInUser.username,
-          password: props.loggedInUser.password,
+        {
+          auth: { // authenticate the GET request
+            username: props.loggedInUser.username,
+            password: props.loggedInUser.password,
+          }
         }
-      }
-    ).then(res => {
-      const posts: Post[] = res.data;
-      setPostEntries(posts);
-    }).catch(err => {
-      console.log("ERROR GETTING POSTS");
-      setResponseMessage(500);
-    })
+      ).then(res => {
+        const posts: Post[] = res.data;
+        setPostEntries(posts);
+      }).catch(err => {
+        console.log("ERROR GETTING POSTS");
+        setResponseMessage(500);
+      })
     };
   }, []);
 
