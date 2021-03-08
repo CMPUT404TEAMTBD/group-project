@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.scss';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { Container } from 'reactstrap';
@@ -13,6 +13,7 @@ import SettingsPage from './pages/SettingsPage';
 import CreatePostComponent from './components/CreatePost';
 import AuthorResultsPage from './pages/AuthorResultsPage';
 
+const LOCAL_STORAGE_USER = 'loggedInUser';
 
 /*
 * Snippet based on
@@ -20,8 +21,20 @@ import AuthorResultsPage from './pages/AuthorResultsPage';
 * from ChrisChrisLoLo
 */
 function App() {
+  
+  const initialJSON = localStorage.getItem(LOCAL_STORAGE_USER);
+  console.log(initialJSON)
+  const initialState:UserLogin|undefined = initialJSON ? JSON.parse(initialJSON) : undefined;
 
-  const [loggedInUser,setLoggedInUser] = useState<UserLogin | undefined>(undefined);
+  const [loggedInUser,setLoggedInUser] = useState<UserLogin | undefined>(initialState);
+
+  useEffect(()=>{
+    if (loggedInUser === undefined){
+      localStorage.removeItem(LOCAL_STORAGE_USER);
+    } else {
+      localStorage.setItem(LOCAL_STORAGE_USER,JSON.stringify(loggedInUser));
+    }
+  },[loggedInUser])
 
   return (
     <div>
