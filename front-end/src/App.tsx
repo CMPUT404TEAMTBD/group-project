@@ -23,7 +23,6 @@ const LOCAL_STORAGE_USER = 'loggedInUser';
 function App() {
   
   const initialJSON = localStorage.getItem(LOCAL_STORAGE_USER);
-  console.log(initialJSON)
   const initialState:UserLogin|undefined = initialJSON ? JSON.parse(initialJSON) : undefined;
 
   const [loggedInUser,setLoggedInUser] = useState<UserLogin | undefined>(initialState);
