@@ -40,7 +40,7 @@ export default function AuthorPage(props: any) {
     })
 
     // Only get stream if you're viewing your own profile
-    if (props.loggedInUser && props.location.pathname.includes(props.loggedInUser.authorId)) {
+    if (props.loggedInUser) {
       axios.get(authorUrl + "/posts/",
         {
           auth: { // authenticate the GET request
@@ -74,7 +74,7 @@ export default function AuthorPage(props: any) {
   }
 
   const displayPosts = () => {
-    if (props.loggedInUser && author?.id.includes(props.loggedInUser.authorId)) {
+    if (props.loggedInUser) {
       return <PostList postEntries={postEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} />
     }
   }
