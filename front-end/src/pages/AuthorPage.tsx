@@ -1,6 +1,5 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { UserLogin } from '../types/UserLogin';
 import PostList from '../components/PostList';
 import { Post } from '../types/Post';
 import {
@@ -16,23 +15,16 @@ import {
   CardText,
   CardLink,
 } from 'reactstrap';
-import PostListItem from '../components/PostListItem';
 import { Author } from '../types/Author';
-
-interface Props {
-  loggedInUser: UserLogin | undefined;
-}
 
 /**
  * Author Page will render and display an author's profile - this includes information
  * about their user account and all the posts they have made
  * @param props 
  */
-export default function AuthorPage(props: Props) {
-  // if logged in, assign authorUrl
-  const authorId = props.loggedInUser ? props.loggedInUser.authorId + "/" : "";
-  const authorUrl = process.env.REACT_APP_API_URL + "/api/author/" + authorId;
-  const [author, setAuthor] = useState<Author|undefined>(undefined);
+export default function AuthorPage(props: any) {
+  const authorUrl = process.env.REACT_APP_API_URL + "/api" + props.location.pathname;
+  const [author, setAuthor] = useState<Author | undefined>(undefined);
   const [responseMessage, setResponseMessage] = useState(100);
   const [postEntries, setPostEntries] = useState<Post[] | undefined>(undefined);
 
@@ -47,20 +39,23 @@ export default function AuthorPage(props: Props) {
       setResponseMessage(500);
     })
 
-    axios.get(process.env.REACT_APP_API_URL + "/api/author/" + authorId + "posts/",
-      {
-        auth: { // authenticate the GET request
-          username: props.loggedInUser ? props.loggedInUser.username : "",
-          password: props.loggedInUser ? props.loggedInUser.password : "",
+    // Only get stream if you're viewing your own profile
+    if (props.loggedInUser) {
+      axios.get(authorUrl + "/posts/",
+        {
+          auth: { // authenticate the GET request
+            username: props.loggedInUser.username,
+            password: props.loggedInUser.password,
+          }
         }
-      }
-    ).then(res => {
-      const posts: Post[] = res.data;
-      setPostEntries(posts);
-    }).catch(err => {
-      console.log("ERROR GETTING POSTS");
-      setResponseMessage(500);
-    })
+      ).then(res => {
+        const posts: Post[] = res.data;
+        setPostEntries(posts);
+      }).catch(err => {
+        console.log("ERROR GETTING POSTS");
+        setResponseMessage(500);
+      })
+    };
   }, []);
 
   // Author's profile pic will be the same one from their GitHub
@@ -78,6 +73,12 @@ export default function AuthorPage(props: Props) {
     </Container>)
   }
 
+  const displayPosts = () => {
+    if (props.loggedInUser) {
+      return <PostList postEntries={postEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} />
+    }
+  }
+
   return (
     <Container fluid>
       <Row className="justify-content-md-center">
@@ -90,7 +91,7 @@ export default function AuthorPage(props: Props) {
             </CardBody>
           </Card>
         </Col>
-        {<PostList postEntries={postEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} />}
+        {author && displayPosts()}
       </Row>
     </Container>
   );
