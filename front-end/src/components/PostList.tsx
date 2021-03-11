@@ -71,8 +71,6 @@ export default function PostList(props: Props) {
     <>
       <Col>
         {props.loggedInUser ? CreatePostModal() : null}
-      </Col>
-      <Col>
         {postListElToDisplay}
       </Col>
     </>
