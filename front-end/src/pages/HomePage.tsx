@@ -74,7 +74,7 @@ export default function HomePage(props: any) {
     return (
       <>
         <Card body className="text-center">
-          <CardTitle tag="h5">Log in to see your posts from who you follow!</CardTitle>
+          <CardTitle tag="h5">Log in to see posts from who you follow!</CardTitle>
         </Card>
       </>)
   }
