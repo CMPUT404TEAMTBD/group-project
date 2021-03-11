@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Row, Col, Button } from 'reactstrap';
+import { Col, Button } from 'reactstrap';
 import { UserLogin } from '../types/UserLogin';
 import CreateEditPostModal from '../components/CreateEditPostModal';
 import PostListItem from '../components/PostListItem';

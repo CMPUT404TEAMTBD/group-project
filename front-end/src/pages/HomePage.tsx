@@ -1,10 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Form, Input, Nav, NavItem, NavLink, TabContent, Button, Card, CardText, CardTitle, TabPane, Container } from 'reactstrap';
-import CreateEditPostModal from '../components/CreateEditPostModal';
 import PostList from '../components/PostList';
 import { Post } from '../types/Post';
-import { UserLogin } from '../types/UserLogin';
 
 
 /**
@@ -32,6 +30,7 @@ export default function HomePage(props: any) {
       console.error(err);
     });
 
+    // if logged in, get posts from inbox
     if (props.loggedInUser) {
       axios.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/inbox/").then(res => {
         console.log(res.data.items);
@@ -56,6 +55,7 @@ export default function HomePage(props: any) {
     props.history.push(`/authors/${userSearch}`);
   }
 
+  // display empty inbox or inbox posts
   function displayInboxPosts() {
     if (!inboxEntries || inboxEntries.length === 0) {
       return (
@@ -69,6 +69,7 @@ export default function HomePage(props: any) {
     return (<PostList postEntries={inboxEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} />)
   }
 
+  // display card that prompts log-in to be able to see inbox posts
   function displayLoginMessage() {
     return (
       <>
@@ -80,16 +81,14 @@ export default function HomePage(props: any) {
 
   return (
     <>
-      {/* <Row> */}
-      {/* <Col> */}
       <Container fluid>
         <Row className="justify-content-md-center">
           <Col sm={2}>
             <Nav tabs vertical className="justify-content-md-center">
               <NavItem>
                 <NavLink
+                  // TODO: consider adding className
                   // className={classnames({ active: activeTab === '1' })}
-                  // className={activeTab === '1' ? activeTab : ''}
                   className={`${true ? activeTab : ''}`}
                   onClick={() => { toggle('1'); }}
                 >Feed</NavLink>
@@ -111,34 +110,26 @@ export default function HomePage(props: any) {
           <Col className="justify-content-md-center">
             <TabContent activeTab={activeTab}>
               <TabPane tabId="1">
-                {/* <Row className="justify-content-md-center"> */}
                 <Col sm={6}>
                   {<PostList postEntries={postEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} />}
                 </Col>
-                {/* </Row> */}
               </TabPane>
               <TabPane tabId="2">
-                {/* <Row className="justify-content-md-center"> */}
                 <Col sm={6}>
                   {props.loggedInUser ? displayInboxPosts() : displayLoginMessage()}
                 </Col>
-                {/* </Row> */}
               </TabPane>
               <TabPane tabId="3">
-                {/* <Row className="justify-content-md-center"> */}
                 <Col sm={8}>
                   <Form inline={true} onSubmit={e => searchUsers(e)} className="justify-content-md-center">
                     <Input type="text" name="Author Search" placeholder="Search Authors" onChange={e => onUserSearchChange(e)} />
                   </Form>
                 </Col>
-                {/* </Row> */}
               </TabPane>
             </TabContent>
           </Col>
         </Row>
       </Container>
-      {/* </Col> */}
-      {/* </Row> */}
     </>
   );
 }
