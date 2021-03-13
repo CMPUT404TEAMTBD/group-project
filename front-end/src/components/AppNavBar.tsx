@@ -11,7 +11,7 @@ import {
 } from "reactstrap";
 import { NavLink } from "react-router-dom";
 import { UserLogin } from "../types/UserLogin";
-import FriendRequestModal from "./FriendRequestModal";
+import FriendRequestList from "./FriendRequestList";
 
 interface Props {
   loggedInUser: UserLogin | undefined;
@@ -41,13 +41,13 @@ export default function AppNavBar(props: Props) {
     return (
       <>
         <NavItem onClick={close}>
-          <NavLink to="/" className="nav-link" onClick={() => setIsFriendRequestOpen(!isFriendRequestOpen)}>Modal</NavLink>
+          <NavLink to="#" className="nav-link" onClick={() => setIsFriendRequestOpen(!isFriendRequestOpen)}>Friend Requests</NavLink>
           <Modal isOpen={isFriendRequestOpen} size="lg" toggle={() => setIsFriendRequestOpen(!isFriendRequestOpen)}>
                 <ModalHeader toggle={() => setIsFriendRequestOpen(!isFriendRequestOpen)}>
                   Friend Requests
                 </ModalHeader>
                 <ModalBody>
-                  <FriendRequestModal {...props}/>
+                  <FriendRequestList {...props}/>
                 </ModalBody>
               </Modal>
         </NavItem>
