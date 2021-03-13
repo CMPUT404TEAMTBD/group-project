@@ -5,9 +5,13 @@ import {
   NavbarToggler,
   Nav,
   NavItem,
+  Modal,
+  ModalBody,
+  ModalHeader,
 } from "reactstrap";
 import { NavLink } from "react-router-dom";
 import { UserLogin } from "../types/UserLogin";
+import FriendRequestModal from "./FriendRequestModal";
 
 interface Props {
   loggedInUser: UserLogin | undefined;
@@ -26,6 +30,7 @@ interface Props {
  */
 export default function AppNavBar(props: Props) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isFriendRequestOpen, setIsFriendRequestOpen] = useState<boolean>(false);
 
   const toggle = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
@@ -35,6 +40,17 @@ export default function AppNavBar(props: Props) {
   function loggedIn() {
     return (
       <>
+        <NavItem onClick={close}>
+          <NavLink to="/" className="nav-link" onClick={() => setIsFriendRequestOpen(!isFriendRequestOpen)}>Modal</NavLink>
+          <Modal isOpen={isFriendRequestOpen} size="lg" toggle={() => setIsFriendRequestOpen(!isFriendRequestOpen)}>
+                <ModalHeader toggle={() => setIsFriendRequestOpen(!isFriendRequestOpen)}>
+                  Friend Requests
+                </ModalHeader>
+                <ModalBody>
+                  <FriendRequestModal {...props}/>
+                </ModalBody>
+              </Modal>
+        </NavItem>
         <NavItem onClick={close}>
           <NavLink to="/settings" className="nav-link">Settings</NavLink>
         </NavItem>
