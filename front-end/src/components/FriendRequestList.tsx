@@ -28,7 +28,7 @@ const FriendRequestList = (props: any) => {
     requestsToDisplay = <Card body className="text-center"><CardBody><CardTitle tag="h5" >No Friend Requests :(</CardTitle></CardBody></Card>
   } else {
     requestsToDisplay = friendReqEntries.map((fr: FriendRequest) => {
-      return <FriendRequestItem friendRequest={fr}/>
+      return <FriendRequestItem {...props} friendRequest={fr}/>
     })
   }
   return (
