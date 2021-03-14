@@ -6,57 +6,39 @@ import { FriendRequest } from '../types/FriendRequest';
 import { UserLogin } from '../types/UserLogin';
 
 interface Props {
-    loggedInUser: UserLogin;
-    friendRequest: FriendRequest;
-    // removeFromList: Function;
+  loggedInUser: UserLogin;
+  friendRequest: FriendRequest;
 }
 
-// TODO: make accept and reject buttons work
-// Accept = PUT to /:author_id/followers/:foreign_id
-// Reject = DELETE from inbox?
+// TODO: update/remove the friend request item from the list when you follow back/accept
 export default function FriendRequestItem(props: Props) {
-    const friendRequest = props.friendRequest;
+  const friendRequest = props.friendRequest;
 
-    function acceptFriendRequest(requester: Author) {
-      const foreignAuthorUri = requester.id.split("/");
-      const foreignId = foreignAuthorUri[4]; // i dont like this being hardcoded
-      axios.put(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/followers/" + foreignId + "/",
-        requester, {
-          auth: {
-            username: props.loggedInUser.username,
-            password: props.loggedInUser.password,
-          },
-        }).then(res => {
-          if (res.status >= 400) {
-            console.log("ERRRRRr");
-          } else if (res.status === 201) {
-            // TODO:
-            // if OK then remove the friend request from the list here
-          }
-        }).catch(err => {
-          console.log(err);
-          console.log("ERRRR");
-        })
-    }
-  
-    return (
-        // <>
-        <Card>
-        <CardBody>
-          <Container fluid>
+  function followBack(requester: Author) {
+    // TODO: follow back
+    console.log("followed back: " + requester.displayName);
+  }
+
+  return (
+    // <>
+    <Card>
+      <CardBody>
+        <Container fluid>
           <Row>
-          <Col xs="2">
-          <CardImg top width="20%" src={friendRequest.actor.github + ".png"} alt="card image cap" />
-          </Col>
-          <Col xs="6">
-          <CardTitle tag="h5" >{friendRequest.actor.displayName}</CardTitle>
-          <CardSubtitle tag="h6">From: {friendRequest.actor.host}</CardSubtitle>
-          <Button color="success" onClick={() => acceptFriendRequest(friendRequest.actor)}>Accept</Button>
-          </Col>
+            <Col xs="2">
+              <CardImg top width="20%" src={friendRequest.actor.github + ".png"} alt="card image cap" />
+            </Col>
+            <Col xs="6">
+              <CardTitle tag="h5" >{friendRequest.actor.displayName}</CardTitle>
+              <CardSubtitle tag="h6">
+                From: <CardLink href={friendRequest.actor.host}>{friendRequest.actor.host}</CardLink>
+              </CardSubtitle>
+              <Button color="success" onClick={() => followBack(friendRequest.actor)}>Befriend</Button>
+            </Col>
           </Row>
-          </Container>
-        </CardBody>
-      </Card>
-        // </>
-    )
+        </Container>
+      </CardBody>
+    </Card>
+    // </>
+  )
 }

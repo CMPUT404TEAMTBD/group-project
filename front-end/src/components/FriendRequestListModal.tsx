@@ -1,14 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Card, CardBody, CardTitle } from 'reactstrap';
+import { Button, Card, CardBody, CardTitle, Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { FriendRequest } from '../types/FriendRequest';
 import FriendRequestItem from './FriendRequestItem';
 
-const FriendRequestList = (props: any) => {
-  const [modal, setModal] = useState(false);
+const FriendRequestListModal = (props: any) => {
   const [friendReqEntries, setFriendReqEntries] = useState<FriendRequest[] | undefined>(undefined);
-
-  const toggle = () => setModal(!modal);
 
   useEffect(() => {
     axios.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/inbox").then(res => {
@@ -17,10 +14,6 @@ const FriendRequestList = (props: any) => {
     })
   }, []);
 
-  function removeFromList() {
-    console.log("remove");
-  }
-
   let requestsToDisplay;
   if (friendReqEntries === undefined) {
     requestsToDisplay = <Card body className="text-center"><CardBody><CardTitle tag="h5" >Loading Friend Requests...</CardTitle></CardBody></Card>
@@ -28,14 +21,22 @@ const FriendRequestList = (props: any) => {
     requestsToDisplay = <Card body className="text-center"><CardBody><CardTitle tag="h5" >No Friend Requests :(</CardTitle></CardBody></Card>
   } else {
     requestsToDisplay = friendReqEntries.map((fr: FriendRequest) => {
-      return <FriendRequestItem {...props} friendRequest={fr}/>
+      return <FriendRequestItem {...props} friendRequest={fr} />
     })
   }
+
   return (
     <>
-      {requestsToDisplay}
+      <Modal isOpen={props.isFriendRequestOpen} size="lg" toggle={() => props.setIsFriendRequestOpen(!props.isFriendRequestOpen)}>
+        <ModalHeader toggle={() => props.setIsFriendRequestOpen(!props.isFriendRequestOpen)}>
+          Friend Requests
+                </ModalHeader>
+        <ModalBody>
+          {requestsToDisplay}
+        </ModalBody>
+      </Modal>
     </>
   );
 }
 
-export default FriendRequestList;
+export default FriendRequestListModal;
