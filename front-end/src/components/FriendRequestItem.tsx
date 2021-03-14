@@ -34,6 +34,7 @@ export default function FriendRequestItem(props: Props) {
             // if OK then remove the friend request from the list here
           }
         }).catch(err => {
+          console.log(err);
           console.log("ERRRR");
         })
     }
@@ -47,13 +48,10 @@ export default function FriendRequestItem(props: Props) {
           <Col xs="2">
           <CardImg top width="20%" src={friendRequest.actor.github + ".png"} alt="card image cap" />
           </Col>
-          <Col xs="7">
+          <Col xs="6">
           <CardTitle tag="h5" >{friendRequest.actor.displayName}</CardTitle>
           <CardSubtitle tag="h6">From: {friendRequest.actor.host}</CardSubtitle>
-          </Col>
-          <Col xs="3">
-            <Button color="success" onClick={() => acceptFriendRequest(friendRequest.actor)}>Accept</Button>
-            <Button color="danger">Reject</Button>
+          <Button color="success" onClick={() => acceptFriendRequest(friendRequest.actor)}>Accept</Button>
           </Col>
           </Row>
           </Container>
