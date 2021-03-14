@@ -11,8 +11,6 @@ import {
   CardBody,
   CardImg,
   CardTitle,
-  CardSubtitle,
-  CardText,
   CardLink,
 } from 'reactstrap';
 import { Author } from '../types/Author';
@@ -91,7 +89,9 @@ export default function AuthorPage(props: any) {
             </CardBody>
           </Card>
         </Col>
-        {author && displayPosts()}
+        <Col>
+          {author && displayPosts()}
+        </Col>
       </Row>
     </Container>
   );

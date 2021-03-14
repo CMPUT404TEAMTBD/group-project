@@ -34,7 +34,7 @@ export default function HomePage(props: any) {
     if (props.loggedInUser) {
       axios.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/inbox/").then(res => {
         console.log(res.data.items);
-        const inboxPosts: Post[] = res.data.items.filter((p: Post) => { return p.type === 'post'});
+        const inboxPosts: Post[] = res.data.items.filter((p: Post) => { return p.type === 'post' });
         setInboxEntries(inboxPosts);
         console.log(inboxPosts);
       }).catch(err => {
@@ -110,21 +110,39 @@ export default function HomePage(props: any) {
           <Col className="justify-content-md-center">
             <TabContent activeTab={activeTab}>
               <TabPane tabId="1">
-                <Col sm={6}>
-                  {<PostList postEntries={postEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} />}
-                </Col>
+                <Container>
+                  <Row>
+                    <Col></Col>
+                    <Col sm={8}>
+                      {<PostList postEntries={postEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} />}
+                    </Col>
+                    <Col></Col>
+                  </Row>
+                </Container>
               </TabPane>
               <TabPane tabId="2">
-                <Col sm={6}>
-                  {props.loggedInUser ? displayInboxPosts() : displayLoginMessage()}
-                </Col>
+                <Container>
+                  <Row>
+                    <Col></Col>
+                    <Col sm={8}>
+                      {props.loggedInUser ? displayInboxPosts() : displayLoginMessage()}
+                    </Col>
+                    <Col></Col>
+                  </Row>
+                </Container>
               </TabPane>
               <TabPane tabId="3">
-                <Col sm={8}>
-                  <Form inline={true} onSubmit={e => searchUsers(e)} className="justify-content-md-center">
-                    <Input type="text" name="Author Search" placeholder="Search Authors" onChange={e => onUserSearchChange(e)} />
-                  </Form>
-                </Col>
+                <Container>
+                  <Row>
+                    <Col></Col>
+                    <Col sm={8}>
+                      <Form inline={true} onSubmit={e => searchUsers(e)} className="justify-content-md-center">
+                        <Input type="text" name="Author Search" placeholder="Search Authors" onChange={e => onUserSearchChange(e)} />
+                      </Form>
+                    </Col>
+                    <Col></Col>
+                  </Row>
+                </Container>
               </TabPane>
             </TabContent>
           </Col>
