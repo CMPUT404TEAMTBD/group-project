@@ -1,6 +1,6 @@
 import { Author } from "./Author";
 
-export interface FriendRequest {
+export interface Follow {
     type: string
     summary: string
     actor: Author // requester

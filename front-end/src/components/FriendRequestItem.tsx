@@ -2,12 +2,12 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, Card, CardBody, CardImg, CardLink, CardSubtitle, CardText, CardTitle, Col, Container, Row } from 'reactstrap';
 import { Author } from '../types/Author';
-import { FriendRequest } from '../types/FriendRequest';
+import { Follow } from '../types/Follow';
 import { UserLogin } from '../types/UserLogin';
 
 interface Props {
   loggedInUser: UserLogin;
-  friendRequest: FriendRequest;
+  friendRequest: Follow;
 }
 
 // TODO: update/remove the friend request item from the list when you follow back/accept
