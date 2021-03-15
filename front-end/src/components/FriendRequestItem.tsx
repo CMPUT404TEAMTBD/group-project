@@ -20,7 +20,6 @@ export default function FriendRequestItem(props: Props) {
   }
 
   return (
-    // <>
     <Card>
       <CardBody>
         <Container fluid>
@@ -39,6 +38,5 @@ export default function FriendRequestItem(props: Props) {
         </Container>
       </CardBody>
     </Card>
-    // </>
   )
 }
