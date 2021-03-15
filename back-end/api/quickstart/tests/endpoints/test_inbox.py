@@ -1,7 +1,7 @@
 import json
 from rest_framework import status
 from django.test import TestCase, Client
-from quickstart.models import Inbox
+from quickstart.models import Like, Inbox
 from quickstart.serializers import InboxSerializer
 from quickstart.tests.helper_test import get_test_post_fields, get_test_follow_fields, get_test_like_fields
 
@@ -34,13 +34,22 @@ class PostInbox(TestCase):
     self.inbox = Inbox.objects.create(author="testAuthorId")
 
   def test_send_post_to_inbox(self):
-    self.send_to_inbox(get_test_post_fields())
+    fields = get_test_post_fields()
+    fields['type'] = 'post'
+    self.send_to_inbox(fields)
 
   def test_send_follow_to_inbox(self):
-    self.send_to_inbox(get_test_follow_fields())
+    fields = get_test_follow_fields()
+    fields['type'] = 'follow'
+    self.send_to_inbox(fields)
 
   def test_send_like_to_inbox(self):
-    self.send_to_inbox(get_test_like_fields())
+    fields = get_test_like_fields()
+    fields['type'] = 'like'
+    self.send_to_inbox(fields)
+    
+    # Ensure a Like model is saved into our database.
+    self.assertTrue(Like.objects.get(object=fields['object']))
 
   def send_to_inbox(self, payload):
     response = client.post(

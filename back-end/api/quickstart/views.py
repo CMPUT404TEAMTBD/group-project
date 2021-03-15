@@ -211,7 +211,7 @@ class LikedViewSet(viewsets.ModelViewSet):
     serializer_class = LikeSerializer
 
     def retrieve(self, request, author):
-        liked = Like.objects.filter(author=author)
+        liked = Like.objects.filter(author__id=author)
         serializer = LikeSerializer(liked, many=True)
 
         return Response({
@@ -229,6 +229,14 @@ class InboxViewSet(viewsets.ModelViewSet):
         
     def update(self, request, author):
         inbox = Inbox.objects.get(author=author)
+
+        # Save likes into our database, so that clearing the inbox keeps them safe.
+        if request.data['type'] == 'like':
+            # Create the Like model without the type field (or else Django complains)
+            like = request.data.copy()
+            del like['type']
+            Like.objects.create(**like)
+
         inbox.items.append(request.data)
         inbox.save()
 
