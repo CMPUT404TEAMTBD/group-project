@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PostList from '../components/PostList';
 import { Post } from '../types/Post';
 import {
@@ -11,11 +11,10 @@ import {
   CardBody,
   CardImg,
   CardTitle,
-  CardSubtitle,
-  CardText,
   CardLink,
 } from 'reactstrap';
 import { Author } from '../types/Author';
+import FollowRequestButton from '../components/FriendRequestButton';
 
 /**
  * Author Page will render and display an author's profile - this includes information
@@ -27,6 +26,7 @@ export default function AuthorPage(props: any) {
   const [author, setAuthor] = useState<Author | undefined>(undefined);
   const [responseMessage, setResponseMessage] = useState(100);
   const [postEntries, setPostEntries] = useState<Post[] | undefined>(undefined);
+  const [isFollower, setIsFollower] = useState<boolean>(false);
 
   // After clicking the profile navlink, get the appropriate author info and data
   useEffect(() => {
@@ -37,6 +37,14 @@ export default function AuthorPage(props: any) {
     }).catch(err => {
       console.log("ERROR GETTING AUTHOR INFO");
       setResponseMessage(500);
+    })
+
+    // get whether user is follower of author
+    axios.get(authorUrl + "/followers/" + props.loggedInUser.authorId).then(res => {
+      setIsFollower(true);
+    }).catch(err => {
+      // 404 is not a follower
+      setIsFollower(false);
     })
 
     // Only get stream if you're viewing your own profile
@@ -90,6 +98,7 @@ export default function AuthorPage(props: any) {
               <CardLink href={author ? author.github : "#"} >GitHub</CardLink>
             </CardBody>
           </Card>
+          {author?.id !== props.loggedInUser.authorId ? <FollowRequestButton loggedInUser={props.loggedInUser} currentAuthor={author} isFollower={isFollower} setIsFollower={setIsFollower} /> : null}
         </Col>
         {author && displayPosts()}
       </Row>

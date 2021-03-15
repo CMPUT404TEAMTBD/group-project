@@ -1,48 +1,44 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
 import { Button } from 'reactstrap'
 import { Author } from '../types/Author';
 import { UserLogin } from '../types/UserLogin';
     
 interface Props {
     loggedInUser: UserLogin;
-    currentAuthor: Author;
+    currentAuthor?: Author;
+    isFollower: boolean;
+    setIsFollower: Function;
 }
 
-export default function FriendRequestButton(props: Props) {
-  const followersUrl = process.env.REACT_APP_API_URL + "/api/authors/" + props.currentAuthor.id + "/followers";
-  const [followers, setFollowers] = useState<Author[] | undefined>(undefined);
+export default function FollowRequestButton(props: Props) {
+  const url = process.env.REACT_APP_API_URL + "/api/author/" + props.currentAuthor?.id + "/followers/" + props.loggedInUser.authorId + "/";
 
-  useEffect(() => {
-    // get followers for author
-    axios.get(followersUrl).then(res => {
-      setFollowers(res.data["items"]);
-    }).catch(err => {
-      console.log("ERROR GETTING FOLLOWERS");
-    })
-  });
-  
-  const showFriendRequestButton = () => {
-    // show friend request button only if it is not the loggedin user or the loggedin user is not already a follower
-    let followerIds = followers?.map(follower => follower.id)
-    return (props.currentAuthor.id !== props.loggedInUser.authorId) || (!followerIds?.includes((props.currentAuthor.id)));
-  }
-
-  const sendFriendRequest = () => {
-    let data = {
-      
-    }
-      
+  const sendFollowRequest = () => {
     // TODO: add authentication
-    axios.put(followersUrl + "/" + props.loggedInUser.authorId, data).then(res => {
-      if (res.status == 200)
-    });
+    let data = {
+      "receiver" : props.currentAuthor?.id,
+      "sender" : props.loggedInUser.authorId,
+      "approved" : false
+    }
+    if (!props.isFollower) {
+      axios.put(url, data).then(res => {
+        if (res.status === 201) {
+          props.setIsFollower(true);
+
+        }
+      });
+    } else {
+      axios.delete(url).then(res => {
+        if (res.status === 204) {
+          props.setIsFollower(false);
+        }
+      });
+    }
   }
 
   return (
     <>
-      {}
-      {showFriendRequestButton() ? <Button onClick={sendFriendRequest}>Follow</Button> : null}
+      <Button onClick={sendFollowRequest}>{props.isFollower ? "Unfollow" : "Follow"}</Button>
     </>
   )
 
