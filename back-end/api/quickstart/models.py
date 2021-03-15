@@ -67,7 +67,7 @@ class Like(models.Model):
   context = models.TextField()
   summary = models.TextField()
   type = 'like' 
-  author = models.TextField()
+  author = models.JSONField()
   object = models.TextField()
   
 # Every Author has an Inbox, which is where they receive notifications about recent activity

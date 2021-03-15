@@ -15,11 +15,20 @@ def get_test_follow_fields():
     'approved': False
   }
 
-def get_test_like_fields(object_id=1, author_id='testAuthorId'):
+def get_test_like_fields(
+  object_id=1, 
+  author={
+    'id': 'testId',
+    'displayName': 'John Doe',
+    'url': 'testUrl',
+    'github': 'testGithub',
+    'host': 'testHost'
+  }
+):
   return {
     'context': 'testContext',
     'summary': 'Someone likes your object',
-    'author': author_id,
+    'author': author,
     'object': object_id,
   }
 
