@@ -40,7 +40,7 @@ auth_user = views.AuthUserViewSet.as_view({
 # PUT create a post with that post_id
 posts = views.PostViewSet.as_view({
     'get': 'retrieve',
-    'post': 'update',
+    'post': 'partial_update',
     'delete': 'destroy',
     'put': 'create'
 })
