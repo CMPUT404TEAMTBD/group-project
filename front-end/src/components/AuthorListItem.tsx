@@ -1,9 +1,13 @@
-import React from "react"
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { Author } from "../types/Author";
+import { UserLogin } from '../types/UserLogin';
+import FollowRequestButton from './FriendRequestButton';
 
 interface Props {
-  author: Author
+  author: Author;
+  loggedInUser: UserLogin;
 }
 
 /**
@@ -11,6 +15,21 @@ interface Props {
  * @param props 
  */
 export default function AuthorListItem(props: Props) {
+  // TODO: this will eventually change to be using the host from the author when we start connecting with other groups
+  const isFollowerUrl = process.env.REACT_APP_API_URL + "/api/author/" + props.author.id + "/followers/" + props.loggedInUser.authorId;
+
+  const [isFollower, setIsFollower] = useState<boolean>(false);
+
+  useEffect(() => {
+    // get whether user is follower of author
+    axios.get(isFollowerUrl).then(res => {
+      setIsFollower(true);
+    }).catch(err => {
+      setIsFollower(false);
+    })
+  }, []);
+
+
   return (
     <>
       <div>
@@ -20,6 +39,7 @@ export default function AuthorListItem(props: Props) {
         <Link to={{ pathname: `/author/${props.author.id}` }} >
           View Profile
         </Link>
+        {props.author.id !== props.loggedInUser.authorId ? <FollowRequestButton loggedInUser={props.loggedInUser} currentAuthor={props.author} isFollower={isFollower} setIsFollower={setIsFollower} /> : null}
       </div>
     </>
   )

@@ -1,9 +1,10 @@
-import React from "react"
 import AuthorListItem from "./AuthorListItem"
 import { Author } from "../types/Author";
+import { UserLogin } from "../types/UserLogin";
 
 interface Props {
-  authorList: Author[]
+  authorList: Author[];
+  loggedInUser: UserLogin;
 }
 
 /**
@@ -15,7 +16,7 @@ export default function AuthorList(props: Props) {
   return (
     <>
       {props.authorList.length !== 0 ?
-       props.authorList.map((author: Author) => <AuthorListItem author={author}></AuthorListItem>):
+       props.authorList.map((author: Author) => <AuthorListItem author={author} loggedInUser={props.loggedInUser}></AuthorListItem>):
        <h4>No Authors Found :(</h4>
       }
     </>
