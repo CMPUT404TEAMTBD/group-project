@@ -28,7 +28,7 @@ author = views.AuthorViewSet.as_view({
 })
 
 # Endpoint: /api/authors/
-# GET: retrieve a list of all authors
+# GET: retrieve a list of all authors. Custom endpoint used for searching authors.
 authors = views.AuthorsViewSet.as_view({
     'get': 'list'
 })
