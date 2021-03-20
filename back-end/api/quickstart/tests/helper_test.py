@@ -8,11 +8,13 @@ def get_test_author_fields(i=1):
     'host': 'testHost'
   }
 
-def get_test_follow_fields():
+def get_sender_fields(i=1):
   return {
-    'receiver': 'receiverUrl',
-    'sender': 'senderUrl',
-    'approved': False
+    'id': f'testid{i}',
+    'displayName': f'John Doe {i}',
+    'url': f'testUrl{i}',
+    'github': f'testGithub{i}',
+    'host': 'testHost'
   }
 
 def get_test_like_fields(
