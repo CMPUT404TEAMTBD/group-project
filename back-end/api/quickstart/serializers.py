@@ -35,7 +35,7 @@ class FollowSerializer(serializers.HyperlinkedModelSerializer):
 class LikeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Like
-        fields = ['context', 'summary', 'type', 'author', 'object']
+        fields = ['type', 'author', 'object']
         
 
 class InboxSerializer(serializers.HyperlinkedModelSerializer):
