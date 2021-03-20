@@ -7,7 +7,7 @@ import FollowRequestButton from './FriendRequestButton';
 
 interface Props {
   author: Author;
-  loggedInUser: UserLogin;
+  loggedInUser?: UserLogin;
 }
 
 /**
@@ -16,7 +16,7 @@ interface Props {
  */
 export default function AuthorListItem(props: Props) {
   // TODO: this will eventually change to be using the host from the author when we start connecting with other groups
-  const isFollowerUrl = process.env.REACT_APP_API_URL + "/api/author/" + props.author.id + "/followers/" + props.loggedInUser.authorId;
+  const isFollowerUrl = process.env.REACT_APP_API_URL + "/api/author/" + props.author.id + "/followers/" + props.loggedInUser?.authorId;
 
   const [isFollower, setIsFollower] = useState<boolean>(false);
 
@@ -29,6 +29,11 @@ export default function AuthorListItem(props: Props) {
     })
   }, []);
 
+  const displayFollowButton = () => {
+    if (props.loggedInUser !== undefined && props.author.id !== props.loggedInUser?.authorId) {
+      return <FollowRequestButton loggedInUser={props.loggedInUser} currentAuthor={props.author} isFollower={isFollower} setIsFollower={setIsFollower} /> 
+    }
+  }
 
   return (
     <>
@@ -39,7 +44,7 @@ export default function AuthorListItem(props: Props) {
         <Link to={{ pathname: `/author/${props.author.id}` }} >
           View Profile
         </Link>
-        {props.author.id !== props.loggedInUser.authorId ? <FollowRequestButton loggedInUser={props.loggedInUser} currentAuthor={props.author} isFollower={isFollower} setIsFollower={setIsFollower} /> : null}
+        {displayFollowButton()}
       </div>
     </>
   )

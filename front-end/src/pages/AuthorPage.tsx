@@ -38,17 +38,16 @@ export default function AuthorPage(props: any) {
       console.log("ERROR GETTING AUTHOR INFO");
       setResponseMessage(500);
     })
-
-    // get whether user is follower of author
-    axios.get(authorUrl + "/followers/" + props.loggedInUser.authorId).then(res => {
-      setIsFollower(true);
-    }).catch(err => {
-      // 404 is not a follower
-      setIsFollower(false);
-    })
-
-    // Only get stream if you're viewing your own profile
     if (props.loggedInUser) {
+      // get whether user is follower of author
+      axios.get(authorUrl + "/followers/" + props.loggedInUser.authorId).then(res => {
+        setIsFollower(true);
+      }).catch(err => {
+        // 404 is not a follower
+        setIsFollower(false);
+      })
+
+      // Only get stream if you're viewing your own profile
       axios.get(authorUrl + "/posts/",
         {
           auth: { // authenticate the GET request
@@ -87,6 +86,12 @@ export default function AuthorPage(props: any) {
     }
   }
 
+  const displayFollowButton = () => {
+    if (props.loggedInUser !== undefined && author?.id !== props.loggedInUser.authorId) {
+      return <FollowRequestButton loggedInUser={props.loggedInUser} currentAuthor={author} isFollower={isFollower} setIsFollower={setIsFollower} />
+    }
+  }
+
   return (
     <Container fluid>
       <Row className="justify-content-md-center">
@@ -98,7 +103,7 @@ export default function AuthorPage(props: any) {
               <CardLink href={author ? author.github : "#"} >GitHub</CardLink>
             </CardBody>
           </Card>
-          {author?.id !== props.loggedInUser.authorId ? <FollowRequestButton loggedInUser={props.loggedInUser} currentAuthor={author} isFollower={isFollower} setIsFollower={setIsFollower} /> : null}
+          {displayFollowButton()}
         </Col>
         <Col>
           {author && displayPosts()}

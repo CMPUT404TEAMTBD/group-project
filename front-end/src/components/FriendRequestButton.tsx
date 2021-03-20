@@ -4,15 +4,15 @@ import { Author } from '../types/Author';
 import { UserLogin } from '../types/UserLogin';
     
 interface Props {
-    loggedInUser: UserLogin;
+    loggedInUser?: UserLogin;
     currentAuthor?: Author;
     isFollower: boolean;
     setIsFollower: Function;
 }
 
 export default function FollowRequestButton(props: Props) {
-  const url = process.env.REACT_APP_API_URL + "/api/author/" + props.currentAuthor?.id + "/followers/" + props.loggedInUser.authorId + "/";
-  const loggedInUserUrl = process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId;
+  const url = process.env.REACT_APP_API_URL + "/api/author/" + props.currentAuthor?.id + "/followers/" + props.loggedInUser?.authorId + "/";
+  const loggedInUserUrl = process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId;
 
   const sendFollowRequest = () => {
     // TODO: add authentication
