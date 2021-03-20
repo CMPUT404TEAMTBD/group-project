@@ -33,7 +33,7 @@ class FollowSerializer(serializers.HyperlinkedModelSerializer):
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
-        return ret["sender"]
+        return ret['sender']
 
 
 class LikeSerializer(serializers.HyperlinkedModelSerializer):
