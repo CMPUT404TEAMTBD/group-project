@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PostList from '../components/PostList';
 import { Post } from '../types/Post';
 import {
@@ -14,6 +14,7 @@ import {
   CardLink,
 } from 'reactstrap';
 import { Author } from '../types/Author';
+import FollowRequestButton from '../components/FriendRequestButton';
 
 /**
  * Author Page will render and display an author's profile - this includes information
@@ -25,6 +26,7 @@ export default function AuthorPage(props: any) {
   const [author, setAuthor] = useState<Author | undefined>(undefined);
   const [responseMessage, setResponseMessage] = useState(100);
   const [postEntries, setPostEntries] = useState<Post[] | undefined>(undefined);
+  const [isFollower, setIsFollower] = useState<boolean>(false);
 
   // After clicking the profile navlink, get the appropriate author info and data
   useEffect(() => {
@@ -36,9 +38,16 @@ export default function AuthorPage(props: any) {
       console.log("ERROR GETTING AUTHOR INFO");
       setResponseMessage(500);
     })
-
-    // Only get stream if you're viewing your own profile
     if (props.loggedInUser) {
+      // get whether user is follower of author
+      axios.get(authorUrl + "/followers/" + props.loggedInUser.authorId).then(res => {
+        setIsFollower(true);
+      }).catch(err => {
+        // 404 is not a follower
+        setIsFollower(false);
+      })
+
+      // Only get stream if you're viewing your own profile
       axios.get(authorUrl + "/posts/",
         {
           auth: { // authenticate the GET request
@@ -77,6 +86,12 @@ export default function AuthorPage(props: any) {
     }
   }
 
+  const displayFollowButton = () => {
+    if (props.loggedInUser && author?.id !== props.loggedInUser.authorId) {
+      return <FollowRequestButton loggedInUser={props.loggedInUser} currentAuthor={author} isFollower={isFollower} setIsFollower={setIsFollower} />
+    }
+  }
+
   return (
     <Container fluid>
       <Row className="justify-content-md-center">
@@ -88,6 +103,7 @@ export default function AuthorPage(props: any) {
               <CardLink href={author ? author.github : "#"} >GitHub</CardLink>
             </CardBody>
           </Card>
+          {displayFollowButton()}
         </Col>
         <Col>
           {author && displayPosts()}
