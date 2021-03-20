@@ -38,7 +38,7 @@ export default function AuthorListItem(props: Props) {
   return (
     <>
       <div>
-        <h3>{props.author.displayName} {props.author.github}</h3>
+        <h3>{props.author.displayName}</h3>
       </div>
       <div>
         <Link to={{ pathname: `/author/${props.author.id}` }} >

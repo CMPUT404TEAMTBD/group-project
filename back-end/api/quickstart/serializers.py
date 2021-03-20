@@ -9,7 +9,7 @@ from rest_framework import serializers
 class AuthorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Author
-        fields = ['id', 'type', 'displayName', 'url', 'github']
+        fields = ['id', 'type', 'displayName', 'url', 'github', 'host']
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     author = AuthorSerializer(read_only=True)
