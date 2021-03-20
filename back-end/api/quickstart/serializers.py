@@ -29,7 +29,7 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 class FollowSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Follow
-        fields = ['receiver', 'sender', 'approved']
+        fields = ['sender']
 
 
 class LikeSerializer(serializers.HyperlinkedModelSerializer):

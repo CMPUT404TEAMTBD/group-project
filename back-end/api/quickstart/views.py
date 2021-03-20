@@ -2,6 +2,7 @@
 views.py defines the code that is run upon receiving a request to our endpoints, whose URLs are defined in urls.py.
 Some endpoint handlers have been omitted, meaning that the DRF default code is sufficient.
 """
+import json
 from django.contrib.auth.models import User, Group
 from .models import Author, Post, Follow, Comment, Like, Inbox
 from rest_framework import viewsets
@@ -145,12 +146,10 @@ class FollowersListViewSet(viewsets.ModelViewSet):
     API endpoint that allows for listing the followers of an author.
     """
     def list(self, request, receiver):
-        follows = Follow.objects.filter(receiver=receiver)
-        sender_ids = [f.sender for f in follows]
+        author = Author.objects.get(id=receiver)
+        queryset = Follow.objects.filter(receiver=author)
 
-        # TODO: Most likely will have to make API calls here instead of database reading.
-        senders = Author.objects.filter(id__in=sender_ids)
-        serializer = AuthorSerializer(senders, many=True)
+        serializer = FollowSerializer(queryset, many=True)
 
         return Response({
             'type': 'followers',
@@ -164,7 +163,39 @@ class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     """
     queryset = Follow.objects.all()
     serializer_class = FollowSerializer
-    lookup_fields = ['receiver', 'sender']
+    lookup_fields = ['receiver']
+
+    def retrieve(self, request, receiver, sender):
+        
+        author = Author.objects.get(id=receiver)
+        queryset = Follow.objects.filter(receiver=author, sender__id=sender)
+        if len(queryset) == 0:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = FollowSerializer(queryset.first())
+        
+        return Response(serializer.data)
+
+
+    def create(self, request, receiver, sender):
+        try:
+            author = Author.objects.get(id=receiver)
+            follow = Follow.objects.create(receiver=author, sender=request.data)
+        except Author.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        return Response(status=status.HTTP_201_CREATED)
+
+    def destroy(self, request, receiver, sender):
+        author = Author.objects.get(id=receiver)
+        queryset = Follow.objects.filter(receiver=author, sender__id=sender)
+        if len(queryset) == 0:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        queryset.first().delete()
+        
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class LikesPostViewSet(viewsets.ModelViewSet):
