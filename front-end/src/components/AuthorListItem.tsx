@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
+import { Card, CardBody, Container, Row, Col, CardImg, CardTitle, Button, CardLink, CardSubtitle } from 'reactstrap';
 import { Author } from "../types/Author";
 import { UserLogin } from '../types/UserLogin';
 import FollowRequestButton from './FriendRequestButton';
@@ -36,16 +37,24 @@ export default function AuthorListItem(props: Props) {
   }
 
   return (
-    <>
-      <div>
-        <h3>{props.author.displayName} {props.author.github}</h3>
-      </div>
-      <div>
-        <Link to={{ pathname: `/author/${props.author.id}` }} >
-          View Profile
-        </Link>
-        {displayFollowButton()}
-      </div>
-    </>
+    <Card>
+    <CardBody>
+      <Container fluid>
+        <Row>
+          <Col xs="1">
+            <CardImg top width="10%" src={props.author.github + ".png"} alt="card image cap" />
+            {/* Center the follow button */}
+            <CardBody>{displayFollowButton()}</CardBody>
+          </Col>
+          <Col xs="6">
+            <CardTitle tag="h3" >{props.author.displayName}</CardTitle>
+            <CardSubtitle tag="h5">
+              <Link to={{ pathname: `/author/${props.author.id}` }}>View Profile</Link>
+            </CardSubtitle> 
+          </Col>
+        </Row>
+      </Container>
+    </CardBody>
+  </Card>
   )
 }

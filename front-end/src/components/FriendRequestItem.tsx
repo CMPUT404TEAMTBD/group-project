@@ -1,9 +1,9 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { Button, Card, CardBody, CardImg, CardLink, CardSubtitle, CardText, CardTitle, Col, Container, Row } from 'reactstrap';
-import { Author } from '../types/Author';
 import { Follow } from '../types/Follow';
 import { UserLogin } from '../types/UserLogin';
+import FollowRequestButton from '../components/FriendRequestButton';
 
 interface Props {
   loggedInUser: UserLogin;
@@ -13,10 +13,13 @@ interface Props {
 // TODO: update/remove the friend request item from the list when you follow back/accept
 export default function FriendRequestItem(props: Props) {
   const friendRequest = props.friendRequest;
+  const requester = props.friendRequest.actor;
+  const [isFollower, setIsFollower] = useState<boolean>(false);
 
-  function followBack(requester: Author) {
-    // TODO: follow back
-    console.log("followed back: " + requester.displayName);
+  const displayFollowButton = () => {
+    if (props.loggedInUser && requester?.id !== props.loggedInUser.authorId) {
+      return <FollowRequestButton loggedInUser={props.loggedInUser} currentAuthor={requester} isFollower={isFollower} setIsFollower={setIsFollower} />
+    }
   }
 
   return (
@@ -28,11 +31,11 @@ export default function FriendRequestItem(props: Props) {
               <CardImg top width="20%" src={friendRequest.actor.github + ".png"} alt="card image cap" />
             </Col>
             <Col xs="6">
-              <CardTitle tag="h5" >{friendRequest.actor.displayName}</CardTitle>
-              <CardSubtitle tag="h6">
+              <CardTitle tag="h4" >{friendRequest.actor.displayName}</CardTitle>
+              <CardSubtitle tag="h5">
                 From: <CardLink href={friendRequest.actor.host}>{friendRequest.actor.host}</CardLink>
               </CardSubtitle>
-              <Button color="success" onClick={() => followBack(friendRequest.actor)}>Befriend</Button>
+              {displayFollowButton()}
             </Col>
           </Row>
         </Container>
