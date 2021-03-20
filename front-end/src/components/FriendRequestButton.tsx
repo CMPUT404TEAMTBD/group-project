@@ -12,28 +12,27 @@ interface Props {
 
 export default function FollowRequestButton(props: Props) {
   const url = process.env.REACT_APP_API_URL + "/api/author/" + props.currentAuthor?.id + "/followers/" + props.loggedInUser.authorId + "/";
+  const loggedInUserUrl = process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId;
 
   const sendFollowRequest = () => {
     // TODO: add authentication
-    let data = {
-      "receiver" : props.currentAuthor?.id,
-      "sender" : props.loggedInUser.authorId,
-      "approved" : false
-    }
-    if (!props.isFollower) {
-      axios.put(url, data).then(res => {
-        if (res.status === 201) {
-          props.setIsFollower(true);
-
-        }
-      });
-    } else {
-      axios.delete(url).then(res => {
-        if (res.status === 204) {
-          props.setIsFollower(false);
-        }
-      });
-    }
+    // get the loggedinuser author object
+    axios.get(loggedInUserUrl).then(res => {
+      if (!props.isFollower) {
+        axios.put(url, res.data).then(res => {
+          if (res.status === 201) {
+            props.setIsFollower(true);
+          }
+        });
+      } else {
+        axios.delete(url).then(res => {
+          if (res.status === 204) {
+            props.setIsFollower(false);
+          }
+        });
+      }
+    });
+    
   }
 
   return (
