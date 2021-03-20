@@ -30,7 +30,7 @@ export default function AuthorListItem(props: Props) {
   }, []);
 
   const displayFollowButton = () => {
-    if (props.loggedInUser !== undefined && props.author.id !== props.loggedInUser?.authorId) {
+    if (props.loggedInUser && props.author.id !== props.loggedInUser?.authorId) {
       return <FollowRequestButton loggedInUser={props.loggedInUser} currentAuthor={props.author} isFollower={isFollower} setIsFollower={setIsFollower} /> 
     }
   }

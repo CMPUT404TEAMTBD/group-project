@@ -87,7 +87,7 @@ export default function AuthorPage(props: any) {
   }
 
   const displayFollowButton = () => {
-    if (props.loggedInUser !== undefined && author?.id !== props.loggedInUser.authorId) {
+    if (props.loggedInUser && author?.id !== props.loggedInUser.authorId) {
       return <FollowRequestButton loggedInUser={props.loggedInUser} currentAuthor={author} isFollower={isFollower} setIsFollower={setIsFollower} />
     }
   }
