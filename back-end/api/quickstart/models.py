@@ -63,8 +63,6 @@ class Follow(models.Model):
 
 # Represents a Like on a post or comment.
 class Like(models.Model):
-  context = models.TextField()
-  summary = models.TextField()
   type = 'like' 
   author = models.JSONField()
   object = models.TextField()
