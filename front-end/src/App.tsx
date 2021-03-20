@@ -50,7 +50,7 @@ function App() {
               {/* TODO: hide settings page if not logged in */}
               <Route path="/settings" render={(props) => <SettingsPage loggedInUser={loggedInUser} />} />
               <Route path="/create_post" render={(props) => <CreatePostComponent {...props} loggedInUser={loggedInUser} />} />
-              <Route path="/authors/:displayName" render={(props) => <AuthorResultsPage {...props}/>}/>
+              <Route path="/authors/:displayName" render={(props) => <AuthorResultsPage {...props} loggedInUser={loggedInUser}/>}/>
               <Route path="/posts/:postId" render={(props) => <PostDetailPage {...props} loggedInUser={loggedInUser}/>}/>
               <Route component={NotFoundPage} />
             </Switch>

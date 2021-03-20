@@ -9,7 +9,7 @@ import { Author } from '../types/Author';
  * Render list of search results when searching for an author by display name
  * @param props 
  */
-export default function AuthorResultsPage(props:RouteComponentProps) {
+export default function AuthorResultsPage(props:any) {
 
   interface ParamTypes {
     displayName: string
@@ -31,7 +31,7 @@ export default function AuthorResultsPage(props:RouteComponentProps) {
   return (
     <Row>
       <Col>
-        <AuthorList authorList={authors}/>
+        <AuthorList authorList={authors} loggedInUser={props.loggedInUser}/>
       </Col>
     </Row>
   );
