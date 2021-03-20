@@ -58,16 +58,15 @@ class Comment(models.Model):
 # Author A can send a Follow request to Author B when they want to
 # be constantly informed on whatever Author B is posting.
 class Follow(models.Model):
-  receiver = models.TextField()
-  sender = models.TextField()
-  approved = models.BooleanField()
+  receiver = models.ForeignKey(Author, on_delete=models.CASCADE)
+  sender = models.JSONField()
 
 # Represents a Like on a post or comment.
 class Like(models.Model):
   context = models.TextField()
   summary = models.TextField()
   type = 'like' 
-  author = models.TextField()
+  author = models.JSONField()
   object = models.TextField()
   
 # Every Author has an Inbox, which is where they receive notifications about recent activity

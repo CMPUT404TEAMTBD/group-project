@@ -53,6 +53,15 @@ class UpdateAuthorById(TestCase):
     self.assertEqual(serializer.data['id'], str(self.john.id))
     self.assertEqual(serializer.data['type'], self.john.type)
 
+  def test_partial_update_author(self):
+    partial_payload = partial_payload = { 'displayName': 'new name'}
+    response = client.post(
+      f'/api/author/{self.john.id}/',
+      data=json.dumps(partial_payload),
+      content_type='application/json'
+    )
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+
   def test_update_invalid_author(self):
     response = client.post(
       '/api/author/invalidId/',

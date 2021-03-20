@@ -12,6 +12,7 @@ import AuthorPage from './pages/AuthorPage';
 import SettingsPage from './pages/SettingsPage';
 import CreatePostComponent from './components/CreatePost';
 import AuthorResultsPage from './pages/AuthorResultsPage';
+import PostDetailPage from './pages/PostDetailPage';
 
 const LOCAL_STORAGE_USER = 'loggedInUser';
 
@@ -50,7 +51,7 @@ function App() {
               <Route path="/settings" render={(props) => <SettingsPage loggedInUser={loggedInUser} />} />
               <Route path="/create_post" render={(props) => <CreatePostComponent {...props} loggedInUser={loggedInUser} />} />
               <Route path="/authors/:displayName" render={(props) => <AuthorResultsPage {...props} loggedInUser={loggedInUser}/>}/>
-  
+              <Route path="/posts/:postId" render={(props) => <PostDetailPage {...props} loggedInUser={loggedInUser}/>}/>
               <Route component={NotFoundPage} />
             </Switch>
           </Container>

@@ -100,7 +100,9 @@ export default function AuthorPage(props: any) {
           </Card>
           {author?.id !== props.loggedInUser.authorId ? <FollowRequestButton loggedInUser={props.loggedInUser} currentAuthor={author} isFollower={isFollower} setIsFollower={setIsFollower} /> : null}
         </Col>
-        {author && displayPosts()}
+        <Col>
+          {author && displayPosts()}
+        </Col>
       </Row>
     </Container>
   );

@@ -145,12 +145,10 @@ class FollowersListViewSet(viewsets.ModelViewSet):
     API endpoint that allows for listing the followers of an author.
     """
     def list(self, request, receiver):
-        follows = Follow.objects.filter(receiver=receiver)
-        sender_ids = [f.sender for f in follows]
+        author = Author.objects.get(id=receiver)
+        queryset = Follow.objects.filter(receiver=author)
 
-        # TODO: Most likely will have to make API calls here instead of database reading.
-        senders = Author.objects.filter(id__in=sender_ids)
-        serializer = AuthorSerializer(senders, many=True)
+        serializer = FollowSerializer(queryset, many=True)
 
         return Response({
             'type': 'followers',
@@ -164,7 +162,39 @@ class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     """
     queryset = Follow.objects.all()
     serializer_class = FollowSerializer
-    lookup_fields = ['receiver', 'sender']
+    lookup_fields = ['receiver']
+
+    def retrieve(self, request, receiver, sender):
+        
+        author = Author.objects.get(id=receiver)
+        queryset = Follow.objects.filter(receiver=author, sender__id=sender)
+        if len(queryset) == 0:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = FollowSerializer(queryset.first())
+        
+        return Response(serializer.data)
+
+
+    def create(self, request, receiver, sender):
+        try:
+            author = Author.objects.get(id=receiver)
+            follow = Follow.objects.create(receiver=author, sender=request.data)
+        except Author.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        
+        return Response(status=status.HTTP_201_CREATED)
+
+    def destroy(self, request, receiver, sender):
+        author = Author.objects.get(id=receiver)
+        queryset = Follow.objects.filter(receiver=author, sender__id=sender)
+        if len(queryset) == 0:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        queryset.first().delete()
+        
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class LikesPostViewSet(viewsets.ModelViewSet):
@@ -211,7 +241,7 @@ class LikedViewSet(viewsets.ModelViewSet):
     serializer_class = LikeSerializer
 
     def retrieve(self, request, author):
-        liked = Like.objects.filter(author=author)
+        liked = Like.objects.filter(author__id=author)
         serializer = LikeSerializer(liked, many=True)
 
         return Response({
@@ -229,6 +259,14 @@ class InboxViewSet(viewsets.ModelViewSet):
         
     def update(self, request, author):
         inbox = Inbox.objects.get(author=author)
+
+        # Save likes into our database, so that clearing the inbox keeps them safe.
+        if request.data['type'] == 'like':
+            # Create the Like model without the type field (or else Django complains)
+            like = request.data.copy()
+            del like['type']
+            Like.objects.create(**like)
+
         inbox.items.append(request.data)
         inbox.save()
 
