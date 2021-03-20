@@ -31,6 +31,10 @@ class FollowSerializer(serializers.HyperlinkedModelSerializer):
         model = Follow
         fields = ['sender']
 
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        return ret['sender']
+
 
 class LikeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
