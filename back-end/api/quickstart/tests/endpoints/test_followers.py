@@ -1,5 +1,4 @@
 import json
-import uuid
 from rest_framework import status
 from django.test import TestCase, Client
 from quickstart.models import Follow, Author

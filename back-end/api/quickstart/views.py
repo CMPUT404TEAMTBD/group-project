@@ -2,7 +2,6 @@
 views.py defines the code that is run upon receiving a request to our endpoints, whose URLs are defined in urls.py.
 Some endpoint handlers have been omitted, meaning that the DRF default code is sufficient.
 """
-import json
 from django.contrib.auth.models import User, Group
 from .models import Author, Post, Follow, Comment, Like, Inbox
 from rest_framework import viewsets
