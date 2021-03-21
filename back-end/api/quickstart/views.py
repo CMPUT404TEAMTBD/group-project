@@ -158,11 +158,15 @@ class FollowersListViewSet(viewsets.ModelViewSet):
     API endpoint that allows for listing the followers of an author.
     """
     def list(self, request, receiver):
-        author = Author.objects.get(id=receiver)
-        queryset = Follow.objects.filter(receiver=author)
+        try:
+            author = Author.objects.get(id=receiver)
+            queryset = Follow.objects.filter(receiver=author)
 
-        serializer = FollowSerializer(queryset, many=True)
+            serializer = FollowSerializer(queryset, many=True)
 
+        except Author.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+            
         return Response({
             'type': 'followers',
             'items': serializer.data
@@ -178,14 +182,17 @@ class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     lookup_fields = ['receiver']
 
     def retrieve(self, request, receiver, sender):
-        
-        author = Author.objects.get(id=receiver)
-        queryset = Follow.objects.filter(receiver=author, sender__id=sender)
-        if len(queryset) == 0:
+        try:
+            author = Author.objects.get(id=receiver)
+            queryset = Follow.objects.filter(receiver=author, sender__id=sender)
+            if len(queryset) == 0:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+
+            serializer = FollowSerializer(queryset.first())
+
+        except Author.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        serializer = FollowSerializer(queryset.first())
-        
         return Response(serializer.data)
 
 
@@ -199,14 +206,17 @@ class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
         return Response(status=status.HTTP_201_CREATED)
 
     def destroy(self, request, receiver, sender):
-        author = Author.objects.get(id=receiver)
-        queryset = Follow.objects.filter(receiver=author, sender__id=sender)
-        if len(queryset) == 0:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        try:
+            author = Author.objects.get(id=receiver)
+            queryset = Follow.objects.filter(receiver=author, sender__id=sender)
+            if len(queryset) == 0:
+                return Response(status=status.HTTP_404_NOT_FOUND)
 
-        queryset.first().delete()
+            queryset.first().delete()
         
-
+        except Author.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+            
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
