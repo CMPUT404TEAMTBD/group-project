@@ -28,10 +28,8 @@ def get_test_like_fields(
   }
 ):
   return {
-    'context': 'testContext',
-    'summary': 'Someone likes your object',
     'author': author,
-    'object': object_id,
+    'object': f'{object_id}',
   }
 
 def get_test_comment_fields(i=1):
