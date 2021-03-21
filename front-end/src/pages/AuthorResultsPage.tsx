@@ -23,7 +23,7 @@ export default function AuthorResultsPage(props:any) {
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_URL}/api/authors/`)
     .then(response => {
-        const filteredAuthorsResponse = response.data.results.filter((author:Author) => author.displayName === displayName);
+        const filteredAuthorsResponse = response.data.filter((author:Author) => author.displayName === displayName);
         setAuthors(filteredAuthorsResponse);
     })
   }, []);

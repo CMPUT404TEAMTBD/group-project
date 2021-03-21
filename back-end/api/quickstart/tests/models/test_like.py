@@ -11,7 +11,5 @@ class CreateLike(TestCase):
 
   def test_create_like(self):
     self.assertEqual(self.like.type, 'like')
-    self.assertEqual(self.like.context, self.fields.context)
-    self.assertEqual(self.like.summary, self.fields.summary)
     self.assertEqual(self.like.author, self.fields.author)
     self.assertEqual(self.like.object, self.fields.object)

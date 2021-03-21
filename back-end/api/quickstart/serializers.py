@@ -9,7 +9,7 @@ from rest_framework import serializers
 class AuthorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Author
-        fields = ['id', 'type', 'displayName', 'url', 'github']
+        fields = ['id', 'type', 'displayName', 'url', 'github', 'host']
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     author = AuthorSerializer(read_only=True)
@@ -31,11 +31,15 @@ class FollowSerializer(serializers.HyperlinkedModelSerializer):
         model = Follow
         fields = ['sender']
 
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        return ret['sender']
+
 
 class LikeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Like
-        fields = ['context', 'summary', 'type', 'author', 'object']
+        fields = ['type', 'author', 'object']
         
 
 class InboxSerializer(serializers.HyperlinkedModelSerializer):

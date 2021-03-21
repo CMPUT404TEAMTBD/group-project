@@ -24,6 +24,19 @@ class AuthorViewSet(viewsets.ModelViewSet):
     # https://stackoverflow.com/questions/56431755/django-rest-framework-urls-without-pk
     lookup_field = 'id'
 
+class AuthorsViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows getting all authors.
+    """
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+    lookup_field = 'id'
+
+    def list(self, request):
+        authors = Author.objects.all()
+        serializer = AuthorSerializer(authors, many=True)
+
+        return Response(serializer.data)
 
 class AuthUserViewSet(viewsets.ModelViewSet):
     """
