@@ -1,5 +1,4 @@
 import datetime
-import json
 
 def get_test_author_fields(i=1):
   return {
