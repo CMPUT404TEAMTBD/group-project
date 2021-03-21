@@ -71,6 +71,6 @@ class Like(models.Model):
 # on their own posts, or posts of Authors they're following.
 class Inbox(models.Model):
   type = 'inbox'
-  author = models.TextField(primary_key=True)
+  author = models.ForeignKey(Author, on_delete=models.CASCADE)
   items = models.JSONField(default=list)
 

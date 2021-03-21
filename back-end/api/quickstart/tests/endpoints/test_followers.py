@@ -1,7 +1,7 @@
 import json
 from rest_framework import status
 from django.test import TestCase, Client
-from quickstart.models import Follow, Author
+from quickstart.models import Follow, Author, Inbox
 from quickstart.serializers import FollowSerializer, AuthorSerializer
 from quickstart.tests.helper_test import get_sender_fields, get_test_author_fields
 
@@ -48,6 +48,7 @@ class CreateFollow(TestCase):
   """Tests for creating a Follow by PUT'ing to endpoint /api/author/{RECEIVER_ID}/followers/{SENDER_ID}/."""
   def setUp(self):
     self.receiver = Author.objects.create(**get_test_author_fields(i=1))
+    self.inbox = Inbox.objects.create(author=self.receiver)
     self.sender = get_sender_fields()
     self.sender_id = self.sender["id"]
 
@@ -58,3 +59,7 @@ class CreateFollow(TestCase):
       content_type='application/json'
     )
     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    self.assertTrue(Follow.objects.get(receiver=self.receiver, sender=self.sender))
+
+    changed_inbox = Inbox.objects.get(author=self.receiver)
+    self.assertTrue(changed_inbox.items[0])

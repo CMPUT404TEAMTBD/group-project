@@ -45,4 +45,4 @@ class LikeSerializer(serializers.HyperlinkedModelSerializer):
 class InboxSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Inbox
-        fields = ["author", "items"]
+        fields = ['type', 'items']
