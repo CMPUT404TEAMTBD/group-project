@@ -64,9 +64,3 @@ def get_test_partial_post_fields(i=1):
     'categories': '["Testing"]',
     'commentLink': 'link to comments'
   }
-
-def get_test_inbox_fields():
-  return {
-    'author': 'testAuthor',
-    'items': '[{"type":"post"}, {"type":"comment"}]'
-  }
