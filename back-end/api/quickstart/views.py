@@ -184,13 +184,11 @@ class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     def retrieve(self, request, receiver, sender):
         try:
             author = Author.objects.get(id=receiver)
-            queryset = Follow.objects.filter(receiver=author, sender__id=sender)
-            if len(queryset) == 0:
-                return Response(status=status.HTTP_404_NOT_FOUND)
+            follow = Follow.objects.get(receiver=author, sender__id=sender)
 
-            serializer = FollowSerializer(queryset.first())
+            serializer = FollowSerializer(follow)
 
-        except Author.DoesNotExist:
+        except (Author.DoesNotExist, Follow.DoesNotExist):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         return Response(serializer.data)

@@ -18,10 +18,10 @@ class GetFollow(TestCase):
   def test_get_valid_follow(self):
     response = client.get(f'/api/author/{self.receiver.id}/followers/{self.sender_id}/')
     serializer = FollowSerializer(self.follow)
-    print(response.data)
-    print(serializer.data)
+    
     self.assertEqual(response.status_code, status.HTTP_200_OK)
-    self.assertEqual(response.data, serializer.data)
+    for property in serializer.data.keys():
+      self.assertEqual(response.data[property], serializer.data[property])
     
 
   def test_get_invalid_follow(self):
