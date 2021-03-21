@@ -1,4 +1,5 @@
 import datetime
+import json
 
 def get_test_author_fields(i=1):
   return {
@@ -63,10 +64,4 @@ def get_test_partial_post_fields(i=1):
     'content': 'Hello, I am a test post',
     'categories': '["Testing"]',
     'commentLink': 'link to comments'
-  }
-
-def get_test_inbox_fields():
-  return {
-    'author': 'testAuthor',
-    'items': '[{"type":"post"}, {"type":"comment"}]'
   }

@@ -2,6 +2,7 @@
 views.py defines the code that is run upon receiving a request to our endpoints, whose URLs are defined in urls.py.
 Some endpoint handlers have been omitted, meaning that the DRF default code is sufficient.
 """
+import json
 from django.contrib.auth.models import User, Group
 from .models import Author, Post, Follow, Comment, Like, Inbox
 from rest_framework import viewsets
@@ -192,10 +193,21 @@ class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     def create(self, request, receiver, sender):
         try:
             author = Author.objects.get(id=receiver)
-            follow = Follow.objects.create(receiver=author, sender=request.data)
+            Follow.objects.create(receiver=author, sender=request.data)
         except Author.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
+
+
+        # Send this follow to the inbox of the receiver as well
+        friend_req = {
+            'type': 'follow',
+            'actor': request.data,
+            'object': AuthorSerializer(author).data
+        }
+        inbox = Inbox.objects.get(author=receiver)
+        inbox.items.append(json.dumps(friend_req))
+        inbox.save()
+
         return Response(status=status.HTTP_201_CREATED)
 
     def destroy(self, request, receiver, sender):
@@ -269,12 +281,26 @@ class InboxViewSet(viewsets.ModelViewSet):
     queryset = Inbox.objects.all()
     serializer_class = InboxSerializer
     lookup_field = 'author'
+
+    def retrieve(self, request, author):
+        try:
+            author = Author.objects.get(id=author)
+            inbox = Inbox.objects.get(author=author)
+        except (Author.DoesNotExist, Inbox.DoesNotExist):
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = InboxSerializer(inbox)
+        return Response(serializer.data)
         
     def update(self, request, author):
-        inbox = Inbox.objects.get(author=author)
+        try:
+            author = Author.objects.get(id=author)
+            inbox = Inbox.objects.get(author=author)
+        except (Author.DoesNotExist, Inbox.DoesNotExist):
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         # Save likes into our database, so that clearing the inbox keeps them safe.
-        if request.data['type'] == 'like':
+        if 'type' in request.data and request.data['type'] == 'like':
             # Create the Like model without the type field (or else Django complains)
             like = request.data.copy()
             del like['type']
@@ -286,6 +312,12 @@ class InboxViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def destroy(self, request, author):
+        try:
+            author = Author.objects.get(id=author)
+            inbox = Inbox.objects.get(author=author)
+        except (Author.DoesNotExist, Inbox.DoesNotExist):
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
         inbox = Inbox.objects.get(author=author)
         inbox.items.clear()
         inbox.save()    

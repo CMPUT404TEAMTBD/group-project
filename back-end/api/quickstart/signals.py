@@ -22,4 +22,4 @@ def after_user_signed_up(request, user, **kwargs):
     
     author.save()
 
-    Inbox.objects.create(author=author.id)
+    Inbox.objects.create(author=author)

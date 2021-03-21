@@ -1,37 +1,38 @@
 import json
+import uuid
 from rest_framework import status
 from django.test import TestCase, Client
-from quickstart.models import Like, Inbox
+from quickstart.models import Like, Inbox, Author
 from quickstart.serializers import InboxSerializer
-from quickstart.tests.helper_test import get_test_post_fields, get_sender_fields, get_test_like_fields
+from quickstart.tests.helper_test import get_test_post_fields, get_sender_fields, get_test_like_fields, get_test_author_fields
 
 client = Client()
 
 class GetInbox(TestCase):
   """Tests to GET an author's inbox at endpoint /api/author/<str:author>/inbox/."""
   def setUp(self):
-    self.inbox = Inbox.objects.create(author="testAuthorId")
+    self.inbox = Inbox.objects.create(author=Author.objects.create(**get_test_author_fields()))
     self.inbox.items.append(get_test_post_fields())
     self.inbox.items.append(get_sender_fields())
     self.inbox.items.append(get_test_like_fields())
     self.inbox.save()
 
   def test_get_inbox(self):
-    response = client.get(f'/api/author/{self.inbox.author}/inbox/')
+    response = client.get(f'/api/author/{self.inbox.author.id}/inbox/')
     inbox = Inbox.objects.get(author=self.inbox.author)
 
     self.assertEqual(response.status_code, status.HTTP_200_OK)
     self.assertEqual(response.data, InboxSerializer(inbox).data)
 
   def test_get_invalid_inbox(self):
-    response = client.get('/api/author/invalidAuthorId/inbox/')
+    response = client.get(f'/api/author/{uuid.uuid4()}/inbox/')
     self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
 class PostInbox(TestCase):
   """Tests for sending a post/follow/like to an inbox by POST'ing to /api/author/<str:author>/inbox/."""
   def setUp(self):
-    self.inbox = Inbox.objects.create(author="testAuthorId")
+    self.inbox = Inbox.objects.create(author=Author.objects.create(**get_test_author_fields()))
 
   def test_send_post_to_inbox(self):
     fields = get_test_post_fields()
@@ -53,7 +54,7 @@ class PostInbox(TestCase):
 
   def send_to_inbox(self, payload):
     response = client.post(
-      f'/api/author/{self.inbox.author}/inbox/',
+      f'/api/author/{self.inbox.author.id}/inbox/',
       data=json.dumps(payload),
       content_type='application/json'
     )
@@ -68,14 +69,14 @@ class PostInbox(TestCase):
 class ClearInbox(TestCase):
   """Tests for clearing an author's inbox by DELETE'ing to /api/author/<str:author>/inbox/."""
   def setUp(self):
-    self.inbox = Inbox.objects.create(author="testAuthorId")
+    self.inbox = Inbox.objects.create(author=Author.objects.create(**get_test_author_fields()))
     self.inbox.items.append(get_sender_fields())
     self.inbox.save()
 
   def test_clear_inbox(self):
     self.assertEqual(len(self.inbox.items), 1)
 
-    response = client.delete(f'/api/author/{self.inbox.author}/inbox/')
+    response = client.delete(f'/api/author/{self.inbox.author.id}/inbox/')
     changed_inbox = Inbox.objects.get(author=self.inbox.author)
 
     self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
