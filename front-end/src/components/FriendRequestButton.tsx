@@ -24,19 +24,19 @@ export default function FollowRequestButton(props: Props) {
         axios.put(authorUrl, res.data).then(res => {
           if (res.status === 201) {
             props.setIsFollower(true);
-          }
-        });
 
-        let follow = {
-          type: "follow",
-          summary: "", // do we need to make custom messages when we follow? prob not
-          actor: res.data,
-          object: props.currentAuthor
-        };
-
-        axios.post(inboxUrl, follow).then(res => {
-          if (res.status === 201) {
-            console.log("friend request sent");
+            let follow = {
+              type: "follow",
+              summary: "", // do we need to make custom messages when we follow? prob not
+              actor: res.data,
+              object: props.currentAuthor
+            };
+    
+            axios.post(inboxUrl, follow).then(res => {
+              if (res.status === 201) {
+                console.log("friend request sent");
+              }
+            });
           }
         });
       } else {
