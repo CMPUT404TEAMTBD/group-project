@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PostList from '../components/PostList';
 import { Post } from '../types/Post';
 import {
@@ -12,6 +12,9 @@ import {
   CardImg,
   CardTitle,
   CardLink,
+  CardText,
+  CardSubtitle,
+  Button,
 } from 'reactstrap';
 import { Author } from '../types/Author';
 import FollowRequestButton from '../components/FriendRequestButton';
@@ -99,11 +102,13 @@ export default function AuthorPage(props: any) {
           <Card body className="text-center">
             {profilePic()}
             <CardBody>
-              <CardTitle tag="h5">{author?.displayName}</CardTitle>
-              <CardLink href={author ? author.github : "#"} >GitHub</CardLink>
+              <CardTitle tag="h3">{author?.displayName}</CardTitle>
+              <CardText>
+                <Button><CardLink className="text-white" href={author ? author.github : "#"} >GitHub</CardLink></Button>
+              </CardText>
+              <CardText>{displayFollowButton()}</CardText>
             </CardBody>
           </Card>
-          {displayFollowButton()}
         </Col>
         <Col>
           {author && displayPosts()}
