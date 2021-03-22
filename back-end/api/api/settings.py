@@ -27,7 +27,7 @@ SECRET_KEY = 'dofx56fj3##hm08ter1iw+u#dyc%3zn)=le!lt$1(9yl+%rgu3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["https://cyver.herokuapp.com", 'http://127.0.0.1']
 
 
 # Application definition
