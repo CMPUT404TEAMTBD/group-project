@@ -36,7 +36,6 @@ export default function AuthorListItem(props: Props) {
     }
   }
 
-  console.log("Sdfdsgfds")
   return (
     <Card>
     <CardBody>
