@@ -36,20 +36,20 @@ export default function AuthorListItem(props: Props) {
     }
   }
 
+  console.log("Sdfdsgfds")
   return (
     <Card>
     <CardBody>
       <Container fluid>
         <Row>
-          <Col xs="1">
+          <Col xs="2">
             <CardImg top width="10%" src={props.author.github + ".png"} alt="card image cap" />
             {/* Center the follow button */}
-            <CardBody>{displayFollowButton()}</CardBody>
           </Col>
           <Col xs="6">
-            <CardTitle tag="h3" >{props.author.displayName}</CardTitle>
+            <CardTitle tag="h3" ><Link to={{ pathname: `/author/${props.author.id}` }}>{props.author.displayName}</Link></CardTitle>
             <CardSubtitle tag="h5">
-              <Link to={{ pathname: `/author/${props.author.id}` }}>View Profile</Link>
+              {displayFollowButton()}
             </CardSubtitle> 
           </Col>
         </Row>

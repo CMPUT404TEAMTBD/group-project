@@ -2,8 +2,9 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, CardBody, CardTitle, Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { Follow } from '../types/Follow';
-import FriendRequestItem from './FriendRequestItem';
+import AuthorListItem from './AuthorListItem';
 
+// TODO: update/remove the friend request item from the list when you follow back/accept
 const FriendRequestListModal = (props: any) => {
   const [friendReqEntries, setFriendReqEntries] = useState<Follow[] | undefined>(undefined);
 
@@ -14,15 +15,14 @@ const FriendRequestListModal = (props: any) => {
     })
   }, []);
 
-  let requestsToDisplay;
-  if (friendReqEntries === undefined) {
-    requestsToDisplay = <Card body className="text-center"><CardBody><CardTitle tag="h5" >Loading Friend Requests...</CardTitle></CardBody></Card>
-  } else if (friendReqEntries.length === 0) {
-    requestsToDisplay = <Card body className="text-center"><CardBody><CardTitle tag="h5" >No Friend Requests :(</CardTitle></CardBody></Card>
-  } else {
-    requestsToDisplay = friendReqEntries.map((fr: Follow) => {
-      return <FriendRequestItem {...props} friendRequest={fr} />
-    })
+  function friendRequestsToDisplay() {
+    return (
+      <ModalBody>
+        {friendReqEntries?.length !== 0 ?
+          friendReqEntries?.map((follow: Follow) => <AuthorListItem author={follow.actor} loggedInUser={props.loggedInUser}></AuthorListItem>) :
+          <Card body className="text-center"><CardBody><CardTitle tag="h5" >No Friend Requests :(</CardTitle></CardBody></Card>
+        }
+      </ModalBody>);
   }
 
   return (
@@ -31,9 +31,7 @@ const FriendRequestListModal = (props: any) => {
         <ModalHeader toggle={() => props.setIsFriendRequestOpen(!props.isFriendRequestOpen)}>
           Friend Requests
                 </ModalHeader>
-        <ModalBody>
-          {requestsToDisplay}
-        </ModalBody>
+        {friendRequestsToDisplay()}
       </Modal>
     </>
   );
