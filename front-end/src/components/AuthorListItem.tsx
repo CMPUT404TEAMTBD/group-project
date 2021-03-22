@@ -23,11 +23,13 @@ export default function AuthorListItem(props: Props) {
 
   useEffect(() => {
     // get whether user is follower of author
-    axios.get(isFollowerUrl).then(res => {
-      setIsFollower(true);
-    }).catch(err => {
-      setIsFollower(false);
-    })
+    if (props.author.id !== props.loggedInUser?.authorId) {
+      axios.get(isFollowerUrl).then(res => {
+        setIsFollower(true);
+      }).catch(err => {
+        setIsFollower(false);
+      })
+    }
   }, []);
 
   const displayFollowButton = () => {
@@ -36,15 +38,13 @@ export default function AuthorListItem(props: Props) {
     }
   }
 
-  console.log("Sdfdsgfds")
   return (
     <Card>
     <CardBody>
       <Container fluid>
         <Row>
           <Col xs="2">
-            <CardImg top width="10%" src={props.author.github + ".png"} alt="card image cap" />
-            {/* Center the follow button */}
+            <CardImg top src={props.author.github + ".png"} alt="Profile Pic" />
           </Col>
           <Col xs="6">
             <CardTitle tag="h3" ><Link to={{ pathname: `/author/${props.author.id}` }}>{props.author.displayName}</Link></CardTitle>

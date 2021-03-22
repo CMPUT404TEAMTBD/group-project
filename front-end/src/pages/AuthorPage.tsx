@@ -18,6 +18,7 @@ import {
 } from 'reactstrap';
 import { Author } from '../types/Author';
 import FollowRequestButton from '../components/FriendRequestButton';
+import { Link } from 'react-router-dom';
 
 /**
  * Author Page will render and display an author's profile - this includes information
@@ -30,6 +31,7 @@ export default function AuthorPage(props: any) {
   const [responseMessage, setResponseMessage] = useState(100);
   const [postEntries, setPostEntries] = useState<Post[] | undefined>(undefined);
   const [isFollower, setIsFollower] = useState<boolean>(false);
+  const [isFollowersListOpen, setIsFollowersListOpen] = useState<boolean>(false);
 
   // After clicking the profile navlink, get the appropriate author info and data
   useEffect(() => {
@@ -95,6 +97,13 @@ export default function AuthorPage(props: any) {
     }
   }
 
+  const displayFollowersListButton = () => {
+    if (props.loggedInUser && author?.id === props.loggedInUser.authorId) {
+      // return <Button><CardLink className="text-white" href={`/followers`} >Followers</CardLink></Button>
+      return <Button><Link to={{ pathname: `/followers` }}>Followers</Link></Button>
+    }
+  }
+
   return (
     <Container fluid>
       <Row className="justify-content-md-center">
@@ -107,9 +116,12 @@ export default function AuthorPage(props: any) {
                 <Button><CardLink className="text-white" href={author ? author.github : "#"} >GitHub</CardLink></Button>
               </CardText>
               <CardText>{displayFollowButton()}</CardText>
+              <CardText>{displayFollowersListButton()}</CardText>
+              {/* <CardLink className="nav-link" href={`/author/${props.author.id}/followers`}>Followers</CardLink> */}
             </CardBody>
           </Card>
         </Col>
+        {/* <Link to={`/author/${props.author.id}/followers`} className="nav-link">View Profile</Link> */}
         <Col>
           {author && displayPosts()}
         </Col>
