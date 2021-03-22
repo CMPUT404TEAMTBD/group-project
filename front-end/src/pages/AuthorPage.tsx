@@ -43,7 +43,8 @@ export default function AuthorPage(props: any) {
       console.log("ERROR GETTING AUTHOR INFO");
       setResponseMessage(500);
     })
-    if (props.loggedInUser) {
+
+    if (props.loggedInUser && !props.location.pathname.includes(props.loggedInUser.authorId)) {
       // get whether user is follower of author
       axios.get(authorUrl + "/followers/" + props.loggedInUser.authorId).then(res => {
         setIsFollower(true);
@@ -52,7 +53,6 @@ export default function AuthorPage(props: any) {
         setIsFollower(false);
       })
 
-      // Only get stream if you're viewing your own profile
       axios.get(authorUrl + "/posts/",
         {
           auth: { // authenticate the GET request
@@ -99,8 +99,7 @@ export default function AuthorPage(props: any) {
 
   const displayFollowersListButton = () => {
     if (props.loggedInUser && author?.id === props.loggedInUser.authorId) {
-      // return <Button><CardLink className="text-white" href={`/followers`} >Followers</CardLink></Button>
-      return <Button><Link to={{ pathname: `/followers` }}>Followers</Link></Button>
+      return <Button><CardLink className="text-white" href={props.loggedInUser.authorId + "/followers"} >Followers</CardLink></Button>
     }
   }
 
