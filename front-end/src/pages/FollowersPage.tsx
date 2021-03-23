@@ -4,17 +4,21 @@ import { Row, Col, Card, CardBody, CardTitle, Container } from 'reactstrap';
 import AuthorList from "../components/AuthorList"
 import AuthorListItem from '../components/AuthorListItem';
 import { Author } from '../types/Author';
+import { UserLogin } from '../types/UserLogin';
 
+interface Props {
+  loggedInUser: UserLogin | undefined,
+}
 /**
  * Render list of search results when searching for an author by display name
  * @param props 
  */
-export default function FollowersPage(props: any) {
+export default function FollowersPage(props: Props) {
   const [followers, setFollowers] = useState<Author[] | undefined>(undefined);
 
   // get all followers
   useEffect(() => {
-    axios.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/followers").then(res => {
+    axios.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/followers").then(res => {
       const followersList: Author[] = res.data.items;
       setFollowers(followersList);
     });

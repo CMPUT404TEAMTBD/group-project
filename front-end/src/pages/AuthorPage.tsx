@@ -26,6 +26,7 @@ import { Link } from 'react-router-dom';
  * @param props 
  */
 export default function AuthorPage(props: any) {
+  // TODO: don't use props.location.pathname
   const authorUrl = process.env.REACT_APP_API_URL + "/api" + props.location.pathname;
   const [author, setAuthor] = useState<Author | undefined>(undefined);
   const [responseMessage, setResponseMessage] = useState(100);
@@ -101,7 +102,7 @@ export default function AuthorPage(props: any) {
 
   const displayFollowersListButton = () => {
     if (props.loggedInUser && author?.id === props.loggedInUser.authorId) {
-      return <Button><CardLink className="text-white" href={"/followers/" + props.loggedInUser.authorId} >Followers</CardLink></Button>
+      return <Button><CardLink className="text-white" href={"/author/" + props.loggedInUser.authorId + "/followers"} >Followers</CardLink></Button>
     }
   }
 
