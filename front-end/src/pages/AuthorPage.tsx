@@ -99,7 +99,7 @@ export default function AuthorPage(props: any) {
 
   const displayFollowersListButton = () => {
     if (props.loggedInUser && author?.id === props.loggedInUser.authorId) {
-      return <Button><CardLink className="text-white" href={props.loggedInUser.authorId + "/followers"} >Followers</CardLink></Button>
+      return <Button><CardLink className="text-white" href={"/followers/" + props.loggedInUser.authorId} >Followers</CardLink></Button>
     }
   }
 
@@ -116,11 +116,9 @@ export default function AuthorPage(props: any) {
               </CardText>
               <CardText>{displayFollowButton()}</CardText>
               <CardText>{displayFollowersListButton()}</CardText>
-              {/* <CardLink className="nav-link" href={`/author/${props.author.id}/followers`}>Followers</CardLink> */}
             </CardBody>
           </Card>
         </Col>
-        {/* <Link to={`/author/${props.author.id}/followers`} className="nav-link">View Profile</Link> */}
         <Col>
           {author && displayPosts()}
         </Col>
