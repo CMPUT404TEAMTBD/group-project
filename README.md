@@ -49,7 +49,6 @@ cd back-end/api
 python manage.py test
 ```
 
-
 Contributors / Licensing
 ========================
 
