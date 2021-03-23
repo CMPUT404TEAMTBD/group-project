@@ -28,6 +28,7 @@ function App() {
   const initialState:UserLogin|undefined = initialJSON ? JSON.parse(initialJSON) : undefined;
 
   const [loggedInUser,setLoggedInUser] = useState<UserLogin | undefined>(initialState);
+  const [nodes, setNodes] = useState<Node[]>([]);
 
   useEffect(()=>{
     if (loggedInUser === undefined){
@@ -37,16 +38,18 @@ function App() {
     }
   },[loggedInUser])
 
+  // TODO wrap the below in NodesContext as well, and then use the Nodes in other components.
+  // Talk to Chris about how to use React Context.
   return (
     <div>
       <LoggedInUserContext.Provider value={loggedInUser}>
       <BrowserRouter>
         <div>
-          <AppNavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser}/>
+          <AppNavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} />
           <Container fluid={true}>
             <Switch>
               <Route exact path="/" render={(props) => <HomePage {...props} loggedInUser={loggedInUser} />} />
-              <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} />} />
+              <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} setNodes={setNodes}/>} />
               <Route path="/author/:authorId/followers/" render={(props) => <FollowersPage {...props} loggedInUser={loggedInUser} />}/>
               <Route path="/author/:authorId" render={(props) => <AuthorPage {...props} loggedInUser={loggedInUser}/>}/>
               {/* TODO: hide settings page if not logged in */}

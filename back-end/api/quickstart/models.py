@@ -74,3 +74,9 @@ class Inbox(models.Model):
   author = models.ForeignKey(Author, on_delete=models.CASCADE)
   items = models.JSONField(default=list)
 
+# All other nodes that our server is connected to. This model holds the Basic Auth 
+# credentials that our client needs to send when making requests to other servers.
+class Node(models.Model):
+  host = models.TextField(primary_key=True) # e.g., coolbears.ca
+  username = models.TextField() # username of a User model on the other server
+  password = models.TextField() # password of that User model on the other server
