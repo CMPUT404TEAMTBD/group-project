@@ -44,14 +44,16 @@ export default function AuthorPage(props: any) {
       setResponseMessage(500);
     })
 
-    if (props.loggedInUser && !props.location.pathname.includes(props.loggedInUser.authorId)) {
-      // get whether user is follower of author
-      axios.get(authorUrl + "/followers/" + props.loggedInUser.authorId).then(res => {
-        setIsFollower(true);
-      }).catch(err => {
-        // 404 is not a follower
-        setIsFollower(false);
-      })
+    if (props.loggedInUser) {
+      // get whether user is follower of author IF not looking at our own profile
+      if (!props.location.pathname.includes(props.loggedInUser.authorId)) {
+        axios.get(authorUrl + "/followers/" + props.loggedInUser.authorId).then(res => {
+          setIsFollower(true);
+        }).catch(err => {
+          // 404 is not a follower
+          setIsFollower(false);
+        });
+      }
 
       axios.get(authorUrl + "/posts/",
         {
