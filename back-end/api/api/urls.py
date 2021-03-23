@@ -38,6 +38,10 @@ auth_user = views.AuthUserViewSet.as_view({
     'get': 'retrieve'
 })
 
+nodes = views.NodesViewSet.as_view({
+    'get': 'list'
+})
+
 # Endpoint: /api/author/{AUTHOR_ID}/posts/{POST_ID}
 # GET get the public post
 # POST update the post (must be authenticated)
@@ -129,6 +133,7 @@ urlpatterns = [
     path('api/authors/', authors, name='authors'),
     path('api/public-posts/', public_posts_list, name='public-posts-list'),
     path('api/auth-user/<str:username>/', auth_user, name='auth-user'),
+    path('api/nodes/', nodes, name='nodes'),
     path('api/author/<str:author>/posts/', posts_list, name='posts-list'),
     path('api/author/<str:author>/posts/<str:id>/', posts, name='posts'),
     path('api/author/<str:receiver>/followers/', followers_list, name='followers-list'),

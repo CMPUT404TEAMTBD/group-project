@@ -4,11 +4,11 @@ Some endpoint handlers have been omitted, meaning that the DRF default code is s
 """
 import json
 from django.contrib.auth.models import User, Group
-from .models import Author, Post, Follow, Comment, Like, Inbox
+from .models import Author, Post, Follow, Comment, Like, Inbox, Node
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from quickstart.serializers import AuthorSerializer, PostSerializer, FollowSerializer, CommentSerializer, LikeSerializer, InboxSerializer
+from quickstart.serializers import AuthorSerializer, PostSerializer, FollowSerializer, CommentSerializer, LikeSerializer, InboxSerializer, NodeSerializer
 from .mixins import MultipleFieldLookupMixin
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -55,6 +55,19 @@ class AuthUserViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
+class NodesViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows getting all external servers this one is connected to.
+    Hostname and Basic Auth credentials for each server is returned.
+    """
+    queryset = Node.objects.all()
+    serializer_class = NodeSerializer
+
+    def list(self, request):
+        nodes = Node.objects.all()
+        serializer = NodeSerializer(nodes, many=True)
+
+        return Response(serializer.data)
 
 class PostListViewSet(viewsets.ModelViewSet):
     """
