@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, CardBody, CardTitle, Container } from 'reactstrap';
+import { Row, Col, Card, CardBody, CardTitle, Container, Button, CardText, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import AuthorList from "../components/AuthorList"
 import AuthorListItem from '../components/AuthorListItem';
 import { Author } from '../types/Author';
@@ -8,6 +8,7 @@ import { UserLogin } from '../types/UserLogin';
 
 interface Props {
   loggedInUser: UserLogin | undefined,
+  activeTab: string,
 }
 /**
  * Render list of search results when searching for an author by display name
@@ -15,29 +16,75 @@ interface Props {
  */
 export default function FollowersPage(props: Props) {
   const [followers, setFollowers] = useState<Author[] | undefined>(undefined);
+  const [following, setFollowing] = useState<Author[] | undefined>(undefined);
 
-  // get all followers
+  // get all followers and following
   useEffect(() => {
     axios.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/followers").then(res => {
       const followersList: Author[] = res.data.items;
       setFollowers(followersList);
     });
+
+    // axios.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/following").then(res => {
+    //   const followingList: Author[] = res.data.items;
+    //   setFollowing(followingList);
+    // });
+
   }, []);
+
+  const [activeTab, setActiveTab] = useState(props.activeTab);
+
+  const toggle = (tab: any) => {
+    if (activeTab !== tab) setActiveTab(tab);
+  }
 
   return (
     <Container fluid>
+
       <Row className="justify-content-md-center">
-        <Col sm="12" md={{ size: 6 }}>
-            <h2>Followers</h2>
-        </Col>
+        <Nav tabs>
+          <NavItem>
+            <NavLink
+              // className={classnames({ active: activeTab === '1' })}
+              onClick={() => { toggle('followers'); }}
+            >
+              <h2>Followers</h2>
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              // className={classnames({ active: activeTab === '2' })}
+              onClick={() => { toggle('following'); }}
+            >
+              <h2>Following</h2>
+            </NavLink>
+          </NavItem>
+        </Nav>
       </Row>
       <Row className="justify-content-md-center">
         <Col sm="12" md={{ size: 6 }}>
-          {followers?.length !== 0 ?
-            followers?.map((follower: Author) => <AuthorListItem author={follower} loggedInUser={props.loggedInUser}></AuthorListItem>) :
-            <Card body className="text-center"><CardBody><CardTitle tag="h5" >No Friend Requests :(</CardTitle></CardBody></Card>
-          }
-
+          <TabContent activeTab={activeTab}>
+            <TabPane tabId="followers">
+              <Row>
+                <Col sm="12">
+                  {followers?.length !== 0 ?
+                    followers?.map((follower: Author) => <AuthorListItem author={follower} loggedInUser={props.loggedInUser}></AuthorListItem>) :
+                    <Card body className="text-center"><CardBody><CardTitle tag="h5" >You have no followers :(</CardTitle></CardBody></Card>
+                  }
+                </Col>
+              </Row>
+            </TabPane>
+            <TabPane tabId="following">
+              <Row>
+                <Col sm="12">
+                  {following?.length !== 0 ?
+                    following?.map((followee: Author) => <AuthorListItem author={followee} loggedInUser={props.loggedInUser}></AuthorListItem>) :
+                    <Card body className="text-center"><CardBody><CardTitle tag="h5" >You're not following anyone!</CardTitle></CardBody></Card>
+                  }
+                </Col>
+              </Row>
+            </TabPane>
+          </TabContent>
         </Col>
       </Row>
     </Container>
