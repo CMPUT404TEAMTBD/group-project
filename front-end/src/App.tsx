@@ -37,8 +37,8 @@ function App() {
     }
   },[loggedInUser])
 
-  // TODO wrap the below in NodesContext as well, and then send it into pages and use it 
-  // in the Axios wrapper. OR make Nodes global.
+  // TODO wrap the below in NodesContext as well, and then use the Nodes in other components.
+  // Talk to Chris about how to use React Context.
   return (
     <div>
       <LoggedInUserContext.Provider value={loggedInUser}>
