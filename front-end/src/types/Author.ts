@@ -4,4 +4,5 @@ export interface Author{
   id: string
   type: string
   url: string
+  host: string
 }

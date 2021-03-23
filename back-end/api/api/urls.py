@@ -9,7 +9,6 @@ from quickstart import views
 
 # Debug site/endpoints that DRF helps us implement.
 router = routers.DefaultRouter()
-router.register(r'authors', views.AuthorViewSet)
 router.register(r'posts', views.PostViewSet)
 router.register(r'comments', views.CommentViewSet)
 router.register(r'followers', views.FollowersViewSet)
@@ -28,9 +27,19 @@ author = views.AuthorViewSet.as_view({
     'post': 'partial_update',
 })
 
+# Endpoint: /api/authors/
+# GET: retrieve a list of all authors. Custom endpoint used for searching authors.
+authors = views.AuthorsViewSet.as_view({
+    'get': 'list'
+})
+
 # Custom endpoint for retrieving an Author object from a Django User object.
 auth_user = views.AuthUserViewSet.as_view({
     'get': 'retrieve'
+})
+
+nodes = views.NodesViewSet.as_view({
+    'get': 'list'
 })
 
 # Endpoint: /api/author/{AUTHOR_ID}/posts/{POST_ID}
@@ -40,7 +49,7 @@ auth_user = views.AuthUserViewSet.as_view({
 # PUT create a post with that post_id
 posts = views.PostViewSet.as_view({
     'get': 'retrieve',
-    'post': 'update',
+    'post': 'partial_update',
     'delete': 'destroy',
     'put': 'create'
 })
@@ -121,8 +130,10 @@ urlpatterns = [
     path('api/admin/', admin.site.urls),
     # Paths for all our API endpoints
     path('api/author/<str:id>/', author, name='author'),
+    path('api/authors/', authors, name='authors'),
     path('api/public-posts/', public_posts_list, name='public-posts-list'),
     path('api/auth-user/<str:username>/', auth_user, name='auth-user'),
+    path('api/nodes/', nodes, name='nodes'),
     path('api/author/<str:author>/posts/', posts_list, name='posts-list'),
     path('api/author/<str:author>/posts/<str:id>/', posts, name='posts'),
     path('api/author/<str:receiver>/followers/', followers_list, name='followers-list'),

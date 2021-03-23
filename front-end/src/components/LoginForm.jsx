@@ -48,6 +48,12 @@ export default class LoginForm extends React.Component {
         this.setState({loginErr: true});
       });
 
+      axios.get(process.env.REACT_APP_API_URL + "/api/nodes/").then(res => {
+        this.props.setNodes(res.data);
+      }).catch(err => {
+        this.setState({loginErr: true});
+      });
+
     }).catch(err => {
       this.setState({loginErr: true});
     });

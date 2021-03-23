@@ -18,8 +18,8 @@ def after_user_signed_up(request, user, **kwargs):
     """
     author = Author.objects.create(user=user, displayName=user.username, github=user.username)
     author.host = str(request.build_absolute_uri('/'))
-    author.url = f'{author.host}author/{author.id}'
+    author.url = f'{author.host}api/author/{author.id}/'
     
     author.save()
 
-    Inbox.objects.create(author=author.id)
+    Inbox.objects.create(author=author)

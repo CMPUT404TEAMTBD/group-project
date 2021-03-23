@@ -2,8 +2,8 @@ import json
 from rest_framework import status
 from django.test import TestCase, Client
 from quickstart.models import Author, Follow
-from quickstart.serializers import AuthorSerializer
-from quickstart.tests.helper_test import get_test_author_fields, get_test_follow_fields
+from quickstart.serializers import AuthorSerializer, FollowSerializer
+from quickstart.tests.helper_test import get_test_author_fields, get_sender_fields
 
 client = Client()
 
@@ -15,14 +15,18 @@ class GetFollowers(TestCase):
       Author.objects.create(**get_test_author_fields(i=2))
     ]
 
-    self.receiver_id = "testId"
-    Follow.objects.create(receiver=self.receiver_id, sender=self.senders[0].id, approved=False)
-    Follow.objects.create(receiver=self.receiver_id, sender=self.senders[1].id, approved=False)
+    self.receiver = Author.objects.create(**get_test_author_fields(i=3))
+    
+    self.follows = [
+      Follow.objects.create(receiver=self.receiver, sender=AuthorSerializer(self.senders[0]).data),
+      Follow.objects.create(receiver=self.receiver, sender=AuthorSerializer(self.senders[1]).data)
+    ]
 
   def test_get_all_followers(self):
-    response = client.get(f'/api/author/{self.receiver_id}/followers/')
+    response = client.get(f'/api/author/{self.receiver.id}/followers/')
+    serializer = FollowSerializer(self.follows, many=True)
+
     self.assertEqual(response.status_code, status.HTTP_200_OK)
     self.assertEqual(response.data['type'], 'followers')
 
-    for i in range(len(self.senders)):
-      self.assertEqual(response.data['items'][i], AuthorSerializer(self.senders[i]).data)
+    self.assertEqual(response.data['items'], serializer.data)

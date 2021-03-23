@@ -58,22 +58,25 @@ class Comment(models.Model):
 # Author A can send a Follow request to Author B when they want to
 # be constantly informed on whatever Author B is posting.
 class Follow(models.Model):
-  receiver = models.TextField()
-  sender = models.TextField()
-  approved = models.BooleanField()
+  receiver = models.ForeignKey(Author, on_delete=models.CASCADE)
+  sender = models.JSONField()
 
 # Represents a Like on a post or comment.
 class Like(models.Model):
-  context = models.TextField()
-  summary = models.TextField()
   type = 'like' 
-  author = models.TextField()
+  author = models.JSONField()
   object = models.TextField()
   
 # Every Author has an Inbox, which is where they receive notifications about recent activity
 # on their own posts, or posts of Authors they're following.
 class Inbox(models.Model):
   type = 'inbox'
-  author = models.TextField(primary_key=True)
+  author = models.ForeignKey(Author, on_delete=models.CASCADE)
   items = models.JSONField(default=list)
 
+# All other nodes that our server is connected to. This model holds the Basic Auth 
+# credentials that our client needs to send when making requests to other servers.
+class Node(models.Model):
+  host = models.TextField(primary_key=True) # e.g., coolbears.ca
+  username = models.TextField() # username of a User model on the other server
+  password = models.TextField() # password of that User model on the other server

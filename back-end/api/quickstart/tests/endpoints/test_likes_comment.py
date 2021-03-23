@@ -20,12 +20,9 @@ class GetLikesForComment(TestCase):
   def test_get_likes_for_comment(self):
     response = client.get(f'/api/author/authorId/posts/postId/comments/{self.test_comment_id}/likes')
 
-    likes = Like.objects.filter(object=self.test_comment_id)
+    likes = Like.objects.filter(object__contains=self.test_comment_id)
     serializer = LikeSerializer(likes, many=True)
 
     self.assertEqual(response.status_code, status.HTTP_200_OK)
     self.assertEqual(response.data['type'], 'likes')
-
-    self.assertEqual(len(response.data['items']), len(self.likes))
-    for i in range(len(self.likes)):
-      self.assertEqual(response.data['items'][i], LikeSerializer(self.likes[i]).data)
+    self.assertEqual(response.data['items'], serializer.data) 

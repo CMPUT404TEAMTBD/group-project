@@ -2,12 +2,13 @@
 views.py defines the code that is run upon receiving a request to our endpoints, whose URLs are defined in urls.py.
 Some endpoint handlers have been omitted, meaning that the DRF default code is sufficient.
 """
+import json
 from django.contrib.auth.models import User, Group
-from .models import Author, Post, Follow, Comment, Like, Inbox
+from .models import Author, Post, Follow, Comment, Like, Inbox, Node
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from quickstart.serializers import AuthorSerializer, PostSerializer, FollowSerializer, CommentSerializer, LikeSerializer, InboxSerializer
+from quickstart.serializers import AuthorSerializer, PostSerializer, FollowSerializer, CommentSerializer, LikeSerializer, InboxSerializer, NodeSerializer
 from .mixins import MultipleFieldLookupMixin
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -24,6 +25,19 @@ class AuthorViewSet(viewsets.ModelViewSet):
     # https://stackoverflow.com/questions/56431755/django-rest-framework-urls-without-pk
     lookup_field = 'id'
 
+class AuthorsViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows getting all authors.
+    """
+    queryset = Author.objects.all()
+    serializer_class = AuthorSerializer
+    lookup_field = 'id'
+
+    def list(self, request):
+        authors = Author.objects.all()
+        serializer = AuthorSerializer(authors, many=True)
+
+        return Response(serializer.data)
 
 class AuthUserViewSet(viewsets.ModelViewSet):
     """
@@ -41,6 +55,19 @@ class AuthUserViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
+class NodesViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows getting all external servers this one is connected to.
+    Hostname and Basic Auth credentials for each server is returned.
+    """
+    queryset = Node.objects.all()
+    serializer_class = NodeSerializer
+
+    def list(self, request):
+        nodes = Node.objects.all()
+        serializer = NodeSerializer(nodes, many=True)
+
+        return Response(serializer.data)
 
 class PostListViewSet(viewsets.ModelViewSet):
     """
@@ -145,13 +172,15 @@ class FollowersListViewSet(viewsets.ModelViewSet):
     API endpoint that allows for listing the followers of an author.
     """
     def list(self, request, receiver):
-        follows = Follow.objects.filter(receiver=receiver)
-        sender_ids = [f.sender for f in follows]
+        try:
+            author = Author.objects.get(id=receiver)
+            queryset = Follow.objects.filter(receiver=author)
 
-        # TODO: Most likely will have to make API calls here instead of database reading.
-        senders = Author.objects.filter(id__in=sender_ids)
-        serializer = AuthorSerializer(senders, many=True)
+            serializer = FollowSerializer(queryset, many=True)
 
+        except Author.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+            
         return Response({
             'type': 'followers',
             'items': serializer.data
@@ -164,7 +193,51 @@ class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     """
     queryset = Follow.objects.all()
     serializer_class = FollowSerializer
-    lookup_fields = ['receiver', 'sender']
+    lookup_fields = ['receiver']
+
+    def retrieve(self, request, receiver, sender):
+        try:
+            author = Author.objects.get(id=receiver)
+            follow = Follow.objects.get(receiver=author, sender__id=sender)
+
+            serializer = FollowSerializer(follow)
+
+        except (Author.DoesNotExist, Follow.DoesNotExist):
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.data)
+
+
+    def create(self, request, receiver, sender):
+        try:
+            author = Author.objects.get(id=receiver)
+            Follow.objects.create(receiver=author, sender=request.data)
+        except Author.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        # Save this follow to the inbox of the receiver as well
+        friend_req = {
+            'type': 'follow',
+            'actor': request.data,
+            'object': AuthorSerializer(author).data
+        }
+        inbox = Inbox.objects.get(author=receiver)
+        inbox.items.append(friend_req)
+        inbox.save()
+
+        return Response(status=status.HTTP_201_CREATED)
+
+    def destroy(self, request, receiver, sender):
+        try:
+            author = Author.objects.get(id=receiver)
+            follow = Follow.objects.get(receiver=author, sender__id=sender)
+
+            follow.delete()
+        
+        except (Author.DoesNotExist, Follow.DoesNotExist):
+            return Response(status=status.HTTP_404_NOT_FOUND)
+            
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class LikesPostViewSet(viewsets.ModelViewSet):
@@ -176,7 +249,7 @@ class LikesPostViewSet(viewsets.ModelViewSet):
 
     # TODO: Author is currently being ignored. Do we need to use it?
     def retrieve(self, request, author, post):
-        likes = Like.objects.filter(object=post)
+        likes = Like.objects.filter(object__contains=post)
         serializer = LikeSerializer(likes, many=True)
 
         return Response({
@@ -194,7 +267,7 @@ class LikesCommentViewSet(viewsets.ModelViewSet):
 
     # TODO: Author+Post is currently being ignored. Do we need to use it?
     def retrieve(self, request, author, post, comment):
-        likes = Like.objects.filter(object=comment)
+        likes = Like.objects.filter(object__contains=comment)
         serializer = LikeSerializer(likes, many=True)
 
         return Response({
@@ -211,7 +284,7 @@ class LikedViewSet(viewsets.ModelViewSet):
     serializer_class = LikeSerializer
 
     def retrieve(self, request, author):
-        liked = Like.objects.filter(author=author)
+        liked = Like.objects.filter(author__id=author)
         serializer = LikeSerializer(liked, many=True)
 
         return Response({
@@ -226,15 +299,43 @@ class InboxViewSet(viewsets.ModelViewSet):
     queryset = Inbox.objects.all()
     serializer_class = InboxSerializer
     lookup_field = 'author'
+
+    def retrieve(self, request, author):
+        try:
+            author = Author.objects.get(id=author)
+            inbox = Inbox.objects.get(author=author)
+        except (Author.DoesNotExist, Inbox.DoesNotExist):
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = InboxSerializer(inbox)
+        return Response(serializer.data)
         
     def update(self, request, author):
-        inbox = Inbox.objects.get(author=author)
+        try:
+            author = Author.objects.get(id=author)
+            inbox = Inbox.objects.get(author=author)
+        except (Author.DoesNotExist, Inbox.DoesNotExist):
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        # Save likes into our database, so that clearing the inbox keeps them safe.
+        if 'type' in request.data and request.data['type'] == 'like':
+            # Create the Like model without the type field (or else Django complains)
+            like = request.data.copy()
+            del like['type']
+            Like.objects.create(**like)
+
         inbox.items.append(request.data)
         inbox.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def destroy(self, request, author):
+        try:
+            author = Author.objects.get(id=author)
+            inbox = Inbox.objects.get(author=author)
+        except (Author.DoesNotExist, Inbox.DoesNotExist):
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
         inbox = Inbox.objects.get(author=author)
         inbox.items.clear()
         inbox.save()    

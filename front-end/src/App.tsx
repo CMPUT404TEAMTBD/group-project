@@ -12,6 +12,7 @@ import AuthorPage from './pages/AuthorPage';
 import SettingsPage from './pages/SettingsPage';
 import CreatePostComponent from './components/CreatePost';
 import AuthorResultsPage from './pages/AuthorResultsPage';
+import PostDetailPage from './pages/PostDetailPage';
 
 const LOCAL_STORAGE_USER = 'loggedInUser';
 
@@ -26,6 +27,7 @@ function App() {
   const initialState:UserLogin|undefined = initialJSON ? JSON.parse(initialJSON) : undefined;
 
   const [loggedInUser,setLoggedInUser] = useState<UserLogin | undefined>(initialState);
+  const [nodes, setNodes] = useState<Node[]>([]);
 
   useEffect(()=>{
     if (loggedInUser === undefined){
@@ -35,22 +37,24 @@ function App() {
     }
   },[loggedInUser])
 
+  // TODO wrap the below in NodesContext as well, and then use the Nodes in other components.
+  // Talk to Chris about how to use React Context.
   return (
     <div>
       <LoggedInUserContext.Provider value={loggedInUser}>
       <BrowserRouter>
         <div>
-          <AppNavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser}/>
+          <AppNavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} />
           <Container fluid={true}>
             <Switch>
               <Route exact path="/" render={(props) => <HomePage {...props} loggedInUser={loggedInUser} />} />
-              <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} />} />
+              <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} setNodes={setNodes}/>} />
               <Route path="/author/:authorId" render={(props) => <AuthorPage {...props} loggedInUser={loggedInUser}/>}/>
               {/* TODO: hide settings page if not logged in */}
               <Route path="/settings" render={(props) => <SettingsPage loggedInUser={loggedInUser} />} />
               <Route path="/create_post" render={(props) => <CreatePostComponent {...props} loggedInUser={loggedInUser} />} />
-              <Route path="/authors/:displayName" render={(props) => <AuthorResultsPage {...props}/>}/>
-  
+              <Route path="/authors/:displayName" render={(props) => <AuthorResultsPage {...props} loggedInUser={loggedInUser}/>}/>
+              <Route path="/posts/:postId" render={(props) => <PostDetailPage {...props} loggedInUser={loggedInUser}/>}/>
               <Route component={NotFoundPage} />
             </Switch>
           </Container>

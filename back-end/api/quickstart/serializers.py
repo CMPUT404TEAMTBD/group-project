@@ -3,13 +3,19 @@ serializers.py defines Serializers that help convert our Django models to JSON a
 We have one Serializer for each of our models, and we specify exactly what fields should be serialized.
 """
 from django.contrib.auth.models import User, Group
-from .models import Author, Post, Follow, Comment, Like, Inbox
+from .models import Author, Post, Follow, Comment, Like, Inbox, Node
 from rest_framework import serializers
 
 class AuthorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Author
-        fields = ['id', 'type', 'displayName', 'url', 'github']
+        fields = ['id', 'type', 'displayName', 'url', 'github', 'host']
+
+
+class NodeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Node
+        fields = ['host', 'username', 'password']
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     author = AuthorSerializer(read_only=True)
@@ -29,16 +35,20 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 class FollowSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Follow
-        fields = ['receiver', 'sender', 'approved']
+        fields = ['sender']
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        return ret['sender']
 
 
 class LikeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Like
-        fields = ['context', 'summary', 'type', 'author', 'object']
+        fields = ['type', 'author', 'object']
         
 
 class InboxSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Inbox
-        fields = ["author", "items"]
+        fields = ['type', 'items']

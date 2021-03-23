@@ -8,6 +8,7 @@ import {
 } from "reactstrap";
 import { NavLink } from "react-router-dom";
 import { UserLogin } from "../types/UserLogin";
+import FriendRequestListModal from "./FriendRequestListModal";
 
 interface Props {
   loggedInUser: UserLogin | undefined;
@@ -26,6 +27,7 @@ interface Props {
  */
 export default function AppNavBar(props: Props) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isFriendRequestOpen, setIsFriendRequestOpen] = useState<boolean>(false);
 
   const toggle = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
@@ -35,6 +37,10 @@ export default function AppNavBar(props: Props) {
   function loggedIn() {
     return (
       <>
+        <NavItem onClick={close}>
+          <NavLink to="#" className="nav-link" onClick={() => setIsFriendRequestOpen(!isFriendRequestOpen)}>Friend Requests</NavLink>
+          <FriendRequestListModal {...props} isFriendRequestOpen={isFriendRequestOpen} setIsFriendRequestOpen={setIsFriendRequestOpen} />
+        </NavItem>
         <NavItem onClick={close}>
           <NavLink to="/settings" className="nav-link">Settings</NavLink>
         </NavItem>

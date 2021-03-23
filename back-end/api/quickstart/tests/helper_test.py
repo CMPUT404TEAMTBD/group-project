@@ -8,19 +8,28 @@ def get_test_author_fields(i=1):
     'host': 'testHost'
   }
 
-def get_test_follow_fields():
+def get_sender_fields(i=1):
   return {
-    'receiver': 'receiverUrl',
-    'sender': 'senderUrl',
-    'approved': False
+    'id': f'testid{i}',
+    'displayName': f'John Doe {i}',
+    'url': f'testUrl{i}',
+    'github': f'testGithub{i}',
+    'host': 'testHost'
   }
 
-def get_test_like_fields(object_id=1, author_id='testAuthorId'):
+def get_test_like_fields(
+  object_id=1, 
+  author={
+    'id': 'testId',
+    'displayName': 'John Doe',
+    'url': 'testUrl',
+    'github': 'testGithub',
+    'host': 'testHost'
+  }
+):
   return {
-    'context': 'testContext',
-    'summary': 'Someone likes your object',
-    'author': author_id,
-    'object': object_id,
+    'author': author,
+    'object': f'{object_id}',
   }
 
 def get_test_comment_fields(i=1):
@@ -56,8 +65,9 @@ def get_test_partial_post_fields(i=1):
     'commentLink': 'link to comments'
   }
 
-def get_test_inbox_fields():
+def get_test_node_fields(host='coolbears.ca'):
   return {
-    'author': 'testAuthor',
-    'items': '[{"type":"post"}, {"type":"comment"}]'
+    'host': host,
+    'username': 'john',
+    'password': 'doe'
   }
