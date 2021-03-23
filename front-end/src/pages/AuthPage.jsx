@@ -33,10 +33,10 @@ export default class AuthPage extends React.Component {
     let displayedForm = <h3>Form could not be found</h3>;
     switch (this.state.formType) {
       case "logIn":
-        displayedForm = <LoginForm setLoggedInUser={this.props.setLoggedInUser} history={this.props.history} changeForm={this.changeForm}/>
+        displayedForm = <LoginForm setLoggedInUser={this.props.setLoggedInUser} setNodes={this.props.setNodes} history={this.props.history} changeForm={this.changeForm}/>
         break;
       case "register":
-        displayedForm = <RegisterForm setLoggedInUser={this.props.setLoggedInUser} history={this.props.history} changeForm={this.changeForm}/>
+        displayedForm = <RegisterForm setLoggedInUser={this.props.setLoggedInUser} setNodes={this.props.setNodes} history={this.props.history} changeForm={this.changeForm}/>
         break;
       default:
         console.error("Unknown form type!");
