@@ -27,6 +27,7 @@ function App() {
   const initialState:UserLogin|undefined = initialJSON ? JSON.parse(initialJSON) : undefined;
 
   const [loggedInUser,setLoggedInUser] = useState<UserLogin | undefined>(initialState);
+  const [nodes, setNodes] = useState<Node[]>([]);
 
   useEffect(()=>{
     if (loggedInUser === undefined){
@@ -36,16 +37,18 @@ function App() {
     }
   },[loggedInUser])
 
+  // TODO wrap the below in NodesContext as well, and then send it into pages and use it 
+  // in the Axios wrapper. OR make Nodes global.
   return (
     <div>
       <LoggedInUserContext.Provider value={loggedInUser}>
       <BrowserRouter>
         <div>
-          <AppNavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser}/>
+          <AppNavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} />
           <Container fluid={true}>
             <Switch>
               <Route exact path="/" render={(props) => <HomePage {...props} loggedInUser={loggedInUser} />} />
-              <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} />} />
+              <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} setNodes={setNodes}/>} />
               <Route path="/author/:authorId" render={(props) => <AuthorPage {...props} loggedInUser={loggedInUser}/>}/>
               {/* TODO: hide settings page if not logged in */}
               <Route path="/settings" render={(props) => <SettingsPage loggedInUser={loggedInUser} />} />
