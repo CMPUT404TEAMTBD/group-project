@@ -64,3 +64,10 @@ def get_test_partial_post_fields(i=1):
     'categories': '["Testing"]',
     'commentLink': 'link to comments'
   }
+
+def get_test_node_fields(host='coolbears.ca'):
+  return {
+    'host': host,
+    'username': 'john',
+    'password': 'doe'
+  }

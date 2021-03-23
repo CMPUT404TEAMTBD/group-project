@@ -3,13 +3,19 @@ serializers.py defines Serializers that help convert our Django models to JSON a
 We have one Serializer for each of our models, and we specify exactly what fields should be serialized.
 """
 from django.contrib.auth.models import User, Group
-from .models import Author, Post, Follow, Comment, Like, Inbox
+from .models import Author, Post, Follow, Comment, Like, Inbox, Node
 from rest_framework import serializers
 
 class AuthorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Author
         fields = ['id', 'type', 'displayName', 'url', 'github', 'host']
+
+
+class NodeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Node
+        fields = ['host', 'username', 'password']
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     author = AuthorSerializer(read_only=True)
