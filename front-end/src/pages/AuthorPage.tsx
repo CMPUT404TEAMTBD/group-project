@@ -18,6 +18,7 @@ import {
 } from 'reactstrap';
 import { Author } from '../types/Author';
 import FollowRequestButton from '../components/FriendRequestButton';
+import { Link } from 'react-router-dom';
 
 /**
  * Author Page will render and display an author's profile - this includes information
@@ -25,11 +26,13 @@ import FollowRequestButton from '../components/FriendRequestButton';
  * @param props 
  */
 export default function AuthorPage(props: any) {
+  // TODO: don't use props.location.pathname
   const authorUrl = process.env.REACT_APP_API_URL + "/api" + props.location.pathname;
   const [author, setAuthor] = useState<Author | undefined>(undefined);
   const [responseMessage, setResponseMessage] = useState(100);
   const [postEntries, setPostEntries] = useState<Post[] | undefined>(undefined);
   const [isFollower, setIsFollower] = useState<boolean>(false);
+  const [isFollowersListOpen, setIsFollowersListOpen] = useState<boolean>(false);
 
   // After clicking the profile navlink, get the appropriate author info and data
   useEffect(() => {
@@ -41,16 +44,18 @@ export default function AuthorPage(props: any) {
       console.log("ERROR GETTING AUTHOR INFO");
       setResponseMessage(500);
     })
-    if (props.loggedInUser) {
-      // get whether user is follower of author
-      axios.get(authorUrl + "/followers/" + props.loggedInUser.authorId).then(res => {
-        setIsFollower(true);
-      }).catch(err => {
-        // 404 is not a follower
-        setIsFollower(false);
-      })
 
-      // Only get stream if you're viewing your own profile
+    if (props.loggedInUser) {
+      // get whether user is follower of author IF not looking at our own profile
+      if (!props.location.pathname.includes(props.loggedInUser.authorId)) {
+        axios.get(authorUrl + "/followers/" + props.loggedInUser.authorId).then(res => {
+          setIsFollower(true);
+        }).catch(err => {
+          // 404 is not a follower
+          setIsFollower(false);
+        });
+      }
+
       axios.get(authorUrl + "/posts/",
         {
           auth: { // authenticate the GET request
@@ -95,6 +100,12 @@ export default function AuthorPage(props: any) {
     }
   }
 
+  const displayFollowersListButton = () => {
+    if (props.loggedInUser && author?.id === props.loggedInUser.authorId) {
+      return <Button><CardLink className="text-white" href={"/author/" + props.loggedInUser.authorId + "/followers"} >Followers</CardLink></Button>
+    }
+  }
+
   return (
     <Container fluid>
       <Row className="justify-content-md-center">
@@ -107,6 +118,7 @@ export default function AuthorPage(props: any) {
                 <Button><CardLink className="text-white" href={author ? author.github : "#"} >GitHub</CardLink></Button>
               </CardText>
               <CardText>{displayFollowButton()}</CardText>
+              <CardText>{displayFollowersListButton()}</CardText>
             </CardBody>
           </Card>
         </Col>
