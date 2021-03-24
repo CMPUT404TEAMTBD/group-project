@@ -21,6 +21,7 @@ export default function AuthorResultsPage(props:any) {
 
   // get all authors and filter through to find the one we're searching for
   useEffect(() => {
+    // TODO - will need to make requests to all 3 servers.
     axios.get(`${process.env.REACT_APP_API_URL}/api/authors/`)
     .then(response => {
         const filteredAuthorsResponse = response.data.filter((author:Author) => author.displayName === displayName);

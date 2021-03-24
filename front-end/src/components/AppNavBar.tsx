@@ -8,11 +8,13 @@ import {
 } from "reactstrap";
 import { NavLink } from "react-router-dom";
 import { UserLogin } from "../types/UserLogin";
+import { Node } from "../types/Node";
 import FriendRequestListModal from "./FriendRequestListModal";
 
 interface Props {
   loggedInUser: UserLogin | undefined;
   setLoggedInUser: React.Dispatch<React.SetStateAction<UserLogin | undefined>>;
+  setNodes: React.Dispatch<React.SetStateAction<Node[]>>;
 }
 
 /**
@@ -31,7 +33,10 @@ export default function AppNavBar(props: Props) {
 
   const toggle = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
-  const logOut = () => props.setLoggedInUser(undefined);
+  const logOut = () => {
+    props.setLoggedInUser(undefined);
+    props.setNodes([])
+  }
 
   // display pages accessible to a logged in author
   function loggedIn() {

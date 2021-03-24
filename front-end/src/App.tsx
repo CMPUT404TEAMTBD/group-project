@@ -8,6 +8,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import AuthPage from './pages/AuthPage';
 import { LoggedInUserContext } from './contexts/LoggedInUserContext';
 import { UserLogin } from './types/UserLogin';
+import { Node } from './types/Node';
 import AuthorPage from './pages/AuthorPage';
 import SettingsPage from './pages/SettingsPage';
 import CreatePostComponent from './components/CreatePost';
@@ -36,6 +37,15 @@ function App() {
     } else {
       localStorage.setItem(LOCAL_STORAGE_USER,JSON.stringify(loggedInUser));
     }
+
+    if (loggedInUser?.username !== undefined && loggedInUser?.password !== undefined) {
+      // Keep track of a Node representing our own server
+      setNodes(n => [...n, {
+        "host": process.env.REACT_APP_API_URL, // TODO may need to strip http:// from this host.
+        "username": loggedInUser?.username, 
+        "password": loggedInUser?.password
+      } as Node])
+    }
   },[loggedInUser])
 
   // TODO wrap the below in NodesContext as well, and then use the Nodes in other components.
@@ -45,7 +55,7 @@ function App() {
       <LoggedInUserContext.Provider value={loggedInUser}>
       <BrowserRouter>
         <div>
-          <AppNavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} />
+          <AppNavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} setNodes={setNodes} />
           <Container fluid={true}>
             <Switch>
               <Route exact path="/" render={(props) => <HomePage {...props} loggedInUser={loggedInUser} />} />
