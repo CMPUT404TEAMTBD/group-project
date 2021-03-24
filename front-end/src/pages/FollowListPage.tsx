@@ -1,14 +1,19 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 import { Row, Col, Card, CardBody, CardTitle, Container, Button, CardText, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import AuthorList from "../components/AuthorList"
 import AuthorListItem from '../components/AuthorListItem';
 import { Author } from '../types/Author';
 import { UserLogin } from '../types/UserLogin';
 
-interface Props {
+interface Props extends RouteComponentProps<MatchParams>{
   loggedInUser: UserLogin | undefined,
   activeTab: string,
+}
+
+interface MatchParams {
+  authorId: string;
 }
 /**
  * Render list of search results when searching for an author by display name
@@ -25,6 +30,7 @@ export default function FollowersPage(props: Props) {
       setFollowers(followersList);
     });
 
+    // TODO: after following API endpoint is finished, just uncomment the axios request below
     // axios.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/following").then(res => {
     //   const followingList: Author[] = res.data.items;
     //   setFollowing(followingList);
@@ -34,8 +40,9 @@ export default function FollowersPage(props: Props) {
 
   const [activeTab, setActiveTab] = useState(props.activeTab);
 
-  const toggle = (tab: any) => {
+  const toggle = (tab: string) => {
     if (activeTab !== tab) setActiveTab(tab);
+    props.history.push("/author/" + props.loggedInUser?.authorId + "/" + tab);
   }
 
   return (
@@ -44,18 +51,12 @@ export default function FollowersPage(props: Props) {
       <Row className="justify-content-md-center">
         <Nav tabs>
           <NavItem>
-            <NavLink
-              // className={classnames({ active: activeTab === '1' })}
-              onClick={() => { toggle('followers'); }}
-            >
+            <NavLink onClick={() => { toggle('followers') }} >
               <h2>Followers</h2>
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink
-              // className={classnames({ active: activeTab === '2' })}
-              onClick={() => { toggle('following'); }}
-            >
+            <NavLink onClick={() => { toggle('following') }} >
               <h2>Following</h2>
             </NavLink>
           </NavItem>
