@@ -30,7 +30,7 @@ function App() {
   const initialUserState: UserLogin|undefined = initialUserJSON ? JSON.parse(initialUserJSON) : undefined;
   const [loggedInUser,setLoggedInUser] = useState<UserLogin | undefined>(initialUserState);
 
-  const initialNodesJSON = localStorage.getItem(LOCAL_STORAGE_USER);
+  const initialNodesJSON = localStorage.getItem(LOCAL_STORAGE_NODES);
   const initialNodesState: Node[] = initialNodesJSON ? JSON.parse(initialNodesJSON) : [];
   const [nodes, setNodes] = useState<Node[]>(initialNodesState);
 
@@ -39,21 +39,23 @@ function App() {
       localStorage.removeItem(LOCAL_STORAGE_USER);
     } else {
       localStorage.setItem(LOCAL_STORAGE_USER,JSON.stringify(loggedInUser));
-    }
 
-    if (loggedInUser?.username !== undefined && loggedInUser?.password !== undefined) {
-      // Keep track of a Node representing our own server
+      // Already have a Node for our own server.
+      if (nodes.filter(n => n.username === loggedInUser.username).length !== 0) {
+        return;
+      }
 
       // Strip http:// or https:// from our own API URL
       const host = process.env.REACT_APP_API_URL?.replace("http://", "").replace("https://", "");
 
-      setNodes(n => [...n, {
+      // Keep track of a Node representing our own server
+      setNodes([...nodes, {
         "host": host,
         "username": loggedInUser?.username, 
         "password": loggedInUser?.password
       } as Node])
     }
-  },[loggedInUser])
+  },[loggedInUser, nodes])
 
   useEffect(() => {
     if (nodes.length === 0){
