@@ -17,6 +17,7 @@ import PostDetailPage from './pages/PostDetailPage';
 import FollowersPage from './pages/FollowersPage';
 
 const LOCAL_STORAGE_USER = 'loggedInUser';
+const LOCAL_STORAGE_NODES = 'nodes';
 
 /*
 * Snippet based on
@@ -25,11 +26,13 @@ const LOCAL_STORAGE_USER = 'loggedInUser';
 */
 function App() {
   
-  const initialJSON = localStorage.getItem(LOCAL_STORAGE_USER);
-  const initialState:UserLogin|undefined = initialJSON ? JSON.parse(initialJSON) : undefined;
+  const initialUserJSON = localStorage.getItem(LOCAL_STORAGE_USER);
+  const initialUserState: UserLogin|undefined = initialUserJSON ? JSON.parse(initialUserJSON) : undefined;
+  const [loggedInUser,setLoggedInUser] = useState<UserLogin | undefined>(initialUserState);
 
-  const [loggedInUser,setLoggedInUser] = useState<UserLogin | undefined>(initialState);
-  const [nodes, setNodes] = useState<Node[]>([]);
+  const initialNodesJSON = localStorage.getItem(LOCAL_STORAGE_USER);
+  const initialNodesState: Node[] = initialNodesJSON ? JSON.parse(initialNodesJSON) : [];
+  const [nodes, setNodes] = useState<Node[]>(initialNodesState);
 
   useEffect(()=>{
     if (loggedInUser === undefined){
@@ -40,13 +43,25 @@ function App() {
 
     if (loggedInUser?.username !== undefined && loggedInUser?.password !== undefined) {
       // Keep track of a Node representing our own server
+
+      // Strip http:// or https:// from our own API URL
+      const host = process.env.REACT_APP_API_URL?.replace("http://", "").replace("https://", "");
+
       setNodes(n => [...n, {
-        "host": process.env.REACT_APP_API_URL, // TODO may need to strip http:// from this host.
+        "host": host,
         "username": loggedInUser?.username, 
         "password": loggedInUser?.password
       } as Node])
     }
   },[loggedInUser])
+
+  useEffect(() => {
+    if (nodes.length === 0){
+      localStorage.removeItem(LOCAL_STORAGE_NODES);
+    } else {
+      localStorage.setItem(LOCAL_STORAGE_NODES, JSON.stringify(nodes));
+    }
+  }, [nodes])
 
   // TODO wrap the below in NodesContext as well, and then use the Nodes in other components.
   // Talk to Chris about how to use React Context.
