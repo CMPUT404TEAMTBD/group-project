@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Row, Col, Card, CardBody, CardTitle, Container, Button, CardText, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
-import AuthorList from "../components/AuthorList"
 import AuthorListItem from '../components/AuthorListItem';
 import { Author } from '../types/Author';
 import { UserLogin } from '../types/UserLogin';
@@ -19,7 +18,7 @@ interface MatchParams {
  * Render list of search results when searching for an author by display name
  * @param props 
  */
-export default function FollowersPage(props: Props) {
+export default function FollowListPage(props: Props) {
   const [followers, setFollowers] = useState<Author[] | undefined>(undefined);
   const [following, setFollowing] = useState<Author[] | undefined>(undefined);
 

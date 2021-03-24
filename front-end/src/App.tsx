@@ -13,7 +13,7 @@ import SettingsPage from './pages/SettingsPage';
 import CreatePostComponent from './components/CreatePost';
 import AuthorResultsPage from './pages/AuthorResultsPage';
 import PostDetailPage from './pages/PostDetailPage';
-import FollowersPage from './pages/FollowListPage';
+import FollowListPage from './pages/FollowListPage';
 
 const LOCAL_STORAGE_USER = 'loggedInUser';
 
@@ -50,8 +50,8 @@ function App() {
             <Switch>
               <Route exact path="/" render={(props) => <HomePage {...props} loggedInUser={loggedInUser} />} />
               <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} setNodes={setNodes}/>} />
-              <Route path="/author/:authorId/followers/" render={(props) => <FollowersPage {...props} loggedInUser={loggedInUser} activeTab={'followers'} />}/>
-              <Route path="/author/:authorId/following/" render={(props) => <FollowersPage {...props} loggedInUser={loggedInUser} activeTab={'following'}/>}/>
+              <Route path="/author/:authorId/followers/" render={(props) => <FollowListPage {...props} loggedInUser={loggedInUser} activeTab={'followers'} />}/>
+              <Route path="/author/:authorId/following/" render={(props) => <FollowListPage {...props} loggedInUser={loggedInUser} activeTab={'following'}/>}/>
               <Route path="/author/:authorId" render={(props) => <AuthorPage {...props} loggedInUser={loggedInUser}/>}/>
               {/* TODO: hide settings page if not logged in */}
               <Route path="/settings" render={() => <SettingsPage loggedInUser={loggedInUser} />} />
