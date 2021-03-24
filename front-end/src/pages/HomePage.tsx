@@ -26,7 +26,6 @@ export default function HomePage(props: any) {
   // get all public posts
   useEffect(() => {
     axios.get(process.env.REACT_APP_API_URL + "/api/public-posts/",).then(res => {
-      console.log(res.data);
       const posts: Post[] = res.data;
       setPostEntries(posts);
     }).catch(err => {
@@ -36,14 +35,11 @@ export default function HomePage(props: any) {
     // if logged in, get posts from inbox
     if (props.loggedInUser) {
       axios.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/inbox/").then(res => {
-        console.log(res.data.items);
         const inboxPosts: Post[] = res.data.items.filter((p: Post) => { return p.type === 'post' });
         setInboxEntries(inboxPosts);
         const likes: Like[] = res.data.items.filter((p:any) => p.type === 'like');
-        console.log(likes);
         setLikeEntries(likes);
       }).catch(err => {
-        console.log("INBOX ERROR")
         console.error(err);
       })
     }
