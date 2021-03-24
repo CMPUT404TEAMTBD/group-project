@@ -3,7 +3,7 @@ from rest_framework import status
 from django.test import TestCase, Client
 from quickstart.models import Follow, Author, Inbox
 from quickstart.serializers import FollowSerializer, AuthorSerializer
-from quickstart.tests.helper_test import get_sender_fields, get_test_author_fields
+from quickstart.tests.helper_test import get_follow_author_fields, get_test_author_fields
 
 client = Client()
 
@@ -51,7 +51,7 @@ class CreateFollow(TestCase):
   def setUp(self):
     self.receiver = Author.objects.create(**get_test_author_fields(i=1))
     self.inbox = Inbox.objects.create(author=self.receiver)
-    self.sender = get_sender_fields()
+    self.sender = get_follow_author_fields()
     self.sender_id = self.sender["id"]
 
   def test_create_follow(self):

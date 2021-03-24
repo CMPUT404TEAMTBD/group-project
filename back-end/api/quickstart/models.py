@@ -61,6 +61,12 @@ class Follow(models.Model):
   receiver = models.ForeignKey(Author, on_delete=models.CASCADE)
   sender = models.JSONField()
 
+# Author A (sender) sent a Follow request to Author B (possibly on 
+# a different server). 
+class Following(models.Model):
+  receiver = models.JSONField()
+  sender = models.ForeignKey(Author, on_delete=models.CASCADE)
+
 # Represents a Like on a post or comment.
 class Like(models.Model):
   type = 'like' 
