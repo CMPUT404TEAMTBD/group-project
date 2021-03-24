@@ -8,7 +8,7 @@ def get_test_author_fields(i=1):
     'host': 'testHost'
   }
 
-def get_sender_fields(i=1):
+def get_follow_author_fields(i=1):
   return {
     'id': f'testid{i}',
     'displayName': f'John Doe {i}',

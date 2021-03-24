@@ -12,6 +12,7 @@ router = routers.DefaultRouter()
 router.register(r'posts', views.PostViewSet)
 router.register(r'comments', views.CommentViewSet)
 router.register(r'followers', views.FollowersViewSet)
+router.register(r'following', views.FollowingViewSet)
 router.register(r'liked', views.LikedViewSet)
 router.register(r'inbox', views.InboxViewSet)
 
@@ -91,6 +92,22 @@ followers = views.FollowersViewSet.as_view({
     'get': 'retrieve'
 })
 
+# Endpoint: /api/author/{AUTHOR_ID}/following
+# GET: get a list of authors who they are following
+following_list = views.FollowingListViewSet.as_view({
+    'get': 'list'
+})
+
+# Endpoint: /api/author/{AUTHOR_ID}/following/{FOREIGN_AUTHOR_ID}
+# DELETE: remove a following
+# PUT: Add a following (must be authenticated)
+# GET check if following
+following = views.FollowingViewSet.as_view({
+    'delete': 'destroy',
+    'put': 'create',
+    'get': 'retrieve'
+})
+
 # Endpoint: /api/author/{AUTHOR_ID}/post/{POST_ID}/likes
 # GET a list of likes from other authors on AUTHOR_ID's post POST_ID
 likes_post = views.LikesPostViewSet.as_view({
@@ -138,6 +155,8 @@ urlpatterns = [
     path('api/author/<str:author>/posts/<str:id>/', posts, name='posts'),
     path('api/author/<str:receiver>/followers/', followers_list, name='followers-list'),
     path('api/author/<str:receiver>/followers/<str:sender>/', followers, name='followers'),
+    path('api/author/<str:sender>/following/', following_list, name='following-list'),
+    path('api/author/<str:sender>/following/<str:receiver>/', following, name='following'),
     path('api/author/<str:author>/posts/<str:post>/comments/', comments, name='comments'),
     path('api/author/<str:author>/posts/<str:post>/likes/', likes_post, name='likes-post'),
     path('api/author/<str:author>/posts/<str:post>/comments/<str:comment>/likes', likes_comment, name='likes-comment'),
