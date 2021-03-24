@@ -6,6 +6,9 @@ import PostContentEl from './PostContentEl';
 import CreateEditPostModal from './CreateEditPostModal';
 import DeletePostModal from './DeleteModal';
 import PostDetailModal from './PostDetailModal';
+import axios from 'axios';
+import { Like } from '../types/Like';
+import { Author } from '../types/Author';
 
 interface Props {
   post: Post;
@@ -30,9 +33,31 @@ export default function PostListItem(props:Props) {
   const toggleEdit = () => setIsEditModalOpen(!isEditModalOpen);
   const toggleDelete = () => setIsDeleteModalOpen(!isDeleteModalOpen);
 
+  function likePost():void {
+    if(props.loggedInUser){
+      axios.get(`${process.env.REACT_APP_API_URL}/api/auth-user/${props.loggedInUser.username}`)
+            .then( res => {
+                const author: Author = res.data;
+                const like: Like = {
+                  type: 'string',
+                  author: author,
+                  object: `${process.env.REACT_APP_API_URL}/api/author/${props.post.author.id}/posts/${props.post.id}`
+                }
+                axios.post(`${process.env.REACT_APP_API_URL}/api/author/${props.post.author.id}/inbox/`,
+                  like
+                ).then( res => {
+                  alert('You liked the post!');
+                });
+              }
+            )
+    }else{
+      console.error("User is not logged in, cannot like!");
+    }
+  }
+
   const EditCardLink = () => props.loggedInUser !== undefined && isAuthorPost ? <CardLink onClick={()=>{setIsEditModalOpen(true);}}>Edit</CardLink> : null
   const DeleteCardLink = () => props.loggedInUser !== undefined && isAuthorPost ? <CardLink onClick={()=>{setIsDeleteModalOpen(true);}}>Delete</CardLink> : null
- 
+  const LikeCardLink = () => props.loggedInUser ? <CardLink onClick={()=>likePost()}>Like</CardLink> : null
 
   if(!props.loggedInUser){
     console.error('You must supply the logged in user if you are editing or deleting!')
@@ -51,6 +76,7 @@ export default function PostListItem(props:Props) {
           <PostContentEl postContent={post} isPreview={true}/>
           {EditCardLink()}
           {DeleteCardLink()}
+          {LikeCardLink()}
         </CardBody>
       </Card>
       <PostDetailModal post={post} toggle={toggle} isOpen={isModalOpen}/>

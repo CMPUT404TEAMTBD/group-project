@@ -97,7 +97,7 @@ export default function HomePage(props: any) {
                 <NavLink
                   // className={classnames({ active: activeTab === '2' })}
                   onClick={() => { toggle('2'); }}
-                >Friend Feed</NavLink>
+                >Inbox</NavLink>
               </NavItem>
               <NavItem>
                 <NavLink
