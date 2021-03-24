@@ -4,11 +4,11 @@ Some endpoint handlers have been omitted, meaning that the DRF default code is s
 """
 import json
 from django.contrib.auth.models import User, Group
-from .models import Author, Post, Follow, Comment, Like, Inbox, Node
+from .models import Author, Post, Follow, Following, Comment, Like, Inbox, Node
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
-from quickstart.serializers import AuthorSerializer, PostSerializer, FollowSerializer, CommentSerializer, LikeSerializer, InboxSerializer, NodeSerializer
+from quickstart.serializers import AuthorSerializer, PostSerializer, FollowSerializer, FollowingSerializer, CommentSerializer, LikeSerializer, InboxSerializer, NodeSerializer
 from .mixins import MultipleFieldLookupMixin
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -237,6 +237,68 @@ class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
         except (Author.DoesNotExist, Follow.DoesNotExist):
             return Response(status=status.HTTP_404_NOT_FOUND)
             
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class FollowingListViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows for listing the following of an author.
+    """
+    def list(self, request, sender):
+        try:
+            author = Author.objects.get(id=sender)
+            queryset = Following.objects.filter(sender=author)
+
+            serializer = FollowingSerializer(queryset, many=True)
+
+        except Author.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response({
+            'type': 'following',
+            'items': serializer.data
+        })
+
+
+class FollowingViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows removing, adding, and checking other authors an author is following.
+    """
+    queryset = Following.objects.all()
+    serializer_class = FollowingSerializer
+
+    def retrieve(self, request, sender, receiver):
+        try:
+            author = Author.objects.get(id=sender)
+            following = Following.objects.get(sender=author, receiver__id=receiver)
+
+            serializer = FollowingSerializer(following)
+
+        except (Author.DoesNotExist, Following.DoesNotExist):
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.data)
+
+
+    def create(self, request, sender, receiver):
+        try:
+            author = Author.objects.get(id=sender)
+            Following.objects.create(sender=author, receiver=request.data)
+        except Author.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(status=status.HTTP_201_CREATED)
+
+    def destroy(self, request, sender, receiver):
+        try:
+            author = Author.objects.get(id=sender)
+            following = Following.objects.get(sender=author, receiver__id=receiver)
+
+            following.delete()
+
+        except (Author.DoesNotExist, Following.DoesNotExist):
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
