@@ -51,12 +51,12 @@ export default function FollowersPage(props: Props) {
       <Row className="justify-content-md-center">
         <Nav tabs>
           <NavItem>
-            <NavLink onClick={() => { toggle('followers') }} >
+            <NavLink onClick={() => { toggle('followers') }} className="mb-2 text-muted">
               <h2>Followers</h2>
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink onClick={() => { toggle('following') }} >
+            <NavLink onClick={() => { toggle('following') }} className="mb-2 text-muted">
               <h2>Following</h2>
             </NavLink>
           </NavItem>
