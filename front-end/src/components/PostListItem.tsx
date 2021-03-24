@@ -39,7 +39,7 @@ export default function PostListItem(props:Props) {
             .then( res => {
                 const author: Author = res.data;
                 const like: Like = {
-                  type: 'string',
+                  type: 'like',
                   author: author,
                   object: `${process.env.REACT_APP_API_URL}/api/author/${props.post.author.id}/posts/${props.post.id}`
                 }

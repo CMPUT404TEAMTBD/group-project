@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Form, Input, Nav, NavItem, NavLink, TabContent, Button, Card, CardText, CardTitle, TabPane, Container } from 'reactstrap';
+import { Row, Col, Form, Input, Nav, NavItem, NavLink, TabContent, Card, CardTitle, TabPane, Container } from 'reactstrap';
+import LikesFeed from '../components/LikesFeed';
 import PostList from '../components/PostList';
+import { Like } from '../types/Like';
 import { Post } from '../types/Post';
 
 
@@ -15,6 +17,7 @@ export default function HomePage(props: any) {
   const [userSearch, setUserSearch] = useState<string>('');
   const [postEntries, setPostEntries] = useState<Post[] | undefined>(undefined);
   const [inboxEntries, setInboxEntries] = useState<Post[] | undefined>(undefined);
+  const [likeEntries, setLikeEntries] = useState<Like[]>([]);
   const [activeTab, setActiveTab] = useState('1');
   const toggle = (tab: any) => {
     if (activeTab !== tab) setActiveTab(tab);
@@ -36,13 +39,16 @@ export default function HomePage(props: any) {
         console.log(res.data.items);
         const inboxPosts: Post[] = res.data.items.filter((p: Post) => { return p.type === 'post' });
         setInboxEntries(inboxPosts);
-        console.log(inboxPosts);
+        const likes: Like[] = res.data.items.filter((p:any) => p.type === 'like');
+        console.log(likes);
+        setLikeEntries(likes);
       }).catch(err => {
         console.log("INBOX ERROR")
         console.error(err);
       })
     }
-  }, []);
+  }, [activeTab]);
+  // TODO: Dirty hack to make sure inbox is fresh. We might need to do a refactor to make sure the inbox data is fresh
 
   // update on search
   function onUserSearchChange(e: any) {
@@ -126,6 +132,7 @@ export default function HomePage(props: any) {
                     <Col></Col>
                     <Col sm={8}>
                       {props.loggedInUser ? displayInboxPosts() : displayLoginMessage()}
+                      <LikesFeed likesList={likeEntries}></LikesFeed>
                     </Col>
                     <Col></Col>
                   </Row>
