@@ -58,6 +58,8 @@ function App() {
   },[loggedInUser, nodes])
 
   useEffect(() => {
+    console.log("Nodes: ");
+    console.log(nodes);
     if (nodes.length === 0){
       localStorage.removeItem(LOCAL_STORAGE_NODES);
     } else {
