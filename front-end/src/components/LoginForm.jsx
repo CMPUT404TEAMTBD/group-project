@@ -36,26 +36,16 @@ export default class LoginForm extends React.Component {
     axios.post(process.env.REACT_APP_API_URL + "/api/rest-auth/login/", {
       username: this.state.username,
       password: this.state.password
-    }).then(res => {
-      //Store token in a cookie
-      // document.cookie = "accessToken=" + res.data.key;
-
-      axios.get(process.env.REACT_APP_API_URL + `/api/auth-user/${this.state.username}/`
-      ).then(res => {
-        this.props.setLoggedInUser({username: this.state.username, password: this.state.password, authorId: res.data.id});
-        this.props.history.push("/");
-      }).catch(err => {
-        this.setState({loginErr: true});
-      });
-
-      axios.get(process.env.REACT_APP_API_URL + "/api/nodes/").then(res => {
-        this.props.setNodes(res.data);
-      }).catch(err => {
-        this.setState({loginErr: true});
-      });
-
+    }).then(_ => {
+      return axios.get(process.env.REACT_APP_API_URL + "/api/nodes/");
+    }).then(nodes => {
+      this.props.setNodes(nodes.data);
+      return axios.get(process.env.REACT_APP_API_URL + `/api/auth-user/${this.state.username}/`);
+    }).then(user => {
+      this.props.setLoggedInUser({username: this.state.username, password: this.state.password, authorId: user.data.id});
+      this.props.history.push("/");
     }).catch(err => {
-      this.setState({loginErr: true});
+      this.setState({loginErr: err.response});
     });
     e.preventDefault();
   }
