@@ -25,7 +25,7 @@ export default function FollowRequestButton(props: Props) {
             props.setIsFollower(true);
           }
         });
-        axios.put(followingUrl, props.currentAuthor).then(res => {
+        AxiosWrapper.put(followingUrl, props.currentAuthor).then((res: any) => {
           if (res.status === 201) {
             console.log(props.loggedInUser?.username + " is now following " + props.currentAuthor?.displayName);
           }
@@ -36,7 +36,7 @@ export default function FollowRequestButton(props: Props) {
             props.setIsFollower(false);
           }
         });
-        axios.delete(followingUrl).then(res => {
+        AxiosWrapper.delete(followingUrl).then((res: any) => {
           if (res.status === 204) {
             console.log("UNFOLLOWED");
           }
