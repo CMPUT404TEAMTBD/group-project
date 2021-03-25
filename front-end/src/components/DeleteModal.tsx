@@ -25,9 +25,9 @@ export default function DeletePostModal(props: Props){
 
       // Send DELETE request to delete post
       AxiosWrapper.delete(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.postID)
-        .then(res => {
+        .then((res: any) => {
           handleRes(res)
-        }).catch(error => {
+        }).catch((err: any) => {
           setShowError(true)
         })
   }

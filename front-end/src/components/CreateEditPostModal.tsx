@@ -99,26 +99,26 @@ export default function CreateEditPostModal(props: Props){
 
       if(isCreate){
         AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data)
-          .then(post => {
+          .then((post: any) => {
             handleRes(post)
             return post
-          }).then(post => {
+          }).then((post: any) => {
             // send this post to all followers
-            AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/followers/`).then(res => {
+            AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/followers/`).then((res: any) => {
               let followingList: Author[] = res.data.items;
               followingList.forEach(follower => {
                 AxiosWrapper.post(`${process.env.REACT_APP_API_URL}/api/author/${follower.id}/inbox/`, post.data);
               });
             });
-          }).catch(error => {
+          }).catch((error: any) => {
             setShowError(true)
           })
       }
       else if(props.editFields !== undefined){
           AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data)
-          .then(res => {
+          .then((res: any) => {
             handleRes(res)
-          }).catch(error => {
+          }).catch((err: any) => {
             setShowError(true)
           })
         }

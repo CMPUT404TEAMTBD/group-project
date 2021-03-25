@@ -18,15 +18,15 @@ export default function FollowRequestButton(props: Props) {
   const sendFollowRequest = () => {
     // TODO: add authentication
     // get the loggedinuser author object
-    AxiosWrapper.get(loggedInUserUrl).then(res => {
+    AxiosWrapper.get(loggedInUserUrl).then((res: any) => {
       if (!props.isFollower) {
-        AxiosWrapper.put(authorUrl, res.data).then(res => {
+        AxiosWrapper.put(authorUrl, res.data).then((res: any) => {
           if (res.status === 201) {
             props.setIsFollower(true);
           }
         });
       } else {
-        AxiosWrapper.delete(authorUrl).then(res => {
+        AxiosWrapper.delete(authorUrl).then((res: any) => {
           if (res.status === 204) {
             props.setIsFollower(false);
           }

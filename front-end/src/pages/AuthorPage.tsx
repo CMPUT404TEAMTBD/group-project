@@ -36,11 +36,11 @@ export default function AuthorPage(props: any) {
 
   // After clicking the profile navlink, get the appropriate author info and data
   useEffect(() => {
-    AxiosWrapper.get(authorUrl).then(res => {
+    AxiosWrapper.get(authorUrl).then((res: any) => {
       const authorOb: Author = res.data;
       setAuthor(authorOb);
       setResponseMessage(200);
-    }).catch(err => {
+    }).catch((err: any) => {
       console.error("ERROR GETTING AUTHOR INFO");
       setResponseMessage(500);
     })
@@ -48,18 +48,18 @@ export default function AuthorPage(props: any) {
     if (props.loggedInUser) {
       // get whether user is follower of author IF not looking at our own profile
       if (!props.location.pathname.includes(props.loggedInUser.authorId)) {
-        AxiosWrapper.get(authorUrl + "/followers/" + props.loggedInUser.authorId).then(res => {
+        AxiosWrapper.get(authorUrl + "/followers/" + props.loggedInUser.authorId).then((res: any) => {
           setIsFollower(true);
-        }).catch(err => {
+        }).catch((err: any) => {
           // 404 is not a follower
           setIsFollower(false);
         });
       }
 
-      AxiosWrapper.get(authorUrl + "/posts/").then(res => {
+      AxiosWrapper.get(authorUrl + "/posts/").then((res: any) => {
         const posts: Post[] = res.data;
         setPostEntries(posts);
-      }).catch(err => {
+      }).catch((err: any) => {
         console.error("ERROR GETTING POSTS");
         setResponseMessage(500);
       })

@@ -49,13 +49,13 @@ const CreatePostComponent = (props: any) => {
             categories: categories
         }
         AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data)
-        .then(res => {
+        .then((res: any) => {
             if (res.status >= 400) {
                 setShowError(true)
             } else if (res.status === 201) {
                 props.history.push("/")
             }
-        }).catch(error => {
+        }).catch((err: any) => {
             setShowError(true)
         })
     }

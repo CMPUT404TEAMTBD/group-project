@@ -33,10 +33,10 @@ export default function PostDetailPage(props: Props) {
     else {
       getPromise = AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/posts/${props.location.pathname}`,);
     }
-    getPromise.then(res => {
+    getPromise.then((res: any) => {
       const post: Post = res.data;
       setPostEntry(post);
-    }).catch(err => {
+    }).catch((err: any) => {
       console.error(err);
     });
   }, []);

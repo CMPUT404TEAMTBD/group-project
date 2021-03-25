@@ -24,9 +24,9 @@ export default function AuthorListItem(props: Props) {
   useEffect(() => {
     // get whether user is follower of author
     if (props.author.id !== props.loggedInUser?.authorId) {
-      AxiosWrapper.get(isFollowerUrl).then(res => {
+      AxiosWrapper.get(isFollowerUrl).then((res: any) => {
         setIsFollower(true);
-      }).catch(err => {
+      }).catch((err: any) => {
         setIsFollower(false);
       })
     }

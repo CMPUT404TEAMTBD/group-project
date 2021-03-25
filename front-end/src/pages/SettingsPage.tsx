@@ -35,9 +35,9 @@ const SettingsPage = (props: Props) => {
 
     // get current author data
     function getAuthorData() {
-        AxiosWrapper.get(authorUrl).then(res => {
+        AxiosWrapper.get(authorUrl).then((res: any) => {
             setUnchangedData(res.data);
-        }).catch(err => {
+        }).catch((err: any) => {
             console.error(err);
             setResponseMessage(500);
         })};
@@ -58,9 +58,9 @@ const SettingsPage = (props: Props) => {
             AxiosWrapper.post(authorUrl, {
                 displayName: !displayName ? unchangedData.displayName : displayName,
                 github: !githubUrl ? unchangedData.githubUrl : githubUrl,
-            }).then(res => {
+            }).then((res: any) => {
                 setResponseMessage(res.status);
-            }).catch(err => {
+            }).catch((err: any) => {
                 console.error(err);
                 setResponseMessage(500);
             });

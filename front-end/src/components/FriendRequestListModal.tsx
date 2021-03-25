@@ -9,7 +9,7 @@ const FriendRequestListModal = (props: any) => {
   const [friendReqEntries, setFriendReqEntries] = useState<Follow[] | undefined>(undefined);
 
   useEffect(() => {
-    AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/inbox").then(res => {
+    AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/inbox").then((res: any) => {
       const friendReqs: Follow[] = res.data.items.filter((fr: Follow) => { return fr.type === 'follow' });
       setFriendReqEntries(friendReqs);
     })

@@ -23,8 +23,8 @@ export default function AuthorResultsPage(props:any) {
   useEffect(() => {
     // TODO - will need to make requests to all 3 servers. Use Promises.all?
     AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/authors/`)
-    .then(response => {
-        const filteredAuthorsResponse = response.data.filter((author:Author) => author.displayName === displayName);
+    .then((res: any) => {
+        const filteredAuthorsResponse = res.data.filter((author:Author) => author.displayName === displayName);
         setAuthors(filteredAuthorsResponse);
     })
   }, []);
