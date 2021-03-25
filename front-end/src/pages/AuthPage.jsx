@@ -29,7 +29,6 @@ export default class AuthPage extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     let displayedForm = <h3>Form could not be found</h3>;
     switch (this.state.formType) {
       case "logIn":
