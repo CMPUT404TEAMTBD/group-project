@@ -38,7 +38,7 @@ const SettingsPage = (props: Props) => {
         axios.get(authorUrl).then(res => {
             setUnchangedData(res.data);
         }).catch(err => {
-            console.log("GET ERROR");
+            console.error(err);
             setResponseMessage(500);
         })};
 
@@ -59,10 +59,9 @@ const SettingsPage = (props: Props) => {
                 displayName: !displayName ? unchangedData.displayName : displayName,
                 github: !githubUrl ? unchangedData.githubUrl : githubUrl,
             }).then(res => {
-                console.log(res);
                 setResponseMessage(res.status);
             }).catch(err => {
-                console.log("POST ERROR")
+                console.error(err);
                 setResponseMessage(500);
             });
         }

@@ -65,7 +65,6 @@ export default function PostList(props: Props) {
       <PostListItem post={post} key={post.id} loggedInUser={props.loggedInUser} removeFromFeed={removeFromFeed} modifyInFeed={modifyInFeed} />
     );
   }
-  console.log(postListElToDisplay);
 
   return (
     <>
