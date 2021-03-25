@@ -9,7 +9,7 @@ interface Props {
  * Author list component to show list of authors
  * @param props
  */
-export default function LikelListItem(props: Props) {
+export default function LikeListItem(props: Props) {
   return (
     <Card>
       <CardBody>
