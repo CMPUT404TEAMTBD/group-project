@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import { Button } from 'reactstrap'
 import { Author } from '../types/Author';
 import { UserLogin } from '../types/UserLogin';
@@ -19,15 +19,15 @@ export default function FollowRequestButton(props: Props) {
   const sendFollowRequest = () => {
     // TODO: add authentication
     // get the loggedinuser author object
-    axios.get(loggedInUserUrl).then(res => {
+    AxiosWrapper.get(loggedInUserUrl).then(res => {
       if (!props.isFollower) {
-        axios.put(authorUrl, res.data).then(res => {
+        AxiosWrapper.put(authorUrl, res.data).then(res => {
           if (res.status === 201) {
             props.setIsFollower(true);
           }
         });
       } else {
-        axios.delete(authorUrl).then(res => {
+        AxiosWrapper.delete(authorUrl).then(res => {
           if (res.status === 204) {
             props.setIsFollower(false);
           }

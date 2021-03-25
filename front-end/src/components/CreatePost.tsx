@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import React, { useState } from 'react';
 import { Alert, Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Post, PostContentType, PostVisibility } from '../types/Post';
@@ -49,15 +49,7 @@ const CreatePostComponent = (props: any) => {
             categories: categories
         }
         console.log(data)
-        axios.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data,
-            {
-                // TODO: consider adding headers as well
-                // https://stackoverflow.com/a/44239543
-                auth: {
-                    username: props.loggedInUser.username,
-                    password: props.loggedInUser.password,
-                },
-            })
+        AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data)
         .then(res => {
             if (res.status >= 400) {
                 setShowError(true)

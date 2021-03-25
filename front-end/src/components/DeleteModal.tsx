@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { AxiosWrapper } from '../helpers/AxiosWrapper';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import React, { useState } from "react";
 import { Alert, Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { UserLogin } from "../types/UserLogin";
@@ -21,16 +22,9 @@ export default function DeletePostModal(props: Props){
 
   function deletePost(e:any) {
       e.preventDefault();
-     
-      const config:AxiosRequestConfig = {
-        auth:{
-          username:props.loggedInUser.username,
-          password:props.loggedInUser.password
-        }
-      }
 
       // Send DELETE request to delete post
-      axios.delete(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.postID, config)
+      AxiosWrapper.delete(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.postID)
         .then(res => {
           handleRes(res)
         }).catch(error => {

@@ -1,24 +1,20 @@
 import { Node } from '../types/Node';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 
 interface Credentials {
   username: string;
   password: string;
 }
 
-class AxiosWrapper {
-  nodes: Node[]
-
-  constructor(nodes: Node[]) {
-    this.nodes = nodes;
-  }
+export class AxiosWrapper {
+  static nodes: Node[] = []
   
   /**
    * Given a URL, checks the host and retrieves the credentials requests to that URL should be made with.
    * @param url to get the credentials for
    */
-  private getCredentialsForUrl(url: string) {
-    let nodes = this.nodes.filter(n => n.host.includes(url));
+  private static getCredentialsForUrl(url: string) {
+    let nodes = AxiosWrapper.nodes.filter(n => n.host.includes(url));
 
     let credentials: Credentials = nodes.length === 0 
       ? { username: "", password: "" }
@@ -29,19 +25,20 @@ class AxiosWrapper {
     };
   }
 
-  get(url: string): Promise<AxiosResponse<any>> {
-    return axios.get(url, this.getCredentialsForUrl(url));
+
+  static get(url: string): any {
+    return axios.get(url, AxiosWrapper.getCredentialsForUrl(url));
   }
 
-  delete(url: string): Promise<AxiosResponse<any>> {
-    return axios.delete(url, this.getCredentialsForUrl(url));
+  static delete(url: string): any {
+    return axios.delete(url, AxiosWrapper.getCredentialsForUrl(url));
   }
 
-  post(url: string, data: any): Promise<AxiosResponse<any>> {
-    return axios.post(url, data, this.getCredentialsForUrl(url));
+  static post(url: string, data: any): any {
+    return axios.post(url, data, AxiosWrapper.getCredentialsForUrl(url));
   }
 
-  put(url: string, data: any): Promise<AxiosResponse<any>> {
-    return axios.put(url, data, this.getCredentialsForUrl(url));
+  static put(url: string, data: any): any {
+    return axios.put(url, data, AxiosWrapper.getCredentialsForUrl(url));
   }
 }

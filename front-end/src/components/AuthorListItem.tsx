@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { Card, CardBody, Container, Row, Col, CardImg, CardTitle, Button, CardLink, CardSubtitle } from 'reactstrap';
@@ -24,7 +24,7 @@ export default function AuthorListItem(props: Props) {
   useEffect(() => {
     // get whether user is follower of author
     if (props.author.id !== props.loggedInUser?.authorId) {
-      axios.get(isFollowerUrl).then(res => {
+      AxiosWrapper.get(isFollowerUrl).then(res => {
         setIsFollower(true);
       }).catch(err => {
         setIsFollower(false);

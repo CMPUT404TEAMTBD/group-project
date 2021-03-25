@@ -9,6 +9,7 @@ import AuthPage from './pages/AuthPage';
 import { LoggedInUserContext } from './contexts/LoggedInUserContext';
 import { UserLogin } from './types/UserLogin';
 import { Node } from './types/Node';
+import { AxiosWrapper } from './helpers/AxiosWrapper'
 import AuthorPage from './pages/AuthorPage';
 import SettingsPage from './pages/SettingsPage';
 import CreatePostComponent from './components/CreatePost';
@@ -63,6 +64,7 @@ function App() {
     if (nodes.length === 0){
       localStorage.removeItem(LOCAL_STORAGE_NODES);
     } else {
+      AxiosWrapper.nodes = nodes;
       localStorage.setItem(LOCAL_STORAGE_NODES, JSON.stringify(nodes));
     }
   }, [nodes])

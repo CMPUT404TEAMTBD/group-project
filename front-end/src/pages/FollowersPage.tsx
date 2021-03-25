@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Card, CardBody, CardTitle, Container } from 'reactstrap';
 import AuthorList from "../components/AuthorList"
@@ -18,7 +18,7 @@ export default function FollowersPage(props: Props) {
 
   // get all followers
   useEffect(() => {
-    axios.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/followers").then(res => {
+    AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/followers").then(res => {
       const followersList: Author[] = res.data.items;
       setFollowers(followersList);
     });

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Form, Input, Nav, NavItem, NavLink, TabContent, Button, Card, CardText, CardTitle, TabPane, Container } from 'reactstrap';
 import PostList from '../components/PostList';
@@ -22,7 +22,7 @@ export default function HomePage(props: any) {
 
   // get all public posts
   useEffect(() => {
-    axios.get(process.env.REACT_APP_API_URL + "/api/public-posts/",).then(res => {
+    AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/public-posts/",).then(res => {
       console.log(res.data);
       const posts: Post[] = res.data;
       setPostEntries(posts);
@@ -32,7 +32,7 @@ export default function HomePage(props: any) {
 
     // if logged in, get posts from inbox
     if (props.loggedInUser) {
-      axios.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/inbox/").then(res => {
+      AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/inbox/").then(res => {
         console.log(res.data.items);
         const inboxPosts: Post[] = res.data.items.filter((p: Post) => { return p.type === 'post' });
         setInboxEntries(inboxPosts);

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import React, { useState } from 'react';
 import {
     Alert,
@@ -35,7 +35,7 @@ const SettingsPage = (props: Props) => {
 
     // get current author data
     function getAuthorData() {
-        axios.get(authorUrl).then(res => {
+        AxiosWrapper.get(authorUrl).then(res => {
             setUnchangedData(res.data);
         }).catch(err => {
             console.log("GET ERROR");
@@ -55,7 +55,7 @@ const SettingsPage = (props: Props) => {
         if (!displayName && !githubUrl) {
             setResponseMessage(400); // handle empty input
         } else {
-            axios.post(authorUrl, {
+            AxiosWrapper.post(authorUrl, {
                 displayName: !displayName ? unchangedData.displayName : displayName,
                 github: !githubUrl ? unchangedData.githubUrl : githubUrl,
             }).then(res => {

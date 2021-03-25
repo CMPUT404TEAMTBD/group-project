@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { AxiosWrapper } from '../helpers/AxiosWrapper';
+import { AxiosResponse } from 'axios';
 import React, { useState } from "react";
 import { Alert, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { Post, PostContent, PostContentType, PostVisibility } from "../types/Post";
@@ -94,15 +95,9 @@ export default function CreateEditPostModal(props: Props){
         content: content,
         categories: categories
       }
-      const config:AxiosRequestConfig = {
-        auth:{
-          username:props.loggedInUser.username,
-          password:props.loggedInUser.password
-        }
-      }
 
       if(isCreate){
-        axios.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data, config)
+        AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data)
           .then(res => {
             handleRes(res)
           }).catch(error => {
@@ -110,7 +105,7 @@ export default function CreateEditPostModal(props: Props){
           })
       }
       else if(props.editFields !== undefined){
-          axios.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data, config)
+          AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data)
           .then(res => {
             handleRes(res)
           }).catch(error => {

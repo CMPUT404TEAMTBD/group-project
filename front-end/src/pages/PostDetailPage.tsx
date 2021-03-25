@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { useParams } from 'react-router-dom';
@@ -26,18 +26,12 @@ export default function PostDetailPage(props: Props) {
   const {postId} = props.match.params;
   // get post
   useEffect(() => {
-    let getPromise: Promise<AxiosResponse<any>>;
+    let getPromise;
     if (props.loggedInUser) {
-      getPromise = axios.get(`${process.env.REACT_APP_API_URL}/api/posts/${postId}`,
-        {
-          auth: {
-            username: props.loggedInUser.username,
-            password: props.loggedInUser.password
-          }
-        });
+      getPromise = AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/posts/${postId}`);
     }
     else {
-      getPromise = axios.get(`${process.env.REACT_APP_API_URL}/api/posts/${props.location.pathname}`,);
+      getPromise = AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/posts/${props.location.pathname}`,);
     }
     getPromise.then(res => {
       const post: Post = res.data;
