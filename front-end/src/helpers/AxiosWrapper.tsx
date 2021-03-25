@@ -12,7 +12,7 @@ export class AxiosWrapper {
     let nodes = AxiosWrapper.nodes.filter(n => url.includes(n.host));
 
     if (nodes.length === 0) {
-      console.error(`No nodes found for the given request url: {url}`)
+      console.log(`No node credentials found for the given request url: ${url}`)
     }
 
     return nodes.length === 0 
