@@ -50,9 +50,9 @@ function App() {
 
       // Keep track of a Node representing our own server
       setNodes([...nodes, {
-        "host": host,
-        "username": loggedInUser?.username, 
-        "password": loggedInUser?.password
+        host: host,
+        username: loggedInUser?.username, 
+        password: loggedInUser?.password
       } as Node])
     }
   },[loggedInUser, nodes])
