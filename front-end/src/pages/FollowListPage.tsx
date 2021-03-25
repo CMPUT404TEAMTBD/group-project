@@ -75,18 +75,22 @@ export default function FollowListPage(props: Props) {
         <Col sm="12" md={{ size: 6 }}>
           <TabContent activeTab={activeTab}>
             <TabPane tabId="followers">
+              <Container fluid>
               <Row>
                 <Col sm="12">
                   {followers && displayFollowList(followers)}
                 </Col>
               </Row>
+              </Container>
             </TabPane>
             <TabPane tabId="following">
+            <Container fluid>
               <Row>
                 <Col sm="12">
                   {following && displayFollowList(following)}
                 </Col>
               </Row>
+              </Container>
             </TabPane>
           </TabContent>
         </Col>

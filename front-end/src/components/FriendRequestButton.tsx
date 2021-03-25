@@ -30,7 +30,7 @@ export default function FollowRequestButton(props: Props) {
           if (res.status === 201) {
             console.log(props.loggedInUser?.username + " is now following " + props.currentAuthor?.displayName);
           }
-        })
+        });
       } else {
         axios.delete(authorUrl).then(res => {
           if (res.status === 204) {
@@ -41,7 +41,7 @@ export default function FollowRequestButton(props: Props) {
           if (res.status === 204) {
             console.log("UNFOLLOWED");
           }
-        })
+        });
       }
     });
     
