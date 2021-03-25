@@ -9,6 +9,7 @@ import AuthPage from './pages/AuthPage';
 import { LoggedInUserContext } from './contexts/LoggedInUserContext';
 import { UserLogin } from './types/UserLogin';
 import { Node } from './types/Node';
+import { AxiosWrapper } from './helpers/AxiosWrapper'
 import AuthorPage from './pages/AuthorPage';
 import SettingsPage from './pages/SettingsPage';
 import CreatePostComponent from './components/CreatePost';
@@ -50,9 +51,9 @@ function App() {
 
       // Keep track of a Node representing our own server
       setNodes([...nodes, {
-        "host": host,
-        "username": loggedInUser?.username, 
-        "password": loggedInUser?.password
+        host: host,
+        username: loggedInUser?.username, 
+        password: loggedInUser?.password
       } as Node])
     }
   },[loggedInUser, nodes])
@@ -60,6 +61,7 @@ function App() {
   useEffect(() => {
     console.log("Nodes: ");
     console.log(nodes);
+    AxiosWrapper.nodes = nodes;
     if (nodes.length === 0){
       localStorage.removeItem(LOCAL_STORAGE_NODES);
     } else {

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { Row, Col, Card, CardBody, CardTitle, Container, Button, CardText, Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
@@ -24,13 +24,13 @@ export default function FollowListPage(props: Props) {
 
   // get all followers and following
   useEffect(() => {
-    axios.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/followers/").then(res => {
+    AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/followers/").then((res: any) => {
       console.log(res.data.items)
       const followersList: Author[] = res.data.items;
       setFollowers(followersList);
     });
 
-    axios.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/following/").then(res => {
+    AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/following/").then((res: any) => {
       console.log(res.data)
       const followingList: Author[] = res.data.items;
       setFollowing(followingList);

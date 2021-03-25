@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import React, { useEffect, useState } from 'react';
 import PostList from '../components/PostList';
 import { Post } from '../types/Post';
@@ -36,11 +36,11 @@ export default function AuthorPage(props: any) {
 
   // After clicking the profile navlink, get the appropriate author info and data
   useEffect(() => {
-    axios.get(authorUrl).then(res => {
+    AxiosWrapper.get(authorUrl).then((res: any) => {
       const authorOb: Author = res.data;
       setAuthor(authorOb);
       setResponseMessage(200);
-    }).catch(err => {
+    }).catch((err: any) => {
       console.error("ERROR GETTING AUTHOR INFO");
       setResponseMessage(500);
     })
@@ -48,25 +48,18 @@ export default function AuthorPage(props: any) {
     if (props.loggedInUser) {
       // get whether user is follower of author IF not looking at our own profile
       if (!props.location.pathname.includes(props.loggedInUser.authorId)) {
-        axios.get(authorUrl + "/followers/" + props.loggedInUser.authorId).then(res => {
+        AxiosWrapper.get(authorUrl + "/followers/" + props.loggedInUser.authorId).then((res: any) => {
           setIsFollower(true);
-        }).catch(err => {
+        }).catch((err: any) => {
           // 404 is not a follower
           setIsFollower(false);
         });
       }
 
-      axios.get(authorUrl + "/posts/",
-        {
-          auth: { // authenticate the GET request
-            username: props.loggedInUser.username,
-            password: props.loggedInUser.password,
-          }
-        }
-      ).then(res => {
+      AxiosWrapper.get(authorUrl + "/posts/").then((res: any) => {
         const posts: Post[] = res.data;
         setPostEntries(posts);
-      }).catch(err => {
+      }).catch((err: any) => {
         console.error("ERROR GETTING POSTS");
         setResponseMessage(500);
       })

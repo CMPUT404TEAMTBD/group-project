@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { AxiosWrapper } from '../helpers/AxiosWrapper';
+import { AxiosResponse } from 'axios';
 import React, { useState } from "react";
 import { Alert, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { Post, PostContent, PostContentType, PostVisibility } from "../types/Post";
@@ -95,35 +96,29 @@ export default function CreateEditPostModal(props: Props){
         content: content,
         categories: categories
       }
-      const config:AxiosRequestConfig = {
-        auth:{
-          username:props.loggedInUser.username,
-          password:props.loggedInUser.password
-        }
-      }
 
       if(isCreate){
-        axios.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data, config)
-          .then(post => {
+        AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data)
+          .then((post: any) => {
             handleRes(post)
             return post
-          }).then(post => {
+          }).then((post: any) => {
             // send this post to all followers
-            axios.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/followers/`).then(res => {
+            AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/followers/`).then((res: any) => {
               let followingList: Author[] = res.data.items;
               followingList.forEach(follower => {
-                axios.post(`${process.env.REACT_APP_API_URL}/api/author/${follower.id}/inbox/`, post.data);
+                AxiosWrapper.post(`${process.env.REACT_APP_API_URL}/api/author/${follower.id}/inbox/`, post.data);
               });
             });
-          }).catch(error => {
+          }).catch((error: any) => {
             setShowError(true)
           })
       }
       else if(props.editFields !== undefined){
-          axios.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data, config)
-          .then(res => {
+          AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data)
+          .then((res: any) => {
             handleRes(res)
-          }).catch(error => {
+          }).catch((err: any) => {
             setShowError(true)
           })
         }

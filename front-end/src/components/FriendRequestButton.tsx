@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import { Button } from 'reactstrap'
 import { Author } from '../types/Author';
 import { UserLogin } from '../types/UserLogin';
@@ -18,25 +18,25 @@ export default function FollowRequestButton(props: Props) {
   const sendFollowRequest = () => {
     // TODO: add authentication
     // get the loggedinuser author object
-    axios.get(loggedInUserUrl).then(res => {
+    AxiosWrapper.get(loggedInUserUrl).then((res: any) => {
       if (!props.isFollower) {
-        axios.put(authorUrl, res.data).then(res => {
+        AxiosWrapper.put(authorUrl, res.data).then((res: any) => {
           if (res.status === 201) {
             props.setIsFollower(true);
           }
         });
-        axios.put(followingUrl, props.currentAuthor).then(res => {
+        AxiosWrapper.put(followingUrl, props.currentAuthor).then((res: any) => {
           if (res.status === 201) {
             console.log(props.loggedInUser?.username + " is now following " + props.currentAuthor?.displayName);
           }
         });
       } else {
-        axios.delete(authorUrl).then(res => {
+        AxiosWrapper.delete(authorUrl).then((res: any) => {
           if (res.status === 204) {
             props.setIsFollower(false);
           }
         });
-        axios.delete(followingUrl).then(res => {
+        AxiosWrapper.delete(followingUrl).then((res: any) => {
           if (res.status === 204) {
             console.log("UNFOLLOWED");
           }

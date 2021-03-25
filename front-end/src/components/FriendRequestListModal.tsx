@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import React, { useEffect, useState } from 'react';
 import { Button, Card, CardBody, CardTitle, Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { Follow } from '../types/Follow';
@@ -9,7 +9,7 @@ const FriendRequestListModal = (props: any) => {
   const [friendReqEntries, setFriendReqEntries] = useState<Follow[] | undefined>(undefined);
 
   useEffect(() => {
-    axios.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/inbox").then(res => {
+    AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/inbox").then((res: any) => {
       const friendReqs: Follow[] = res.data.items.filter((fr: Follow) => { return fr.type === 'follow' });
       setFriendReqEntries(friendReqs);
     })
