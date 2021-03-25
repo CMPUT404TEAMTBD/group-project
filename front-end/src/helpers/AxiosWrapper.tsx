@@ -11,6 +11,10 @@ export class AxiosWrapper {
   private static getCredentialsForUrl(url: string) {
     let nodes = AxiosWrapper.nodes.filter(n => url.includes(n.host));
 
+    if (nodes.length === 0) {
+      console.error(`No nodes found for the given request url: {url}`)
+    }
+
     return nodes.length === 0 
       ? null
       : { auth: { username: nodes[0].username, password: nodes[0].password } } ;
