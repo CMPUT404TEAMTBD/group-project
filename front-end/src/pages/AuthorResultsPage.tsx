@@ -23,12 +23,15 @@ export default function AuthorResultsPage(props:any) {
   // get all authors and filter through to find the one we're searching for
   useEffect(() => {
     // NOTE: Search functionality does not work for users that are not logged in. (they have no Node credentials).
-    let requests = AxiosWrapper.nodes.map((n: Node) => {
-      return AxiosWrapper.get(`${n.host}/api/authors/`);
+    let requests = props.nodes.map((n: Node) => {
+      const url = `${n.host}/api/authors/`
+      console.log(`Getting authors from ${url}`);
+      return AxiosWrapper.get(url);
     })
 
-    Promise.all(requests).then((authors: any) => {
-      setAuthors(authors.data.filter((a: Author) => a.displayName === displayName));
+    Promise.allSettled(requests).then((results: any) => {
+      let authors = results.filter((r: any) => r.status === "fulfilled").map((r: any) => r.value.data).flat(); 
+      setAuthors(authors.filter((a: Author) => a.displayName === displayName));
     })
   }, []);
 
