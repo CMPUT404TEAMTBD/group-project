@@ -28,7 +28,11 @@
     "startdev": "react-scripts start",
     "start": "REACT_APP_API_URL=http://localhost:8000 react-scripts start",
     "build": "REACT_APP_API_URL=https://cyver.herokuapp.com react-scripts build",
-    "buildVinny": "REACT_APP_API_URL=https://dry-plateau-09130.herokuapp.com react-scripts build",
+    "build-clo1": "REACT_APP_API_URL=https://chriz-heroku.com react-scripts build",
+    "build-monica": "REACT_APP_API_URL=https://monica-heroku.com react-scripts build",
+    "build-ray": "REACT_APP_API_URL=https://ray-heroku.com react-scripts build",
+    "build-justin": "REACT_APP_API_URL=https://justin-heroku.com react-scripts build",
+    "build-vinny": "REACT_APP_API_URL=https://dry-plateau-09130.herokuapp.com react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
