@@ -15,7 +15,7 @@ import SettingsPage from './pages/SettingsPage';
 import CreatePostComponent from './components/CreatePost';
 import AuthorResultsPage from './pages/AuthorResultsPage';
 import PostDetailPage from './pages/PostDetailPage';
-import FollowersPage from './pages/FollowersPage';
+import FollowListPage from './pages/FollowListPage';
 
 const LOCAL_STORAGE_USER = 'loggedInUser';
 const LOCAL_STORAGE_NODES = 'nodes';
@@ -70,7 +70,7 @@ function App() {
   }, [nodes])
 
   // TODO wrap the below in NodesContext as well, and then use the Nodes in other components.
-  // Talk to Chris about how to use React Context.
+  // Talk to Chris about how to use React Context
   return (
     <div>
       <LoggedInUserContext.Provider value={loggedInUser}>
@@ -81,10 +81,11 @@ function App() {
             <Switch>
               <Route exact path="/" render={(props) => <HomePage {...props} loggedInUser={loggedInUser} />} />
               <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} setNodes={setNodes}/>} />
-              <Route path="/author/:authorId/followers/" render={(props) => <FollowersPage {...props} loggedInUser={loggedInUser} />}/>
+              <Route path="/author/:authorId/followers/" render={(props) => <FollowListPage {...props} loggedInUser={loggedInUser} activeTab={'followers'} />}/>
+              <Route path="/author/:authorId/following/" render={(props) => <FollowListPage {...props} loggedInUser={loggedInUser} activeTab={'following'}/>}/>
               <Route path="/author/:authorId" render={(props) => <AuthorPage {...props} loggedInUser={loggedInUser}/>}/>
               {/* TODO: hide settings page if not logged in */}
-              <Route path="/settings" render={(props) => <SettingsPage loggedInUser={loggedInUser} />} />
+              <Route path="/settings" render={() => <SettingsPage loggedInUser={loggedInUser} />} />
               <Route path="/create_post" render={(props) => <CreatePostComponent {...props} loggedInUser={loggedInUser} />} />
               <Route path="/authors/:displayName" render={(props) => <AuthorResultsPage {...props} loggedInUser={loggedInUser}/>}/>
               <Route path="/posts/:postId" render={(props) => <PostDetailPage {...props} loggedInUser={loggedInUser}/>}/>

@@ -1,4 +1,15 @@
 [build]
   base    = "front-end"
   publish = "build"
+  # You must set a similar command in your Netlify app
   command = "CI='' npm run build"
+[context.chris]
+  command = "CI='' npm run build-chris"
+[context.monica]
+  command = "CI='' npm run build-monica"
+[context.ray]
+  command = "CI='' npm run build-ray"
+[context.justin]
+  command = "CI='' npm run build-justin"
+[context.vinny]
+  command = "CI='' npm run build-vinny"

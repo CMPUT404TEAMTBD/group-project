@@ -11,9 +11,9 @@ interface Props {
 }
 
 export default function FollowRequestButton(props: Props) {
-  // TODO: change this to use currentAuthor.url
   const authorUrl = `${process.env.REACT_APP_API_URL}/api/author/${props.currentAuthor?.id}/followers/${props.loggedInUser?.authorId}/`;
   const loggedInUserUrl = `${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser?.authorId}/`;
+  const followingUrl = `${loggedInUserUrl}following/${props.currentAuthor?.id}/`;
 
   const sendFollowRequest = () => {
     // TODO: add authentication
@@ -25,10 +25,20 @@ export default function FollowRequestButton(props: Props) {
             props.setIsFollower(true);
           }
         });
+        axios.put(followingUrl, props.currentAuthor).then(res => {
+          if (res.status === 201) {
+            console.log(props.loggedInUser?.username + " is now following " + props.currentAuthor?.displayName);
+          }
+        });
       } else {
         AxiosWrapper.delete(authorUrl).then((res: any) => {
           if (res.status === 204) {
             props.setIsFollower(false);
+          }
+        });
+        axios.delete(followingUrl).then(res => {
+          if (res.status === 204) {
+            console.log("UNFOLLOWED");
           }
         });
       }
