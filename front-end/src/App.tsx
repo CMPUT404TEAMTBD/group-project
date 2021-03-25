@@ -61,10 +61,10 @@ function App() {
   useEffect(() => {
     console.log("Nodes: ");
     console.log(nodes);
+    AxiosWrapper.nodes = nodes;
     if (nodes.length === 0){
       localStorage.removeItem(LOCAL_STORAGE_NODES);
     } else {
-      AxiosWrapper.nodes = nodes;
       localStorage.setItem(LOCAL_STORAGE_NODES, JSON.stringify(nodes));
     }
   }, [nodes])
