@@ -1,11 +1,6 @@
 import { Node } from '../types/Node';
 import axios from 'axios';
 
-interface Credentials {
-  username: string;
-  password: string;
-}
-
 export class AxiosWrapper {
   static nodes: Node[] = []
   
@@ -14,31 +9,26 @@ export class AxiosWrapper {
    * @param url to get the credentials for
    */
   private static getCredentialsForUrl(url: string) {
-    let nodes = AxiosWrapper.nodes.filter(n => n.host.includes(url));
+    let nodes = AxiosWrapper.nodes.filter(n => url.includes(n.host));
 
-    let credentials: Credentials = nodes.length === 0 
-      ? { username: "", password: "" }
-      : { username: nodes[0].username, password: nodes[0].password };
-    
-    return {
-      auth: credentials
-    };
+    return nodes.length === 0 
+      ? null
+      : { auth: { username: nodes[0].username, password: nodes[0].password } } ;
   }
 
-
-  static get(url: string): any {
-    return axios.get(url, AxiosWrapper.getCredentialsForUrl(url));
+  static get(url: string, credentials: any = AxiosWrapper.getCredentialsForUrl(url)): any {
+    return credentials === null ? axios.get(url) : axios.get(url, credentials);
   }
 
-  static delete(url: string): any {
-    return axios.delete(url, AxiosWrapper.getCredentialsForUrl(url));
+  static delete(url: string, credentials: any = AxiosWrapper.getCredentialsForUrl(url)): any {
+    return credentials === null ? axios.delete(url) : axios.delete(url, credentials);
   }
 
-  static post(url: string, data: any): any {
-    return axios.post(url, data, AxiosWrapper.getCredentialsForUrl(url));
+  static post(url: string, data: any, credentials: any = AxiosWrapper.getCredentialsForUrl(url)): any {
+    return credentials === null ? axios.post(url, data) : axios.post(url, data, credentials);
   }
 
-  static put(url: string, data: any): any {
-    return axios.put(url, data, AxiosWrapper.getCredentialsForUrl(url));
+  static put(url: string, data: any, credentials: any = AxiosWrapper.getCredentialsForUrl(url)): any {
+    return credentials === null ? axios.put(url, data) : axios.put(url, data, credentials);
   }
 }

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, Form, Input, Nav, NavItem, NavLink, TabContent, Button, Card, CardText, CardTitle, TabPane, Container } from 'reactstrap';
 import PostList from '../components/PostList';
 import { Post } from '../types/Post';
+import axios from 'axios';
 
 
 /**
@@ -22,7 +23,7 @@ export default function HomePage(props: any) {
 
   // get all public posts
   useEffect(() => {
-    AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/public-posts/",).then(res => {
+    AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/public-posts/").then(res => {
       console.log(res.data);
       const posts: Post[] = res.data;
       setPostEntries(posts);
