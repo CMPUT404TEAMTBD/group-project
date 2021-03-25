@@ -107,9 +107,9 @@ export default function AuthorPage(props: any) {
           <Button><CardLink className="text-white" href={"/author/" + props.loggedInUser.authorId + "/followers"}>Followers</CardLink></Button>
         </CardText>
         <CardText>
-        <Button><CardLink className="text-white" href={"/author/" + props.loggedInUser.authorId + "/following"}>Following</CardLink></Button>
+          <Button><CardLink className="text-white" href={"/author/" + props.loggedInUser.authorId + "/following"}>Following</CardLink></Button>
         </CardText>
-        </>)
+      </>)
     }
   }
 

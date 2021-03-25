@@ -6,7 +6,7 @@ import AuthorListItem from '../components/AuthorListItem';
 import { Author } from '../types/Author';
 import { UserLogin } from '../types/UserLogin';
 
-interface Props extends RouteComponentProps<MatchParams>{
+interface Props extends RouteComponentProps<MatchParams> {
   loggedInUser: UserLogin | undefined,
   activeTab: string,
 }
@@ -45,6 +45,15 @@ export default function FollowListPage(props: Props) {
     props.history.push("/author/" + props.loggedInUser?.authorId + "/" + tab);
   }
 
+  const displayFollowList = (list: Author[]) => {
+    if (list && list.length > 0) {
+      return (<>
+        {list.map((auth: Author) => <AuthorListItem author={auth} loggedInUser={props.loggedInUser}></AuthorListItem>)}
+      </>)
+    }
+    return <Card body className="text-center"><CardBody><CardTitle tag="h5" >No authors to show :(</CardTitle></CardBody></Card>;
+  };
+
   return (
     <Container fluid>
 
@@ -68,20 +77,14 @@ export default function FollowListPage(props: Props) {
             <TabPane tabId="followers">
               <Row>
                 <Col sm="12">
-                  {followers?.length !== 0 ?
-                    followers?.map((follower: Author) => <AuthorListItem author={follower} loggedInUser={props.loggedInUser}></AuthorListItem>) :
-                    <Card body className="text-center"><CardBody><CardTitle tag="h5" >You have no followers :(</CardTitle></CardBody></Card>
-                  }
+                  {followers && displayFollowList(followers)}
                 </Col>
               </Row>
             </TabPane>
             <TabPane tabId="following">
               <Row>
                 <Col sm="12">
-                  {following?.length !== 0 ?
-                    following?.map((followee: Author) => <AuthorListItem author={followee} loggedInUser={props.loggedInUser}></AuthorListItem>) :
-                    <Card body className="text-center"><CardBody><CardTitle tag="h5" >You're not following anyone!</CardTitle></CardBody></Card>
-                  }
+                  {following && displayFollowList(following)}
                 </Col>
               </Row>
             </TabPane>
