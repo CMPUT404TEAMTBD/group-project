@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Alert, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { Post, PostContent, PostContentType, PostVisibility } from "../types/Post";
 import { UserLogin } from "../types/UserLogin";
+import { Author } from "../types/Author";
 import PostContentEl from "./PostContentEl";
 
 interface Props {
@@ -98,8 +99,17 @@ export default function CreateEditPostModal(props: Props){
 
       if(isCreate){
         AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data)
-          .then(res => {
-            handleRes(res)
+          .then(post => {
+            handleRes(post)
+            return post
+          }).then(post => {
+            // send this post to all followers
+            AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/followers/`).then(res => {
+              let followingList: Author[] = res.data.items;
+              followingList.forEach(follower => {
+                AxiosWrapper.post(`${process.env.REACT_APP_API_URL}/api/author/${follower.id}/inbox/`, post.data);
+              });
+            });
           }).catch(error => {
             setShowError(true)
           })

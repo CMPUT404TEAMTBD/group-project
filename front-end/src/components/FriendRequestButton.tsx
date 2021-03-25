@@ -12,9 +12,8 @@ interface Props {
 
 export default function FollowRequestButton(props: Props) {
   // TODO: change this to use currentAuthor.url
-  const authorUrl = process.env.REACT_APP_API_URL + "/api/author/" + props.currentAuthor?.id + "/followers/" + props.loggedInUser?.authorId + "/";
-  const inboxUrl = process.env.REACT_APP_API_URL + "/api/author/" + props.currentAuthor?.id + "/inbox/";
-  const loggedInUserUrl = process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId;
+  const authorUrl = `${process.env.REACT_APP_API_URL}/api/author/${props.currentAuthor?.id}/followers/${props.loggedInUser?.authorId}/`;
+  const loggedInUserUrl = `${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser?.authorId}/`;
 
   const sendFollowRequest = () => {
     // TODO: add authentication

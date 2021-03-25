@@ -41,7 +41,7 @@ export default function AuthorPage(props: any) {
       setAuthor(authorOb);
       setResponseMessage(200);
     }).catch(err => {
-      console.log("ERROR GETTING AUTHOR INFO");
+      console.error("ERROR GETTING AUTHOR INFO");
       setResponseMessage(500);
     })
 
@@ -60,7 +60,7 @@ export default function AuthorPage(props: any) {
         const posts: Post[] = res.data;
         setPostEntries(posts);
       }).catch(err => {
-        console.log("ERROR GETTING POSTS");
+        console.error("ERROR GETTING POSTS");
         setResponseMessage(500);
       })
     };
