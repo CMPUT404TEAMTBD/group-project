@@ -100,9 +100,16 @@ export default function AuthorPage(props: any) {
     }
   }
 
-  const displayFollowersListButton = () => {
+  const displayFollowListButtons = () => {
     if (props.loggedInUser && author?.id === props.loggedInUser.authorId) {
-      return <Button><CardLink className="text-white" href={"/author/" + props.loggedInUser.authorId + "/followers"} >Followers</CardLink></Button>
+      return (<>
+        <CardText>
+          <Button><CardLink className="text-white" href={"/author/" + props.loggedInUser.authorId + "/followers"}>Followers</CardLink></Button>
+        </CardText>
+        <CardText>
+          <Button><CardLink className="text-white" href={"/author/" + props.loggedInUser.authorId + "/following"}>Following</CardLink></Button>
+        </CardText>
+      </>)
     }
   }
 
@@ -118,7 +125,7 @@ export default function AuthorPage(props: any) {
                 <Button><CardLink className="text-white" href={author ? author.github : "#"} >GitHub</CardLink></Button>
               </CardText>
               <CardText>{displayFollowButton()}</CardText>
-              <CardText>{displayFollowersListButton()}</CardText>
+              {displayFollowListButtons()}
             </CardBody>
           </Card>
         </Col>
