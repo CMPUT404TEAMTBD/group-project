@@ -13,7 +13,6 @@ client = APIClient()
 class GetInbox(TestCase):
   """Tests to GET an author's inbox at endpoint /api/author/<str:author>/inbox/."""
   def setUp(self):
-    client.force_authenticate(User.objects.create(username='john', password='doe'))
     self.inbox = Inbox.objects.create(author=Author.objects.create(**get_test_author_fields()))
     self.inbox.items.append(get_test_post_fields())
     self.inbox.items.append(get_follow_author_fields())
