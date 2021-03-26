@@ -36,7 +36,7 @@ export default function PostListItem(props: Props) {
   const toggleDelete = () => setIsDeleteModalOpen(!isDeleteModalOpen);
 
   useEffect(() => {
-    AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${post.author.id}/posts/${post.id}/likes/`).then((res: any) => {
+    AxiosWrapper.get(`${post.author.host}api/author/${post.author.id}/posts/${post.id}/likes/`).then((res: any) => {
       const resLikes: Like[] = res.data.items;
       setLikes(resLikes);
       setHasLiked(resLikes.filter((l: Like) => l.author.id === props.loggedInUser?.authorId).length !== 0);
