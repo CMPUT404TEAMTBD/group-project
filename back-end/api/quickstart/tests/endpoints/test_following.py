@@ -1,15 +1,18 @@
 import json
 from rest_framework import status
-from django.test import TestCase, Client
+from rest_framework.test import APIClient, force_authenticate
+from django.contrib.auth.models import User
+from django.test import TestCase
 from quickstart.models import Following, Author
 from quickstart.serializers import FollowingSerializer, AuthorSerializer
 from quickstart.tests.helper_test import get_follow_author_fields, get_test_author_fields
 
-client = Client()
+client = APIClient()
 
 class GetFollowing(TestCase):
   """Tests for getting a single Following at endpoint /api/author/{SENDER_ID}/following/{RECEIVER_ID}/."""
   def setUp(self):
+    client.force_authenticate(User.objects.create(username='john', password='doe'))
     self.receiver = Author.objects.create(**get_test_author_fields())
     self.sender = Author.objects.create(**get_test_author_fields())
     self.following = Following.objects.create(receiver=AuthorSerializer(self.receiver).data, sender=self.sender)
@@ -31,6 +34,7 @@ class GetFollowing(TestCase):
 class DeleteFollowing(TestCase):
   """Tests for deleting a single Following at endpoint /api/author/{SENDER_ID}/following/{RECEIVER_ID}/."""
   def setUp(self):
+    client.force_authenticate(User.objects.create(username='john', password='doe'))
     self.receiver = Author.objects.create(**get_test_author_fields())
     self.sender = Author.objects.create(**get_test_author_fields())
     self.follow = Following.objects.create(receiver=AuthorSerializer(self.receiver).data, sender=self.sender)
@@ -47,6 +51,7 @@ class DeleteFollowing(TestCase):
 class CreateFollowing(TestCase):
   """Tests for creating a Following by PUT'ing to endpoint /api/author/{SENDER_ID}/following/{RECEIVER_ID}/."""
   def setUp(self):
+    client.force_authenticate(User.objects.create(username='john', password='doe'))
     self.sender = Author.objects.create(**get_test_author_fields(i=1))
     self.receiver = get_follow_author_fields()
     self.receiver_id = self.receiver["id"]
