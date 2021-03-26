@@ -167,6 +167,32 @@ class CommentViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+class FriendsListViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows for listing the friends of an author.
+    """
+    def list(self, request, author):
+        try:
+            author = Author.objects.get(id=author)
+            follow_queryset = Follow.objects.filter(receiver=author)
+            following_queryset = Following.objects.filter(sender=author)
+
+            friends = []
+            for follow in follow_queryset:
+                for following in following_queryset:
+                    if follow.sender["id"] == following.receiver["id"]:
+                        friends.append(follow.sender)
+                        break
+
+        except Author.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+            
+        return Response({
+            'type': 'friends',
+            'items': friends
+        })
+
+
 class FollowersListViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows for listing the followers of an author.
