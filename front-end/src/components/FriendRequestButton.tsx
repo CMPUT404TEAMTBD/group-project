@@ -11,12 +11,11 @@ interface Props {
 }
 
 export default function FollowRequestButton(props: Props) {
-  const authorUrl = `${process.env.REACT_APP_API_URL}/api/author/${props.currentAuthor?.id}/followers/${props.loggedInUser?.authorId}/`;
+  const authorUrl = `${props.currentAuthor?.host}api/author/${props.currentAuthor?.id}/followers/${props.loggedInUser?.authorId}/`;
   const loggedInUserUrl = `${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser?.authorId}/`;
   const followingUrl = `${loggedInUserUrl}following/${props.currentAuthor?.id}/`;
 
   const sendFollowRequest = () => {
-    // TODO: add authentication
     // get the loggedinuser author object
     AxiosWrapper.get(loggedInUserUrl).then((res: any) => {
       if (!props.isFollower) {
