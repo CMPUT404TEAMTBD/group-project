@@ -107,7 +107,7 @@ export default function CreateEditPostModal(props: Props){
             AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/followers/`).then((res: any) => {
               let followingList: Author[] = res.data.items;
               followingList.forEach(follower => {
-                AxiosWrapper.post(`${process.env.REACT_APP_API_URL}/api/author/${follower.id}/inbox/`, post.data);
+                AxiosWrapper.post(`${follower.host}api/author/${follower.id}/inbox/`, post.data);
               });
             });
           }).catch((error: any) => {

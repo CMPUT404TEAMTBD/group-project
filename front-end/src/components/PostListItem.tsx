@@ -57,7 +57,7 @@ export default function PostListItem(props: Props) {
           object: `${process.env.REACT_APP_API_URL}/api/author/${props.post.author.id}/posts/${props.post.id}`
         }
 
-        return AxiosWrapper.post(`${process.env.REACT_APP_API_URL}/api/author/${props.post.author.id}/inbox/`,
+        return AxiosWrapper.post(`${props.post.author.host}api/author/${props.post.author.id}/inbox/`,
           like
         )
       }).then((res: any) => {

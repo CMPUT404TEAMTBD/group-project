@@ -16,8 +16,7 @@ interface Props {
  * @param props 
  */
 export default function AuthorListItem(props: Props) {
-  // TODO: this will eventually change to be using the host from the author when we start connecting with other groups
-  const isFollowerUrl = process.env.REACT_APP_API_URL + "/api/author/" + props.author.id + "/followers/" + props.loggedInUser?.authorId;
+  const isFollowerUrl = `${props.author.host}api/author/${props.author.id}/followers/${props.loggedInUser?.authorId}`;
 
   const [isFollower, setIsFollower] = useState<boolean>(false);
 
