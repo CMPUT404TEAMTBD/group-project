@@ -12,6 +12,7 @@ from quickstart.serializers import AuthorSerializer, PostSerializer, FollowSeria
 from .mixins import MultipleFieldLookupMixin
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from .permissions import IsAuthenticatedOrGet
 
 
 class AuthorViewSet(viewsets.ModelViewSet):
@@ -393,7 +394,7 @@ class InboxViewSet(viewsets.ModelViewSet):
     API endpoint that allows getting inbox items for an author
     """
     authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrGet]
     queryset = Inbox.objects.all()
     serializer_class = InboxSerializer
     lookup_field = 'author'
