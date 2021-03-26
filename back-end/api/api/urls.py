@@ -76,6 +76,12 @@ comments = views.CommentViewSet.as_view({
     'post': 'create'
 })
 
+# Endpoint: /api/author/{AUTHOR_ID}/friends/
+# GET: get a list of authors who they are friends with
+friends_list = views.FriendsListViewSet.as_view({
+    'get': 'list'
+})
+
 # Endpoint: /api/author/{AUTHOR_ID}/followers
 # GET: get a list of authors who are their followers
 followers_list = views.FollowersListViewSet.as_view({
@@ -153,6 +159,7 @@ urlpatterns = [
     path('api/nodes/', nodes, name='nodes'),
     path('api/author/<str:author>/posts/', posts_list, name='posts-list'),
     path('api/author/<str:author>/posts/<str:id>/', posts, name='posts'),
+    path('api/author/<str:author>/friends/', friends_list, name='friends-list'),
     path('api/author/<str:receiver>/followers/', followers_list, name='followers-list'),
     path('api/author/<str:receiver>/followers/<str:sender>/', followers, name='followers'),
     path('api/author/<str:sender>/following/', following_list, name='following-list'),
