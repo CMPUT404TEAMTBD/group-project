@@ -47,5 +47,4 @@ class GetFriends(TestCase):
 
     self.assertEqual(response.status_code, status.HTTP_200_OK)
     self.assertEqual(response.data['type'], 'friends')
-    print(response.data["items"])
     self.assertEqual(response.data['items'], self.friends_obj)
