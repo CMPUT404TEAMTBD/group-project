@@ -103,13 +103,23 @@ export default function CreateEditPostModal(props: Props){
             handleRes(post)
             return post
           }).then((post: any) => {
-            // send this post to all followers
-            AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/followers/`).then((res: any) => {
-              let followingList: Author[] = res.data.items;
-              followingList.forEach(follower => {
-                AxiosWrapper.post(`${process.env.REACT_APP_API_URL}/api/author/${follower.id}/inbox/`, post.data);
+            if (visibility === PostVisibility.FRIENDS) {
+              // send this post to friends only
+              AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/friends/`).then((res: any) => {
+                let friendsList: Author[] = res.data.items;
+                friendsList.forEach(friend => {
+                  AxiosWrapper.post(`${process.env.REACT_APP_API_URL}/api/author/${friend.id}/inbox/`, post.data);
+                });
+              })
+            } else {
+              // send this post to all followers (which are friends and followers)
+              AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/followers/`).then((res: any) => {
+                let followingList: Author[] = res.data.items;
+                followingList.forEach(follower => {
+                  AxiosWrapper.post(`${process.env.REACT_APP_API_URL}/api/author/${follower.id}/inbox/`, post.data);
+                });
               });
-            });
+            }
           }).catch((error: any) => {
             setShowError(true)
           })
