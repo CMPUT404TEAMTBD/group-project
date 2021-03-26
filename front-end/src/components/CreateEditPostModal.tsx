@@ -141,7 +141,7 @@ export default function CreateEditPostModal(props: Props){
     } else if (res.status >= 200) {
       const post:Post = res.data;
       if(isCreate){
-        if(props.prependToFeed !== undefined && post.visibility === "Public"){
+        if(props.prependToFeed !== undefined && post.visibility === PostVisibility.PUBLIC){
           props.prependToFeed(post)
         }
         resetFormAndToggle()
