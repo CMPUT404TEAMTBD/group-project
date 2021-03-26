@@ -29,6 +29,8 @@ class AuthorsViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows getting all authors.
     """
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     lookup_field = 'id'
@@ -153,6 +155,8 @@ class CommentViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows comments to be viewed or edited.
     """
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     lookup_field = 'id'
@@ -217,6 +221,8 @@ class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows removing, adding, and checking followers for an author.
     """
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = Follow.objects.all()
     serializer_class = FollowSerializer
     lookup_fields = ['receiver']
@@ -290,6 +296,8 @@ class FollowingViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows removing, adding, and checking other authors an author is following.
     """
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = Following.objects.all()
     serializer_class = FollowingSerializer
 
@@ -384,6 +392,8 @@ class InboxViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows getting inbox items for an author
     """
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = Inbox.objects.all()
     serializer_class = InboxSerializer
     lookup_field = 'author'
