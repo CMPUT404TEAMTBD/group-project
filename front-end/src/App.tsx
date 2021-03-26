@@ -9,6 +9,7 @@ import AuthPage from './pages/AuthPage';
 import { LoggedInUserContext } from './contexts/LoggedInUserContext';
 import { UserLogin } from './types/UserLogin';
 import { Node } from './types/Node';
+import { AxiosWrapper } from './helpers/AxiosWrapper'
 import AuthorPage from './pages/AuthorPage';
 import SettingsPage from './pages/SettingsPage';
 import CreatePostComponent from './components/CreatePost';
@@ -41,18 +42,15 @@ function App() {
       localStorage.setItem(LOCAL_STORAGE_USER,JSON.stringify(loggedInUser));
 
       // Already have a Node for our own server.
-      if (nodes.filter(n => n.username === loggedInUser.username).length !== 0) {
+      if (nodes.filter(n => n.host === process.env.REACT_APP_API_URL).length !== 0) {
         return;
       }
 
-      // Strip http:// or https:// from our own API URL
-      const host = process.env.REACT_APP_API_URL?.replace("http://", "").replace("https://", "");
-
       // Keep track of a Node representing our own server
       setNodes([...nodes, {
-        "host": host,
-        "username": loggedInUser?.username, 
-        "password": loggedInUser?.password
+        host: process.env.REACT_APP_API_URL,
+        username: loggedInUser?.username, 
+        password: loggedInUser?.password
       } as Node])
     }
   },[loggedInUser, nodes])
@@ -60,6 +58,7 @@ function App() {
   useEffect(() => {
     console.log("Nodes: ");
     console.log(nodes);
+    AxiosWrapper.nodes = nodes;
     if (nodes.length === 0){
       localStorage.removeItem(LOCAL_STORAGE_NODES);
     } else {
@@ -85,7 +84,7 @@ function App() {
               {/* TODO: hide settings page if not logged in */}
               <Route path="/settings" render={() => <SettingsPage loggedInUser={loggedInUser} />} />
               <Route path="/create_post" render={(props) => <CreatePostComponent {...props} loggedInUser={loggedInUser} />} />
-              <Route path="/authors/:displayName" render={(props) => <AuthorResultsPage {...props} loggedInUser={loggedInUser}/>}/>
+              <Route path="/authors/:displayName" render={(props) => <AuthorResultsPage {...props} loggedInUser={loggedInUser} nodes={nodes} />}/>
               <Route path="/posts/:postId" render={(props) => <PostDetailPage {...props} loggedInUser={loggedInUser}/>}/>
               <Route component={NotFoundPage} />
             </Switch>

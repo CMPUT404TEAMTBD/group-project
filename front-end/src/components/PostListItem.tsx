@@ -6,7 +6,7 @@ import PostContentEl from './PostContentEl';
 import CreateEditPostModal from './CreateEditPostModal';
 import DeletePostModal from './DeleteModal';
 import PostDetailModal from './PostDetailModal';
-import axios from 'axios';
+import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import { Like } from '../types/Like';
 import { Author } from '../types/Author';
 
@@ -36,7 +36,7 @@ export default function PostListItem(props: Props) {
   const toggleDelete = () => setIsDeleteModalOpen(!isDeleteModalOpen);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_URL}/api/author/${post.author.id}/posts/${post.id}/likes/`).then(res => {
+    AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${post.author.id}/posts/${post.id}/likes/`).then((res: any) => {
       const resLikes: Like[] = res.data.items;
       setLikes(resLikes);
       setHasLiked(resLikes.filter((l: Like) => l.author.id === props.loggedInUser?.authorId).length !== 0);
@@ -48,8 +48,8 @@ export default function PostListItem(props: Props) {
       console.error("User is not logged in, cannot like!");
       return;
     }
-    axios.get(`${process.env.REACT_APP_API_URL}/api/auth-user/${props.loggedInUser.username}`)
-      .then(res => {
+    AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/auth-user/${props.loggedInUser.username}`)
+      .then((res: any) => {
         const author: Author = res.data;
         const like: Like = {
           type: 'like',
@@ -57,10 +57,10 @@ export default function PostListItem(props: Props) {
           object: `${process.env.REACT_APP_API_URL}/api/author/${props.post.author.id}/posts/${props.post.id}`
         }
 
-        return axios.post(`${process.env.REACT_APP_API_URL}/api/author/${props.post.author.id}/inbox/`,
+        return AxiosWrapper.post(`${props.post.author.host}api/author/${props.post.author.id}/inbox/`,
           like
         )
-      }).then(res => {
+      }).then((res: any) => {
         alert('You liked the post!');
         setHasLiked(true);
       })
