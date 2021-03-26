@@ -1,15 +1,18 @@
 import json
 from rest_framework import status
-from django.test import TestCase, Client
+from rest_framework.test import APIClient, force_authenticate
+from django.contrib.auth.models import User
+from django.test import TestCase
 from quickstart.models import Comment
 from quickstart.serializers import CommentSerializer
 from quickstart.tests.helper_test import get_test_comment_fields
 
-client = Client()
+client = APIClient()
 
 class GetAllCommentsTest(TestCase):
   """Tests for getting all comments of a given post at endpoint /api/author/<str:author>/posts/<str:post>/comments/"""
   def setUp(self):
+    client.force_authenticate(User.objects.create(username='john', password='doe'))
     self.test_post_id = 1
     self.test_other_post_id = 2
     self.comment1 = Comment.objects.create(**get_test_comment_fields(1), postId=self.test_post_id)
@@ -44,6 +47,7 @@ class CreateCommentTest(TestCase):
   """
 
   def setUp(self):
+    client.force_authenticate(User.objects.create(username='john', password='doe'))
     self.payload = get_test_comment_fields(1)
 
   def test_create_comment(self):
