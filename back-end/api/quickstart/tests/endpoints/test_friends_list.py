@@ -24,16 +24,12 @@ class GetFriends(TestCase):
     self.follows = [
       Follow.objects.create(receiver=self.author, sender=AuthorSerializer(self.friends[0]).data),
       Follow.objects.create(receiver=self.author, sender=AuthorSerializer(self.friends[1]).data),
-      Follow.objects.create(receiver=self.friends[0], sender=AuthorSerializer(self.author).data),
-      Follow.objects.create(receiver=self.friends[1], sender=AuthorSerializer(self.author).data),
       Follow.objects.create(receiver=self.author, sender=AuthorSerializer(self.other_follower).data),
     ]
 
     self.followings = [
       Following.objects.create(receiver=AuthorSerializer(self.friends[0]).data, sender=self.author),
       Following.objects.create(receiver=AuthorSerializer(self.friends[1]).data, sender=self.author),
-      Following.objects.create(receiver=AuthorSerializer(self.author).data, sender=self.friends[0]),
-      Following.objects.create(receiver=AuthorSerializer(self.author).data, sender=self.friends[1]),
       Following.objects.create(receiver=AuthorSerializer(self.other_followings).data, sender=self.author),
     ]
 

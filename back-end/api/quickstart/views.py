@@ -182,6 +182,7 @@ class FriendsListViewSet(viewsets.ModelViewSet):
                 for following in following_queryset:
                     if follow.sender["id"] == following.receiver["id"]:
                         friends.append(follow.sender)
+                        break
 
         except Author.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
