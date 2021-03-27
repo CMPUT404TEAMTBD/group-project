@@ -48,7 +48,7 @@ const CreatePostComponent = (props: any) => {
             content: content,
             categories: categories
         }
-        AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data)
+        AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data, props.loggedInUser)
         .then((res: any) => {
             if (res.status >= 400) {
                 setShowError(true)
