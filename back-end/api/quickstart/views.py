@@ -29,8 +29,7 @@ class AuthorsViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows getting all authors.
     """
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    # DO NOT AUTHENTICATION UNTIL DEEMED SAFE WITH OTHER GROUPS AFTER DEMOS
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     lookup_field = 'id'
