@@ -97,10 +97,10 @@ export default function AuthorPage(props: any) {
     if (props.loggedInUser && author?.id === props.loggedInUser.authorId) {
       return (<>
         <CardText>
-          <Button><CardLink className="text-white" href={"/author/" + props.loggedInUser.authorId + "/followers"}>Followers</CardLink></Button>
+          <Link className="text-white" to={{ pathname: `/author/${props.loggedInUser.authorId}/followers` }}><Button>Followers</Button></Link>
         </CardText>
         <CardText>
-          <Button><CardLink className="text-white" href={"/author/" + props.loggedInUser.authorId + "/following"}>Following</CardLink></Button>
+          <Link className="text-white" to={{ pathname: `/author/${props.loggedInUser.authorId}/following` }}><Button>Following</Button></Link>
         </CardText>
       </>)
     }
