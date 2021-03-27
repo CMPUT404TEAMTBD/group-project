@@ -103,23 +103,14 @@ export default function CreateEditPostModal(props: Props){
             handleRes(post)
             return post
           }).then((post: any) => {
-            if (visibility === PostVisibility.FRIENDS) {
-              // send this post to friends only
-              AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/friends/`).then((res: any) => {
-                let friendsList: Author[] = res.data.items;
-                friendsList.forEach(friend => {
-                  AxiosWrapper.post(`${friend.host}api/author/${friend.id}/inbox/`, post.data);
-                });
-              })
-            } else {
-              // send this post to all followers (which are friends and followers)
-              AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/followers/`).then((res: any) => {
-                let followingList: Author[] = res.data.items;
-                followingList.forEach(follower => {
-                  AxiosWrapper.post(`${follower.host}api/author/${follower.id}/inbox/`, post.data);
-                });
-              });
-            }
+            const promise = visibility === PostVisibility.FRIENDS ? AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/friends/`) : AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/followers/`)
+
+            return { post: post, promise: promise };
+          }).then((obj: any) => {
+            let authors: Author[] = obj.promise.data.items;
+            authors.forEach(a => {
+              AxiosWrapper.post(`${a.host}api/author/${a.id}/inbox/`, obj.post.data);
+            });
           }).catch((error: any) => {
             setShowError(true)
           })
