@@ -11,7 +11,7 @@ import {
   Label,
   Input,
 } from 'reactstrap';
-import { AxiosWrapper } from '../helpers/AxiosWrapper';
+import axios from 'axios';
 
 /**
  * Originally from
@@ -35,15 +35,12 @@ export default class RegisterForm extends React.Component {
 
 
   attemptRegister(e) {
-    AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/rest-auth/registration/", {
+    axios.post(process.env.REACT_APP_API_URL + "/api/rest-auth/registration/", {
       username: this.state.username,
       password1: this.state.password,
       password2: this.state.passwordConf
     }).then(_ => {
-      return AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/nodes/");
-    }).then(nodes => {
-      this.props.setNodes(nodes.data);
-      return AxiosWrapper.get(process.env.REACT_APP_API_URL + `/api/auth-user/${this.state.username}/`);
+      return axios.get(process.env.REACT_APP_API_URL + `/api/auth-user/${this.state.username}/`);
     }).then(user => {
       this.props.setLoggedInUser({username: this.state.username, password: this.state.password, authorId: user.data.id});
       this.props.history.push("/");

@@ -24,13 +24,13 @@ export default function FollowListPage(props: Props) {
 
   // get all followers and following
   useEffect(() => {
-    AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/followers/").then((res: any) => {
+    AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/followers/", props.loggedInUser).then((res: any) => {
       console.log(res.data.items)
       const followersList: Author[] = res.data.items;
       setFollowers(followersList);
     });
 
-    AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/following/").then((res: any) => {
+    AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/following/", props.loggedInUser).then((res: any) => {
       console.log(res.data)
       const followingList: Author[] = res.data.items;
       setFollowing(followingList);

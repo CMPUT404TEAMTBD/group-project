@@ -98,25 +98,25 @@ export default function CreateEditPostModal(props: Props){
       }
 
       if(isCreate){
-        AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data)
+        AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data, props.loggedInUser)
           .then((post: any) => {
             handleRes(post)
             return post
           }).then((post: any) => {
             if (visibility === PostVisibility.FRIENDS) {
               // send this post to friends only
-              AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/friends/`).then((res: any) => {
+              AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/friends/`, props.loggedInUser).then((res: any) => {
                 let friendsList: Author[] = res.data.items;
                 friendsList.forEach(friend => {
-                  AxiosWrapper.post(`${friend.host}api/author/${friend.id}/inbox/`, post.data);
+                  AxiosWrapper.post(`${friend.host}api/author/${friend.id}/inbox/`, post.data, props.loggedInUser);
                 });
               })
             } else {
               // send this post to all followers (which are friends and followers)
-              AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/followers/`).then((res: any) => {
+              AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/followers/`, props.loggedInUser).then((res: any) => {
                 let followingList: Author[] = res.data.items;
                 followingList.forEach(follower => {
-                  AxiosWrapper.post(`${follower.host}api/author/${follower.id}/inbox/`, post.data);
+                  AxiosWrapper.post(`${follower.host}api/author/${follower.id}/inbox/`, post.data, props.loggedInUser);
                 });
               });
             }
@@ -125,7 +125,7 @@ export default function CreateEditPostModal(props: Props){
           })
       }
       else if(props.editFields !== undefined){
-          AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data)
+          AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data, props.loggedInUser)
           .then((res: any) => {
             handleRes(res)
           }).catch((err: any) => {
