@@ -243,16 +243,12 @@ class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     def create(self, request, receiver, sender):
         try:
             author = Author.objects.get(id=receiver)
-            Follow.objects.create(receiver=author, sender=request.data)
+            Follow.objects.create(receiver=author, sender=request.data["actor"])
         except Author.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         # Save this follow to the inbox of the receiver as well
-        friend_req = {
-            'type': 'follow',
-            'actor': request.data,
-            'object': AuthorSerializer(author).data
-        }
+        friend_req = request.data
         inbox = Inbox.objects.get(author=receiver)
         inbox.items.append(friend_req)
         inbox.save()
