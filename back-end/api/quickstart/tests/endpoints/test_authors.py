@@ -11,9 +11,6 @@ client = APIClient()
 class GetAuthorById(TestCase):
   """Tests for getting all Authors at endpoint /api/authors/."""
 
-  def setUp(self):
-    client.force_authenticate(User.objects.create(username='john', password='doe'))
-
   def test_get_authors(self):
     for i in range(3):
       Author.objects.create(**get_test_author_fields())
