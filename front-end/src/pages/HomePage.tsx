@@ -25,7 +25,7 @@ export default function HomePage(props: any) {
 
   // get all public posts
   useEffect(() => {
-    AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/public-posts/").then((res: any) => {
+    AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/public-posts/", props.loggedInUser).then((res: any) => {
       const posts: Post[] = res.data;
       setPostEntries(posts);
     }).catch((err: any) => {
@@ -34,9 +34,10 @@ export default function HomePage(props: any) {
 
     // if logged in, get posts from inbox
     if (props.loggedInUser) {
-      AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/inbox/").then((res: any) => {
+      AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/inbox/", props.loggedInUser).then((res: any) => {
         const inboxPosts: Post[] = res.data.items.filter((p: Post) => { return p.type === 'post' });
-        setInboxEntries(inboxPosts);
+        // Reverse the posts so that they are in order (from newest to oldest).
+        setInboxEntries(inboxPosts.reverse());
         const likes: Like[] = res.data.items.filter((p:any) => p.type === 'like');
         setLikeEntries(likes);
       }).catch((err: any) => {

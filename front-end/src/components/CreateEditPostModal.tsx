@@ -98,24 +98,27 @@ export default function CreateEditPostModal(props: Props){
       }
 
       if(isCreate){
-        AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data)
+        let post: Post | undefined = undefined;
+        AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data, props.loggedInUser)
           .then((res: any) => {
             handleRes(res)
-            
-            const promise = visibility === PostVisibility.FRIENDS ? AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/friends/`) : AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/followers/`);
+            post = res.data;
 
-            return { post: res.data, promise: promise };
-          }).then((obj: any) => {
-            let authors: Author[] = obj.promise.data.items;
+            const urlPrefix = `${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}`;
+            const authorsUrl = visibility === PostVisibility.FRIENDS ? `${urlPrefix}/friends/` : `${urlPrefix}/followers/`;
+
+            return AxiosWrapper.get(authorsUrl, props.loggedInUser);
+          }).then((res: any) => {
+            let authors: Author[] = res.data.items;
             authors.forEach(a => {
-              AxiosWrapper.post(`${a.host}api/author/${a.id}/inbox/`, obj.post);
+              AxiosWrapper.post(`${a.host}api/author/${a.id}/inbox/`, post, props.loggedInUser);
             });
           }).catch((error: any) => {
             setShowError(true)
           })
       }
       else if(props.editFields !== undefined){
-          AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data)
+          AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data, props.loggedInUser)
           .then((res: any) => {
             handleRes(res)
           }).catch((err: any) => {

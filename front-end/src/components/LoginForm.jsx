@@ -10,7 +10,7 @@ import {
   Label,
   Input,
 } from 'reactstrap';
-import { AxiosWrapper } from '../helpers/AxiosWrapper';
+import axios from 'axios';
 
 /**
  * Originally from
@@ -33,14 +33,11 @@ export default class LoginForm extends React.Component {
 
   // attempt a login request to the Django server
   attemptLogin(e) {
-    AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/rest-auth/login/", {
+    axios.post(process.env.REACT_APP_API_URL + "/api/rest-auth/login/", {
       username: this.state.username,
       password: this.state.password
     }).then(_ => {
-      return AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/nodes/");
-    }).then(nodes => {
-      this.props.setNodes(nodes.data);
-      return AxiosWrapper.get(process.env.REACT_APP_API_URL + `/api/auth-user/${this.state.username}/`);
+      return axios.get(process.env.REACT_APP_API_URL + `/api/auth-user/${this.state.username}/`);
     }).then(user => {
       this.props.setLoggedInUser({username: this.state.username, password: this.state.password, authorId: user.data.id});
       this.props.history.push("/");

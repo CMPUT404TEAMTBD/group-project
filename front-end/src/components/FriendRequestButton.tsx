@@ -17,25 +17,25 @@ export default function FollowRequestButton(props: Props) {
 
   const sendFollowRequest = () => {
     // get the loggedinuser author object
-    AxiosWrapper.get(loggedInUserUrl).then((res: any) => {
+    AxiosWrapper.get(loggedInUserUrl, props.loggedInUser).then((res: any) => {
       if (!props.isFollower) {
-        AxiosWrapper.put(authorUrl, res.data).then((res: any) => {
+        AxiosWrapper.put(authorUrl, res.data, props.loggedInUser).then((res: any) => {
           if (res.status === 201) {
             props.setIsFollower(true);
           }
         });
-        AxiosWrapper.put(followingUrl, props.currentAuthor).then((res: any) => {
+        AxiosWrapper.put(followingUrl, props.currentAuthor, props.loggedInUser).then((res: any) => {
           if (res.status === 201) {
             console.log(props.loggedInUser?.username + " is now following " + props.currentAuthor?.displayName);
           }
         });
       } else {
-        AxiosWrapper.delete(authorUrl).then((res: any) => {
+        AxiosWrapper.delete(authorUrl, props.loggedInUser).then((res: any) => {
           if (res.status === 204) {
             props.setIsFollower(false);
           }
         });
-        AxiosWrapper.delete(followingUrl).then((res: any) => {
+        AxiosWrapper.delete(followingUrl, props.loggedInUser).then((res: any) => {
           if (res.status === 204) {
             console.log("UNFOLLOWED");
           }
