@@ -29,7 +29,7 @@ export default function AuthorResultsPage(props:any) {
     axios.get<Node[]>(nodesUrl).then(res => {
       let nodes: Node[] = res.data;
       let externalAuthors = nodes.map((n: Node) => {
-        const url = `${n.host}/api/authors/`
+        const url = `${n.host}api/authors/`
         console.log(`Getting authors from ${url}`);
         return AxiosWrapper.get(url, props.loggedInUser);
       })
