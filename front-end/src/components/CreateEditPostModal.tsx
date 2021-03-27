@@ -99,17 +99,16 @@ export default function CreateEditPostModal(props: Props){
 
       if(isCreate){
         AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data)
-          .then((post: any) => {
-            handleRes(post)
-            return post
-          }).then((post: any) => {
+          .then((res: any) => {
+            handleRes(res)
+            
             const promise = visibility === PostVisibility.FRIENDS ? AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/friends/`) : AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/followers/`);
 
-            return { post: post, promise: promise };
+            return { post: res.data, promise: promise };
           }).then((obj: any) => {
             let authors: Author[] = obj.promise.data.items;
             authors.forEach(a => {
-              AxiosWrapper.post(`${a.host}api/author/${a.id}/inbox/`, obj.post.data);
+              AxiosWrapper.post(`${a.host}api/author/${a.id}/inbox/`, obj.post);
             });
           }).catch((error: any) => {
             setShowError(true)
