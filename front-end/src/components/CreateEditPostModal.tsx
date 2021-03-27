@@ -98,28 +98,21 @@ export default function CreateEditPostModal(props: Props){
       }
 
       if(isCreate){
+        let post: Post | undefined = undefined;
         AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data, props.loggedInUser)
-          .then((post: any) => {
-            handleRes(post)
-            return post
-          }).then((post: any) => {
-            if (visibility === PostVisibility.FRIENDS) {
-              // send this post to friends only
-              AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/friends/`, props.loggedInUser).then((res: any) => {
-                let friendsList: Author[] = res.data.items;
-                friendsList.forEach(friend => {
-                  AxiosWrapper.post(`${friend.host}api/author/${friend.id}/inbox/`, post.data, props.loggedInUser);
-                });
-              })
-            } else {
-              // send this post to all followers (which are friends and followers)
-              AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/followers/`, props.loggedInUser).then((res: any) => {
-                let followingList: Author[] = res.data.items;
-                followingList.forEach(follower => {
-                  AxiosWrapper.post(`${follower.host}api/author/${follower.id}/inbox/`, post.data, props.loggedInUser);
-                });
-              });
-            }
+          .then((res: any) => {
+            handleRes(res)
+            post = res.data;
+
+            const urlPrefix = `${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}`;
+            const authorsUrl = visibility === PostVisibility.FRIENDS ? `${urlPrefix}/friends/` : `${urlPrefix}/followers/`;
+
+            return AxiosWrapper.get(authorsUrl, props.loggedInUser);
+          }).then((res: any) => {
+            let authors: Author[] = res.data.items;
+            authors.forEach(a => {
+              AxiosWrapper.post(`${a.host}api/author/${a.id}/inbox/`, post, props.loggedInUser);
+            });
           }).catch((error: any) => {
             setShowError(true)
           })
