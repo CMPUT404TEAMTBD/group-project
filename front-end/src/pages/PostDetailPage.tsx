@@ -29,10 +29,9 @@ export default function PostDetailPage(props: Props) {
   useEffect(() => {
     let getPromise;
     if (props.loggedInUser) {
-      getPromise = AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/posts/${postId}`, props.loggedInUser);
-    }
-    else {
-      getPromise = axios.get(`${process.env.REACT_APP_API_URL}/api/posts/${props.location.pathname}`);
+      getPromise = AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/posts/${postId}/`, props.loggedInUser);
+    } else {
+      getPromise = AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api${props.location.pathname}`, props.loggedInUser);
     }
     getPromise.then((res: any) => {
       const post: Post = res.data;

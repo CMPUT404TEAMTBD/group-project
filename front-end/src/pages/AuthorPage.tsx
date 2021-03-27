@@ -48,7 +48,7 @@ export default function AuthorPage(props: any) {
     if (props.loggedInUser) {
       // get whether user is follower of author IF not looking at our own profile
       if (!props.location.pathname.includes(props.loggedInUser.authorId)) {
-        AxiosWrapper.get(authorUrl + "/followers/" + props.loggedInUser.authorId, props.loggedInUser).then((res: any) => {
+        AxiosWrapper.get(`${authorUrl}/followers/${props.loggedInUser.authorId}/`, props.loggedInUser).then((res: any) => {
           setIsFollower(true);
         }).catch((err: any) => {
           // 404 is not a follower

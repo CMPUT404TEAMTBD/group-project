@@ -75,10 +75,6 @@ export default function PostListItem(props: Props) {
       : <CardLink onClick={() => likePost()}>Like</CardLink>
     : null;
 
-  if (!props.loggedInUser) {
-    console.error('You must supply the logged in user if you are editing or deleting!')
-  }
-
   const post: Post = props.post;
   return (
     <div>
