@@ -103,7 +103,7 @@ export default function CreateEditPostModal(props: Props){
             handleRes(post)
             return post
           }).then((post: any) => {
-            const promise = visibility === PostVisibility.FRIENDS ? AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/friends/`) : AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/followers/`)
+            const promise = visibility === PostVisibility.FRIENDS ? AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/friends/`) : AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/followers/`);
 
             return { post: post, promise: promise };
           }).then((obj: any) => {
