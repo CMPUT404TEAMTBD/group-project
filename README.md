@@ -1,6 +1,6 @@
 CMPUT404-group-project
 =============================
-CMPUT404 Winter 2021 group project (Team 2). Our project is to create a distributed social network!
+CMPUT404 Winter 2021 group project (Team 2). Our project is to create a distributed social network!!
 
 Group members:
 - Vinny Luu
