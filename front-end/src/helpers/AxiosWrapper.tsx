@@ -27,14 +27,11 @@ export class AxiosWrapper {
   // Given a URL, gets all Nodes from the server and returns a Promise of credentials that should be used to make requests to that URL.
   private static credentials(url: string, user: UserLogin | undefined): Promise<any> {
     if (AxiosWrapper.isLocal(url)) {
-      return Promise.resolve(user === undefined ? null : { auth: { username: user.username, password: user.password } } );
+      let credentials: any = user === undefined ? null : { auth: { username: user.username, password: user.password } };
+      return Promise.resolve(credentials);
     } else {
       return axios.get<Node[]>(AxiosWrapper.nodesUrl).then(res => AxiosWrapper.getCredentialsForUrl(url, res.data));
     }
-
-    return AxiosWrapper.isLocal(url) && user !== undefined
-      ? Promise.resolve( { auth: { username: user.username, password: user.password } } )
-      : axios.get<Node[]>(AxiosWrapper.nodesUrl).then(res => AxiosWrapper.getCredentialsForUrl(url, res.data));
   }
 
   static get(url: string, user: UserLogin | undefined): any {
