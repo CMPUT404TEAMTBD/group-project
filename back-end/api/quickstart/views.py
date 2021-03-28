@@ -162,13 +162,19 @@ class CommentViewSet(viewsets.ModelViewSet):
     lookup_field = 'id'
 
     def retrieve(self, request, author, post):
-        try:
-            queryset = Comment.objects.filter(postId=post)
-            serializer = CommentSerializer(queryset, many=True)
-        except Comment.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        queryset = Comment.objects.filter(post=post)
+        serializer = CommentSerializer(queryset, many=True)
 
         return Response(serializer.data)
+
+    def create(self, request, author, post):
+        try:
+            postObj = Post.objects.get(id=post)
+            Comment.objects.create(**request.data, post=postObj)
+        except Post.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class FriendsListViewSet(viewsets.ModelViewSet):
