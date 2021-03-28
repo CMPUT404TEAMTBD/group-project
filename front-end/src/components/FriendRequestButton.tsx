@@ -19,7 +19,12 @@ export default function FollowRequestButton(props: Props) {
     // get the loggedinuser author object
     AxiosWrapper.get(loggedInUserUrl, props.loggedInUser).then((res: any) => {
       if (!props.isFollower) {
-        AxiosWrapper.put(authorUrl, res.data, props.loggedInUser).then((res: any) => {
+        let followObject = {
+          type: "follow",
+          actor: res.data,
+          object: props.currentAuthor
+        }
+        AxiosWrapper.put(authorUrl, followObject, props.loggedInUser).then((res: any) => {
           if (res.status === 201) {
             props.setIsFollower(true);
           }

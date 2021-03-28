@@ -48,11 +48,10 @@ class Post(models.Model):
 # An Author can communicate with other Authors by commenting on posts. 
 class Comment(models.Model):
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+  post = models.ForeignKey(Post, on_delete=models.CASCADE)
   type = 'comment'
-  postId = models.TextField()
-  author = models.TextField()
+  author = models.JSONField()
   comment = models.TextField()
-  contentType = models.TextField()
   published = models.DateTimeField(default=timezone.now, editable=False)
 
 # Author A can send a Follow request to Author B when they want to
