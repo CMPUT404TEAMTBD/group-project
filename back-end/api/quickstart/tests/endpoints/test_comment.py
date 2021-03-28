@@ -58,3 +58,4 @@ class CreateCommentTest(TestCase):
     )
 
     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    self.assertTrue(Comment.objects.get(post=self.post))
