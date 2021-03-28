@@ -5,6 +5,7 @@ import { Alert, Button, Card, CardTitle, Form, FormGroup, Input, Modal, ModalBod
 import { UserLogin } from "../types/UserLogin";
 import { Author } from '../types/Author';
 import { PostComment } from '../types/PostComment';
+import CommentList from './CommentList';
 
 interface Props {
   loggedInUser: UserLogin | undefined,
@@ -41,7 +42,7 @@ export default function CommentFormElement(props: Props) {
         // Send POST request to comment on a post
         AxiosWrapper.post(`${props.postAuthor.host}api/author/${props.postAuthor.id}/posts/${props.postId}/comments/`, comment, props.loggedInUser)
           .then((res: any) => {
-            handleRes(res)
+            handleRes(res);
           }).catch((err: any) => {
             setShowError(true)
           });
