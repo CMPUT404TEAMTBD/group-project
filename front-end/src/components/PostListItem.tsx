@@ -79,8 +79,6 @@ export default function PostListItem(props: Props) {
   return (
     <div>
       <Card>
-        {/* TODO: Post image here? */}
-        {/* <CardImg top width="100%" src="/assets/318x180.svg" alt="Card image cap" /> */}
         <CardBody>
           <CardTitle onClick={() => setIsModalOpen(true)} tag="h5" style={{ cursor: 'pointer' }}>{post.title}</CardTitle>
           <CardSubtitle tag="h6" className="mb-2 text-muted">By: {post.author.displayName}</CardSubtitle>
@@ -92,7 +90,7 @@ export default function PostListItem(props: Props) {
           {LikeCardLink()}
         </CardBody>
       </Card>
-      <PostDetailModal post={post} toggle={toggle} isOpen={isModalOpen} />
+      <PostDetailModal post={post} toggle={toggle} isOpen={isModalOpen} loggedInUser={props.loggedInUser} />
       {props.loggedInUser !== undefined && isAuthorPost ? <CreateEditPostModal
         loggedInUser={props.loggedInUser}
         toggle={toggleEdit}
