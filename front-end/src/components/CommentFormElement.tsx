@@ -63,7 +63,7 @@ export default function CommentFormElement(props: Props) {
   if (!props.loggedInUser) {
     return (
       <Card body className="text-center">
-        <CardTitle>Log in to make a comment!</CardTitle>
+        <CardTitle>Log in to make and see comments!</CardTitle>
       </Card>
     )
   }

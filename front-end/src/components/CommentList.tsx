@@ -12,7 +12,7 @@ import { AxiosWrapper } from '../helpers/AxiosWrapper';
 interface Props {
   postId: string;
   postAuthor: Author;
-  loggedInUser?: UserLogin;
+  loggedInUser: UserLogin | undefined;
 }
 
 /**
