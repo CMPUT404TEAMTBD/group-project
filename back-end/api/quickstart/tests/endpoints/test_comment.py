@@ -27,6 +27,7 @@ class GetAllCommentsTest(TestCase):
 
     comments = Comment.objects.filter(post=self.post1)
     serializer = CommentSerializer(comments, many=True)
+
     self.assertEqual(response.data, serializer.data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
 

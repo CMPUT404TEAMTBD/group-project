@@ -15,7 +15,7 @@ export default function CommentListItem(props: Props) {
     // TODO: add button/logic/functionality for liking comments
     return (
         <Card >
-            <CardHeader><b>@{props.comment.author.displayName}</b></CardHeader>
+            <CardHeader className="mb-2 text-muted"><b>@{props.comment.author.displayName}</b></CardHeader>
             <CardBody>
                 {props.comment.comment}
             </CardBody>
