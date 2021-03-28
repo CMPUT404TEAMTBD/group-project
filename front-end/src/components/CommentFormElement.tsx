@@ -8,11 +8,8 @@ import { PostComment } from '../types/PostComment';
 
 interface Props {
   loggedInUser: UserLogin | undefined,
-  // isModalOpen: boolean
-  // toggle: any
   postId: string,
   postAuthor: Author,
-  //   removeFromFeed: Function
 }
 
 /**
@@ -64,7 +61,6 @@ export default function CommentFormElement(props: Props) {
   }
 
   if (!props.loggedInUser) {
-    console.log("not logged in")
     return (
       <Card body className="text-center">
         <CardTitle>Log in to make a comment!</CardTitle>
@@ -74,7 +70,7 @@ export default function CommentFormElement(props: Props) {
 
   return (
     <Card body className="text-center">
-      {showError ? <Alert>Could not add comment</Alert> : null}
+      {showError ? <Alert>Could not add comment :(</Alert> : null}
       <Form onSubmit={e => addComment(e)}>
         <FormGroup class="input-group flex-fill">
           <Input type="textarea" rows="4" name="Comment" placeholder="Write a comment! 🗣" onChange={(e: any) => setCommentContent(e.target.value)} value={commentContent} />

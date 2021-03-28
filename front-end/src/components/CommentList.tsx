@@ -25,7 +25,7 @@ export default function CommentList(props: Props) {
   const [commentList, setCommentList] = useState<PostComment[] | undefined>(undefined);
 
   useEffect(() => {
-    AxiosWrapper.get(`${props.postAuthor.url}posts/${props.postId}/comments`, props.loggedInUser).then((res: any) => {
+    AxiosWrapper.get(`${props.postAuthor.url}posts/${props.postId}/comments/`, props.loggedInUser).then((res: any) => {
       // TODO: filters for friend posts?
       console.log(res.data);
       const comments: PostComment[] = res.data;
