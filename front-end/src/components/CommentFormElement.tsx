@@ -28,7 +28,6 @@ export default function CommentFormElement(props: Props) {
 
   function addComment(e: any) {
     e.preventDefault();
-    console.log(commentContent)
 
     // Send GET request to get commenter's info
     AxiosWrapper.get(loggedInUserUrl, props.loggedInUser).then((res: any) => {
@@ -39,7 +38,6 @@ export default function CommentFormElement(props: Props) {
     }).then(() => {
       if (commenter) {
         const comment: PostComment = {
-          type: "comment",
           author: commenter,
           comment: commentContent,
         }

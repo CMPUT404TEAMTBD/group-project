@@ -2,7 +2,7 @@ import { Author } from "./Author";
 import { PostContentType } from "./Post";
 
 export interface PostComment {
-    type: string,
+    // type: string,
     author: Author,
     comment: string,
 }

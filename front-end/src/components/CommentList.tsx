@@ -25,41 +25,15 @@ export default function CommentList(props: Props) {
   const [commentList, setCommentList] = useState<PostComment[] | undefined>(undefined);
 
   useEffect(() => {
-    AxiosWrapper.get(`${props.postAuthor.url}posts/${props.postId}/comments/`, props.loggedInUser).then((res: any) => {
+    AxiosWrapper.get(`${props.postAuthor.url}posts/${props.postId}/comments`, props.loggedInUser).then((res: any) => {
       // TODO: filters for friend posts?
+      console.log(res.data);
       const comments: PostComment[] = res.data;
       // Reverse the posts so that they are in order (from newest to oldest).
       setCommentList(comments.reverse());
     }).catch((err: any) => {
       console.error(err);
     });
-    const comment1: PostComment = {
-      type: "comment",
-      author: {
-        displayName: "god",
-        github: "https://github.com/god",
-        id: "74f87354-4b60-4087-9100-f081fb7b64fe",
-        type: "author",
-        url: "http://localhost:8000/api/author/74f87354-4b60-4087-9100-f081fb7b64fe/",
-        host: "http://localhost:8000/"
-      },
-      comment: "comment 1111111111"
-    }
-    const comment2: PostComment = {
-      type: "comment",
-      author: {
-        displayName: "god",
-        github: "https://github.com/god",
-        id: "74f87354-4b60-4087-9100-f081fb7b64fe",
-        type: "author",
-        url: "http://localhost:8000/api/author/74f87354-4b60-4087-9100-f081fb7b64fe/",
-        host: "http://localhost:8000/"
-      },
-      comment: "22222222 comment 2222222222"
-    }
-    const test: PostComment[] = [comment1, comment2];
-    console.log(test);
-    setCommentList(test);
   }, []);
 
   return (
