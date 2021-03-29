@@ -32,11 +32,18 @@ def get_test_like_fields(
     'object': f'{object_id}',
   }
 
-def get_test_comment_fields(i=1):
+def get_test_comment_fields(
+  author={
+    'id': 'testId',
+    'displayName': 'John Doe',
+    'url': 'testUrl',
+    'github': 'testGithub',
+    'host': 'testHost'
+  }
+):
   return {
-    'author': f'testcommenter{i}',
+    'author': author,
     'comment': 'i am a comment',
-    'contentType': 'text/plain',
   }
 
 def get_test_post_fields(i=1, visibility="Public", unlisted=False):
