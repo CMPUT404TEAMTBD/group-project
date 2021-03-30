@@ -83,7 +83,7 @@ export default function AuthorPage(props: any) {
 
   const displayPosts = () => {
     if (props.loggedInUser) {
-      return <PostList postEntries={postEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser}  isResharable={false}/>
+      return <PostList postEntries={postEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} isResharable={true}/>
     }
   }
 

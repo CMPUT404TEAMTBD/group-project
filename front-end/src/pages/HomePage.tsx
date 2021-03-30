@@ -69,7 +69,7 @@ export default function HomePage(props: any) {
         </>
       )
     }
-    return (<PostList postEntries={inboxEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} isResharable={false}/>)
+    return (<PostList postEntries={inboxEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} isResharable={true}/>)
   }
 
   // display card that prompts log-in to be able to see inbox posts

@@ -82,7 +82,7 @@ export default function PostListItem(props: Props) {
         content: post.content,
         categories: post.categories
       }
-      AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + post.author.id + "/posts/", data, props.loggedInUser)
+      AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/posts/", data, props.loggedInUser)
         .then((res: any) => {
             if (res.status >= 400) {
                 setShowError(true)
