@@ -21,8 +21,16 @@ export default function CommentFormElement(props: Props) {
 
   const [showError, setShowError] = useState(false);
   const [commentContent, setCommentContent] = useState("");
-  const [commenter, setCommenter] = useState<Author | undefined>(undefined);
+  const [commentAuthor, setCommentAuthor] = useState<Author | undefined>(undefined);
   const loggedInUserUrl = `${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser?.authorId}/`;
+
+  if (!props.loggedInUser) {
+    return (
+      <Card body className="text-center">
+        <CardTitle>Log in to make and see comments!</CardTitle>
+      </Card>
+    )
+  }
 
   function addComment(e: any) {
     e.preventDefault();
@@ -31,12 +39,12 @@ export default function CommentFormElement(props: Props) {
     AxiosWrapper.get(loggedInUserUrl, props.loggedInUser).then((res: any) => {
       if (res.status === 200) {
         const author: Author = res.data;
-        setCommenter(author);
+        setCommentAuthor(author);
       }
     }).then(() => {
-      if (commenter) {
+      if (commentAuthor) {
         const comment: PostComment = {
-          author: commenter,
+          author: commentAuthor,
           comment: commentContent,
         }
         // Send POST request to comment on a post
@@ -59,14 +67,6 @@ export default function CommentFormElement(props: Props) {
       // Error in commenting on post
       setShowError(true)
     }
-  }
-
-  if (!props.loggedInUser) {
-    return (
-      <Card body className="text-center">
-        <CardTitle>Log in to make and see comments!</CardTitle>
-      </Card>
-    )
   }
 
   return (

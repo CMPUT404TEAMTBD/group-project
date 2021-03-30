@@ -37,11 +37,11 @@ export default function CommentList(props: Props) {
   }, []);
 
   return (
-    <>
+    <Container fluid>
       <Col>
         {commentList && commentList.map((c: PostComment) => <CommentListItem comment={c} />)}
       </Col>
-    </>
+    </Container>
   );
 }
 
