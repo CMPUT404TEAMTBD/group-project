@@ -83,21 +83,21 @@ export default function PostListItem(props: Props) {
         categories: post.categories
       }
       AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/posts/", data, props.loggedInUser)
-          .then((res: any) => {
-            post = res.data;
+        .then((res: any) => {
+          post = res.data;
 
-            const urlPrefix = `${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser?.authorId}`;
-            const authorsUrl = `${urlPrefix}/followers/`;
+          const urlPrefix = `${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser?.authorId}`;
+          const authorsUrl = `${urlPrefix}/followers/`;
 
-            return AxiosWrapper.get(authorsUrl, props.loggedInUser);
-          }).then((res: any) => {
-            let authors: Author[] = res.data.items;
-            authors.forEach(a => {
-              AxiosWrapper.post(`${a.host}api/author/${a.id}/inbox/`, post, props.loggedInUser);
-            });
-          }).catch((error: any) => {
-            setShowError(true)
-          })
+          return AxiosWrapper.get(authorsUrl, props.loggedInUser);
+        }).then((res: any) => {
+          let authors: Author[] = res.data.items;
+          authors.forEach(a => {
+            AxiosWrapper.post(`${a.host}api/author/${a.id}/inbox/`, post, props.loggedInUser);
+          });
+        }).catch((error: any) => {
+          setShowError(true)
+        })
       
   }
 
@@ -111,7 +111,7 @@ export default function PostListItem(props: Props) {
     : null;
 
   //reshare cardlink 
-  const ReshareCardLink = () => props.loggedInUser !== undefined && isAuthorPost && props.isReshareable ?<CardLink onClick={() => reshare(props.post)}>share</CardLink> : null;
+  const ReshareCardLink = () => props.loggedInUser !== undefined && props.isReshareable ?<CardLink onClick={() => reshare(props.post)}>share</CardLink> : null;
    
 
   const post: Post = props.post;
@@ -130,7 +130,6 @@ export default function PostListItem(props: Props) {
           {DeleteCardLink()}
           {LikeCardLink()}
           {ReshareCardLink()}
-          {/* {props.isReshareable ? (ReshareCardLink()): null} */}
         </CardBody>
       </Card>
       <PostDetailModal post={post} toggle={toggle} isOpen={isModalOpen} />

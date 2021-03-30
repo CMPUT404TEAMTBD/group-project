@@ -117,7 +117,7 @@ export default function HomePage(props: any) {
                   <Row>
                     <Col></Col>
                     <Col sm={8}>
-                      {<PostList postEntries={postEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} isResharable={false}/>}
+                      {<PostList postEntries={postEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} isResharable={true}/>}
                     </Col>
                     <Col></Col>
                   </Row>
