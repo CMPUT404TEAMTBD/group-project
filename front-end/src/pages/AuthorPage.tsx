@@ -36,7 +36,7 @@ export default function AuthorPage(props: any) {
 
   // After clicking the profile navlink, get the appropriate author info and data
   useEffect(() => {
-    AxiosWrapper.get(authorUrl).then((res: any) => {
+    AxiosWrapper.get(authorUrl, props.loggedInUser).then((res: any) => {
       const authorOb: Author = res.data;
       setAuthor(authorOb);
       setResponseMessage(200);
@@ -48,7 +48,7 @@ export default function AuthorPage(props: any) {
     if (props.loggedInUser) {
       // get whether user is follower of author IF not looking at our own profile
       if (!props.location.pathname.includes(props.loggedInUser.authorId)) {
-        AxiosWrapper.get(authorUrl + "/followers/" + props.loggedInUser.authorId).then((res: any) => {
+        AxiosWrapper.get(`${authorUrl}/followers/${props.loggedInUser.authorId}/`, props.loggedInUser).then((res: any) => {
           setIsFollower(true);
         }).catch((err: any) => {
           // 404 is not a follower
@@ -56,7 +56,7 @@ export default function AuthorPage(props: any) {
         });
       }
 
-      AxiosWrapper.get(authorUrl + "/posts/").then((res: any) => {
+      AxiosWrapper.get(authorUrl + "/posts/", props.loggedInUser).then((res: any) => {
         const posts: Post[] = res.data;
         setPostEntries(posts);
       }).catch((err: any) => {
@@ -97,10 +97,10 @@ export default function AuthorPage(props: any) {
     if (props.loggedInUser && author?.id === props.loggedInUser.authorId) {
       return (<>
         <CardText>
-          <Button><CardLink className="text-white" href={"/author/" + props.loggedInUser.authorId + "/followers"}>Followers</CardLink></Button>
+          <Link className="text-white" to={{ pathname: `/author/${props.loggedInUser.authorId}/followers` }}><Button>Followers</Button></Link>
         </CardText>
         <CardText>
-          <Button><CardLink className="text-white" href={"/author/" + props.loggedInUser.authorId + "/following"}>Following</CardLink></Button>
+          <Link className="text-white" to={{ pathname: `/author/${props.loggedInUser.authorId}/following` }}><Button>Following</Button></Link>
         </CardText>
       </>)
     }

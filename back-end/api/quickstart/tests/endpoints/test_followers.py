@@ -58,11 +58,16 @@ class CreateFollow(TestCase):
     self.inbox = Inbox.objects.create(author=self.receiver)
     self.sender = get_follow_author_fields()
     self.sender_id = self.sender["id"]
+    self.object = {
+      "type": "follow",
+      "actor": self.sender,
+      "object": AuthorSerializer(self.receiver).data
+    }
 
   def test_create_follow(self):
     response = client.put(
       f'/api/author/{self.receiver.id}/followers/{self.sender_id}/',
-      data=json.dumps(self.sender),
+      data=json.dumps(self.object),
       content_type='application/json'
     )
     self.assertEqual(response.status_code, status.HTTP_201_CREATED)

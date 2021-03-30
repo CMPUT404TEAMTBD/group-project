@@ -16,14 +16,14 @@ interface Props {
  * @param props 
  */
 export default function AuthorListItem(props: Props) {
-  const isFollowerUrl = `${props.author.host}api/author/${props.author.id}/followers/${props.loggedInUser?.authorId}`;
+  const isFollowerUrl = `${props.author.host}api/author/${props.author.id}/followers/${props.loggedInUser?.authorId}/`;
 
   const [isFollower, setIsFollower] = useState<boolean>(false);
 
   useEffect(() => {
     // get whether user is follower of author
     if (props.author.id !== props.loggedInUser?.authorId) {
-      AxiosWrapper.get(isFollowerUrl).then((res: any) => {
+      AxiosWrapper.get(isFollowerUrl, props.loggedInUser).then((res: any) => {
         setIsFollower(true);
       }).catch((err: any) => {
         setIsFollower(false);

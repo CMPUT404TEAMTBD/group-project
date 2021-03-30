@@ -12,6 +12,7 @@ from quickstart.serializers import AuthorSerializer, PostSerializer, FollowSeria
 from .mixins import MultipleFieldLookupMixin
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from .permissions import IsAuthenticatedOrGet
 
 
 class AuthorViewSet(viewsets.ModelViewSet):
@@ -29,8 +30,7 @@ class AuthorsViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows getting all authors.
     """
-    authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    # DO NOT AUTHENTICATION UNTIL DEEMED SAFE WITH OTHER GROUPS AFTER DEMOS
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     lookup_field = 'id'
@@ -162,13 +162,19 @@ class CommentViewSet(viewsets.ModelViewSet):
     lookup_field = 'id'
 
     def retrieve(self, request, author, post):
-        try:
-            queryset = Comment.objects.filter(postId=post)
-            serializer = CommentSerializer(queryset, many=True)
-        except Comment.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        queryset = Comment.objects.filter(post=post)
+        serializer = CommentSerializer(queryset, many=True)
 
         return Response(serializer.data)
+
+    def create(self, request, author, post):
+        try:
+            postObj = Post.objects.get(id=post)
+            Comment.objects.create(**request.data, post=postObj)
+        except Post.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class FriendsListViewSet(viewsets.ModelViewSet):
@@ -243,16 +249,12 @@ class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     def create(self, request, receiver, sender):
         try:
             author = Author.objects.get(id=receiver)
-            Follow.objects.create(receiver=author, sender=request.data)
+            Follow.objects.create(receiver=author, sender=request.data["actor"])
         except Author.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         # Save this follow to the inbox of the receiver as well
-        friend_req = {
-            'type': 'follow',
-            'actor': request.data,
-            'object': AuthorSerializer(author).data
-        }
+        friend_req = request.data
         inbox = Inbox.objects.get(author=receiver)
         inbox.items.append(friend_req)
         inbox.save()
@@ -393,7 +395,7 @@ class InboxViewSet(viewsets.ModelViewSet):
     API endpoint that allows getting inbox items for an author
     """
     authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrGet]
     queryset = Inbox.objects.all()
     serializer_class = InboxSerializer
     lookup_field = 'author'
