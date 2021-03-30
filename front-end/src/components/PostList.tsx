@@ -9,6 +9,7 @@ interface Props {
   postEntries?: Post[];
   setPostEntries: Function;
   loggedInUser?: UserLogin;
+  isResharable : Boolean;
 }
 
 /**
@@ -62,7 +63,7 @@ export default function PostList(props: Props) {
     postListElToDisplay = <p>No Entries Found</p>;
   } else {
     postListElToDisplay = props.postEntries.map((post: Post) =>
-      <PostListItem post={post} key={post.id} loggedInUser={props.loggedInUser} removeFromFeed={removeFromFeed} modifyInFeed={modifyInFeed} />
+      <PostListItem post={post} key={post.id} loggedInUser={props.loggedInUser} removeFromFeed={removeFromFeed} modifyInFeed={modifyInFeed} isReshareable={true}/>
     );
   }
 

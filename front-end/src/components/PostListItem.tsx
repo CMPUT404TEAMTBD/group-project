@@ -10,11 +10,13 @@ import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import { Like } from '../types/Like';
 import { Author } from '../types/Author';
 
+
 interface Props {
   post: Post;
   loggedInUser?: UserLogin;
   removeFromFeed: Function;
-  modifyInFeed: Function
+  modifyInFeed: Function,
+  isReshareable: Boolean;
 }
 
 /**
@@ -30,6 +32,8 @@ export default function PostListItem(props: Props) {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [likes, setLikes] = useState<Like[]>([]);
   const [hasLiked, setHasLiked] = useState<boolean>(false);
+  const [showError, setShowError] = useState(false);
+
 
   const toggle = () => setIsModalOpen(!isModalOpen);
   const toggleEdit = () => setIsEditModalOpen(!isEditModalOpen);
@@ -66,6 +70,33 @@ export default function PostListItem(props: Props) {
       })
   }
 
+  //function to reshare 
+  function reshare(post: Post): void{
+      //remove author id 
+      let data = {
+        title: post.title,
+        description: post.description,
+        visibility: post.visibility,
+        unlisted: post.unlisted,
+        contentType: post.contentType,
+        content: post.content,
+        categories: post.categories
+      }
+      AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + post.author.id + "/posts/", data, props.loggedInUser)
+        .then((res: any) => {
+            if (res.status >= 400) {
+                setShowError(true)
+            } else if (res.status === 201) {
+                //props.history.push("/")
+                console.log("Post shared")
+            }
+        }).catch((err: any) => {
+            setShowError(true)
+        })
+      console.log(post.author.id, post.id, post)
+      return;
+  }
+
 
   const EditCardLink = () => props.loggedInUser !== undefined && isAuthorPost ? <CardLink onClick={() => { setIsEditModalOpen(true); }}>Edit</CardLink> : null;
   const DeleteCardLink = () => props.loggedInUser !== undefined && isAuthorPost ? <CardLink onClick={() => { setIsDeleteModalOpen(true); }}>Delete</CardLink> : null;
@@ -74,6 +105,10 @@ export default function PostListItem(props: Props) {
       ? <CardLink >Liked</CardLink>
       : <CardLink onClick={() => likePost()}>Like</CardLink>
     : null;
+
+  //reshare cardlink 
+  const ReshareCardLink = () => props.loggedInUser !== undefined && isAuthorPost ?<CardLink onClick={() => reshare(props.post)}>share</CardLink> : null;
+   
 
   const post: Post = props.post;
   return (
@@ -90,6 +125,9 @@ export default function PostListItem(props: Props) {
           {EditCardLink()}
           {DeleteCardLink()}
           {LikeCardLink()}
+          {props.isReshareable ? (ReshareCardLink()): null}
+          
+
         </CardBody>
       </Card>
       <PostDetailModal post={post} toggle={toggle} isOpen={isModalOpen} />
