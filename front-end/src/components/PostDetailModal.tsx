@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Post } from '../types/Post';
+import { PostComment } from '../types/PostComment';
 import { UserLogin } from '../types/UserLogin';
 import CommentFormElement from './CommentFormElement';
 import CommentList from './CommentList';
@@ -19,7 +20,8 @@ interface Props {
  */
 export default function PostDetailModal(props:Props) {
   const post: Post = props.post;
-  
+
+  const [updateComment, setUpdateComment] = useState(false);
 
   return (
     <Modal isOpen={props.isOpen} toggle={props.toggle} size="lg">
@@ -32,9 +34,9 @@ export default function PostDetailModal(props:Props) {
         </div>
       </ModalBody>
       <ModalFooter>
-        <CommentFormElement loggedInUser={props.loggedInUser} postId={post.id} postAuthor={post.author} />
+        <CommentFormElement loggedInUser={props.loggedInUser} postId={post.id} postAuthor={post.author} setUpdateComment={setUpdateComment} />
       </ModalFooter>
-      {props.loggedInUser && <ModalFooter><CommentList postId={post.id} postAuthor={post.author} loggedInUser={props.loggedInUser}/></ModalFooter>}
+      {props.loggedInUser && <ModalFooter><CommentList postId={post.id} postAuthor={post.author} loggedInUser={props.loggedInUser} updateComment={updateComment} setUpdateComment={setUpdateComment}/></ModalFooter>}
     </Modal>
   );
 }

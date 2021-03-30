@@ -11,6 +11,7 @@ interface Props {
   loggedInUser: UserLogin | undefined,
   postId: string,
   postAuthor: Author,
+  setUpdateComment: Function,
 }
 
 /**
@@ -20,7 +21,7 @@ interface Props {
 export default function CommentFormElement(props: Props) {
 
   const [showError, setShowError] = useState(false);
-  const [commentContent, setCommentContent] = useState("");
+  const [commentContent, setCommentContent] = useState<string>();
   const [commentAuthor, setCommentAuthor] = useState<Author | undefined>(undefined);
   const loggedInUserUrl = `${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser?.authorId}/`;
 
@@ -34,6 +35,11 @@ export default function CommentFormElement(props: Props) {
 
   function addComment(e: any) {
     e.preventDefault();
+
+    if (!commentContent) {
+      alert("Can't make a blank comment!");
+      return;
+    }
 
     // Send GET request to get commenter's info
     AxiosWrapper.get(loggedInUserUrl, props.loggedInUser).then((res: any) => {
@@ -50,7 +56,7 @@ export default function CommentFormElement(props: Props) {
         // Send POST request to comment on a post
         AxiosWrapper.post(`${props.postAuthor.host}api/author/${props.postAuthor.id}/posts/${props.postId}/comments/`, comment, props.loggedInUser)
           .then((res: any) => {
-            handleRes(res);
+            handleRes(res, comment);
           }).catch((err: any) => {
             setShowError(true)
           });
@@ -58,11 +64,11 @@ export default function CommentFormElement(props: Props) {
     });
   }
 
-  function handleRes(res: AxiosResponse) {
+  function handleRes(res: AxiosResponse, comment: PostComment) {
     if (res.status === 201) {
       // Successfully commented on post, so clear the text box
       setCommentContent("");
-      // TODO: append the new comment to the list?
+      props.setUpdateComment(true);
     } else if (res.status >= 400) {
       // Error in commenting on post
       setShowError(true)

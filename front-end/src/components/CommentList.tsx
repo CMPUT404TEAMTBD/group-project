@@ -10,9 +10,11 @@ import CommentListItem from './CommentListItem';
 import { AxiosWrapper } from '../helpers/AxiosWrapper';
 
 interface Props {
-  postId: string;
-  postAuthor: Author;
-  loggedInUser: UserLogin | undefined;
+  postId: string,
+  postAuthor: Author,
+  loggedInUser: UserLogin | undefined,
+  setUpdateComment: Function,
+  updateComment: boolean,
 }
 
 /**
@@ -20,21 +22,28 @@ interface Props {
  * @param props 
  */
 export default function CommentList(props: Props) {
-  console.log("COMMENT LIST")
 
   const [commentList, setCommentList] = useState<PostComment[] | undefined>(undefined);
 
-  useEffect(() => {
+  function fetchComments() {
     AxiosWrapper.get(`${props.postAuthor.url}posts/${props.postId}/comments/`, props.loggedInUser).then((res: any) => {
       // TODO: filters for friend posts?
-      console.log(res.data);
       const comments: PostComment[] = res.data;
       // Reverse the posts so that they are in order (from newest to oldest).
       setCommentList(comments.reverse());
     }).catch((err: any) => {
       console.error(err);
     });
+  }
+
+  useEffect(() => {
+    fetchComments();
   }, []);
+
+  if (props.updateComment) {
+    fetchComments();
+    props.setUpdateComment(false);
+  }
 
   return (
     <Container fluid>
