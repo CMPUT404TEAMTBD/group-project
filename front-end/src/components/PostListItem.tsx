@@ -58,7 +58,7 @@ export default function PostListItem(props: Props) {
         const like: Like = {
           type: 'like',
           author: author,
-          object: `${props.post.author.host}api/author/${props.post.author.id}/posts/${props.post.id}`
+          object: `${props.post.author.host}api/author/${props.post.author.id}/posts/${props.post.id}/`
         }
 
         return AxiosWrapper.post(`${props.post.author.host}api/author/${props.post.author.id}/inbox/`,
