@@ -2,6 +2,7 @@ import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import { Button } from 'reactstrap'
 import { Author } from '../types/Author';
 import { UserLogin } from '../types/UserLogin';
+import { ResponseHelper } from '../helpers/ResponseHelper';
     
 interface Props {
     loggedInUser?: UserLogin;
@@ -25,23 +26,23 @@ export default function FollowRequestButton(props: Props) {
           object: props.currentAuthor
         }
         AxiosWrapper.put(authorUrl, followObject, props.loggedInUser).then((res: any) => {
-          if (res.status === 201) {
+          if (ResponseHelper.isSuccess(res)) {
             props.setIsFollower(true);
           }
         });
         AxiosWrapper.put(followingUrl, props.currentAuthor, props.loggedInUser).then((res: any) => {
-          if (res.status === 201) {
+          if (ResponseHelper.isSuccess(res)) {
             console.log(props.loggedInUser?.username + " is now following " + props.currentAuthor?.displayName);
           }
         });
       } else {
         AxiosWrapper.delete(authorUrl, props.loggedInUser).then((res: any) => {
-          if (res.status === 204) {
+          if (ResponseHelper.isSuccess(res)) {
             props.setIsFollower(false);
           }
         });
         AxiosWrapper.delete(followingUrl, props.loggedInUser).then((res: any) => {
-          if (res.status === 204) {
+          if (ResponseHelper.isSuccess(res)) {
             console.log("UNFOLLOWED");
           }
         });
