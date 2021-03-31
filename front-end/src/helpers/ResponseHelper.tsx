@@ -6,7 +6,7 @@ export class ResponseHelper {
     return res.status >= 200 && res.status < 300;
   }
 
-  static isRequestError = (res:AxiosResponse) => {
+  static isClientError = (res:AxiosResponse) => {
     return res.status >= 400 && res.status < 500;
   }
 
