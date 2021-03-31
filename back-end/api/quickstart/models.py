@@ -27,8 +27,8 @@ class Post(models.Model):
         ordering = ['-published']
 
   class Visibility(models.TextChoices):
-    PUBLIC = 'Public'
-    FRIENDS = 'Friends'
+    PUBLIC = 'PUBLIC'
+    FRIENDS = 'FRIENDS'
 
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   author = models.ForeignKey(Author, on_delete=models.CASCADE)

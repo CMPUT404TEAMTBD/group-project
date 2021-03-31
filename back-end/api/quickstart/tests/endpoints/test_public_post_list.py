@@ -13,25 +13,25 @@ class GetPublicPosts(TestCase):
     self.author2 = Author.objects.create(**get_test_author_fields())
 
     self.post1 = Post.objects.create(
-      **get_test_post_fields(1, visibility="Public", unlisted=False), author=self.author1
+      **get_test_post_fields(1, visibility="PUBLIC", unlisted=False), author=self.author1
     )
     self.post2 = Post.objects.create(
-      **get_test_post_fields(2, visibility="Public", unlisted=False), author=self.author2
+      **get_test_post_fields(2, visibility="PUBLIC", unlisted=False), author=self.author2
     )
     self.post3 = Post.objects.create(
-      **get_test_post_fields(3, visibility="Private", unlisted=False), author=self.author1
+      **get_test_post_fields(3, visibility="PRIVATE", unlisted=False), author=self.author1
     )
     self.post4 = Post.objects.create(
-      **get_test_post_fields(4, visibility="Private", unlisted=False), author=self.author2
+      **get_test_post_fields(4, visibility="PRIVATE", unlisted=False), author=self.author2
     )
     self.post5 = Post.objects.create(
-      **get_test_post_fields(5, visibility="Public", unlisted=True), author=self.author1
+      **get_test_post_fields(5, visibility="PUBLIC", unlisted=True), author=self.author1
     )
 
   def tests_get_all_public_posts(self):
     response = client.get(f'/api/public-posts/')
 
-    posts = Post.objects.filter(visibility='Public', unlisted=False)
+    posts = Post.objects.filter(visibility='PUBLIC', unlisted=False)
 
     serializer = PostSerializer(posts, many=True)
 

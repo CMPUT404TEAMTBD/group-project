@@ -95,7 +95,7 @@ class PostListViewSet(viewsets.ModelViewSet):
             if str(authenticated_author.id) == author:
                 queryset = Post.objects.filter(author=author)
             else:
-                queryset = Post.objects.filter(author=author, visibility="Public", unlisted=False)
+                queryset = Post.objects.filter(author=author, visibility="PUBLIC", unlisted=False)
 
             serializer = PostSerializer(queryset, many=True)
         except (Author.DoesNotExist, Post.DoesNotExist):
@@ -124,7 +124,8 @@ class PublicPostListViewSet(viewsets.ModelViewSet):
     def list(self, request):
         try:
             # TODO: Set up pagination: https://www.django-rest-framework.org/api-guide/pagination/
-            queryset = Post.objects.filter(visibility='Public', unlisted=False)
+            # Warning: visibility='PUBLIC' (single quotes) does not work.
+            queryset = Post.objects.filter(visibility="PUBLIC", unlisted=False)
             serializer = PostSerializer(queryset, many=True)
         except Post.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)

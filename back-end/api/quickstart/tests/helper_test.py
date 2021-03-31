@@ -46,7 +46,7 @@ def get_test_comment_fields(
     'comment': 'i am a comment',
   }
 
-def get_test_post_fields(i=1, visibility="Public", unlisted=False):
+def get_test_post_fields(i=1, visibility="PUBLIC", unlisted=False):
   return {
     'title': f'testpost{i}',
     'description': f'i am test post {i}',
@@ -64,7 +64,7 @@ def get_test_partial_post_fields(i=1):
     return {
     'title': f'testpost{i}',
     'description': f'i am test post {i}',
-    'visibility': "Public",
+    'visibility': "PUBLIC",
     'unlisted': True,
     'contentType': 'text/plain',
     'content': 'Hello, I am a test post',

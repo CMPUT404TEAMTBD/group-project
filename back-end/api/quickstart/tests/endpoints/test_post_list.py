@@ -19,13 +19,13 @@ class GetPosts(TestCase):
     self.user1 = User.objects.create(username='john', password='doe')
     self.author1 = Author.objects.create(**get_test_author_fields(), user=self.user1)
     self.post1 = Post.objects.create(
-      **get_test_post_fields(1, visibility="Public", unlisted=False), author=self.author1
+      **get_test_post_fields(1, visibility="PUBLIC", unlisted=False), author=self.author1
     )
     self.post2 = Post.objects.create(
-      **get_test_post_fields(2, visibility="Private", unlisted=False), author=self.author1
+      **get_test_post_fields(2, visibility="PRIVATE", unlisted=False), author=self.author1
     )
     self.post3 = Post.objects.create(
-      **get_test_post_fields(3, visibility="Public", unlisted=True), author=self.author1
+      **get_test_post_fields(3, visibility="PUBLIC", unlisted=True), author=self.author1
     )
 
     self.user2 = User.objects.create(username='mary', password='lamb')
@@ -44,7 +44,7 @@ class GetPosts(TestCase):
     self.auth_client.force_authenticate(user=self.user2)
     response = self.auth_client.get(f'/api/author/{self.author1.id}/posts/')
     
-    posts = Post.objects.filter(author=self.author1.id, visibility="Public", unlisted=False)
+    posts = Post.objects.filter(author=self.author1.id, visibility="PUBLIC", unlisted=False)
     serializer = PostSerializer(posts, many=True)
 
     self.assertEqual(response.data, serializer.data)
