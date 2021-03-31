@@ -10,7 +10,7 @@ Group members:
 - Christian Lo
 
 # Deployment Link
-Our project is not deployed on Heroku yet as we plan to deploy it for project part 2. It is currently only runnable locally. We will update this section with the deployment link once deployed on Heroku.
+Our project's back-end is deployed on Heroku [here](https://cyver.herokuapp.com/api/). The front-end is deployed on netlify [here](https://qonnectionz.netlify.app/).
 
 # Backend setup
 Assuming you already postgres installed and a superuser created, first create a postgres database for our server:
