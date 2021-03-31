@@ -3,6 +3,7 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import React, { useState } from "react";
 import { Alert, Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { UserLogin } from "../types/UserLogin";
+import { ResponseHelper } from '../helpers/ResponseHelper';
 
 interface Props {
   loggedInUser: UserLogin
@@ -33,13 +34,13 @@ export default function DeletePostModal(props: Props){
   }
 
   function handleRes(res:AxiosResponse){
-    if (res.status === 204) {
+    if (ResponseHelper.isSuccess(res)) {
       // Successfully deleted post
       if(props.removeFromFeed !== undefined){
         props.removeFromFeed(props.postID)
         props.toggle()
       }
-    } else if (res.status >= 400) {
+    } else {
       // Error in deleting post
       setShowError(true)
     }

@@ -5,6 +5,7 @@ import { Alert, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, Mo
 import { Post, PostContent, PostContentType, PostVisibility } from "../types/Post";
 import { UserLogin } from "../types/UserLogin";
 import { Author } from "../types/Author";
+import { ResponseHelper } from "../helpers/ResponseHelper"
 import PostContentEl from "./PostContentEl";
 
 interface Props {
@@ -129,9 +130,7 @@ export default function CreateEditPostModal(props: Props){
   }
 
   function handleRes(res:AxiosResponse){
-    if (res.status >= 300) {
-      setShowError(true)
-    } else if (res.status >= 200) {
+    if (ResponseHelper.isSuccess(res)) {
       const post:Post = res.data;
       if(isCreate){
         if(props.prependToFeed !== undefined && post.visibility === PostVisibility.PUBLIC){
@@ -146,6 +145,8 @@ export default function CreateEditPostModal(props: Props){
         }
         props.toggle()
       }
+    } else {
+      setShowError(true)
     }
   }
 

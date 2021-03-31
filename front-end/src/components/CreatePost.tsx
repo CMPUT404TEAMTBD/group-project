@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Alert, Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Post, PostContentType, PostVisibility } from '../types/Post';
 import { Form, Input } from 'reactstrap';
+import { ResponseHelper } from '../helpers/ResponseHelper';
 
 /**
  * Component for creating a new post
@@ -50,10 +51,10 @@ const CreatePostComponent = (props: any) => {
         }
         AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data, props.loggedInUser)
         .then((res: any) => {
-            if (res.status >= 400) {
-                setShowError(true)
-            } else if (res.status === 201) {
+            if (ResponseHelper.isSuccess(res)) {
                 props.history.push("/")
+            } else {
+                setShowError(true)
             }
         }).catch((err: any) => {
             setShowError(true)
