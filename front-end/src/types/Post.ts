@@ -1,8 +1,8 @@
 import { Author } from "./Author";
 
 export enum PostVisibility {
-  PUBLIC = 'Public',
-  FRIENDS = 'Friends'
+  PUBLIC = 'PUBLIC',
+  FRIENDS = 'FRIENDS'
 }
 
 export enum PostContentType {
