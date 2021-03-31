@@ -109,7 +109,7 @@ export default function PostListItem(props: Props) {
       ? <CardLink >Liked</CardLink>
       : <CardLink onClick={() => likePost()}>Like</CardLink>
     : null;
-  const ReshareCardLink = () => props.loggedInUser !== undefined && !isAuthorPost && props.isReshareable ?<CardLink onClick={() => reshare(props.post)}>share</CardLink> : null;
+  const ReshareCardLink = () => props.loggedInUser !== undefined && !isAuthorPost && props.isReshareable ?<CardLink onClick={() => reshare(props.post)}>Share</CardLink> : null;
    
 
   const post: Post = props.post;
