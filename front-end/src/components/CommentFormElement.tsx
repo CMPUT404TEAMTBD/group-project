@@ -1,11 +1,10 @@
 import { AxiosWrapper } from '../helpers/AxiosWrapper';
-import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import React, { useState } from "react";
+import { AxiosResponse } from 'axios';
+import { useState } from "react";
 import { Alert, Button, Card, CardTitle, Form, FormGroup, Input, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { UserLogin } from "../types/UserLogin";
 import { Author } from '../types/Author';
 import { PostComment } from '../types/PostComment';
-import CommentList from './CommentList';
 
 interface Props {
   loggedInUser: UserLogin | undefined,
@@ -79,7 +78,7 @@ export default function CommentFormElement(props: Props) {
     <Card body className="text-center">
       {showError ? <Alert>Could not add comment :(</Alert> : null}
       <Form onSubmit={e => addComment(e)}>
-        <FormGroup class="input-group flex-fill">
+        <FormGroup className="input-group flex-fill">
           <Input type="textarea" rows="4" name="Comment" placeholder="Write a comment! 🗣" onChange={(e: any) => setCommentContent(e.target.value)} value={commentContent} />
         </FormGroup>
         <FormGroup>

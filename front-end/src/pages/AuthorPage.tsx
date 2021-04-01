@@ -13,12 +13,21 @@ import {
   CardTitle,
   CardLink,
   CardText,
-  CardSubtitle,
   Button,
 } from 'reactstrap';
 import { Author } from '../types/Author';
 import FollowRequestButton from '../components/FriendRequestButton';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
+import { isValidGithub } from '../helpers/GithubHelper';
+import GithubFeed from '../components/GithubFeed';
+
+interface Props extends RouteComponentProps<MatchParams>{
+  loggedInUser?: string,
+}
+
+interface MatchParams {
+  authorId: string
+}
 
 /**
  * Author Page will render and display an author's profile - this includes information
@@ -32,7 +41,6 @@ export default function AuthorPage(props: any) {
   const [responseMessage, setResponseMessage] = useState(100);
   const [postEntries, setPostEntries] = useState<Post[] | undefined>(undefined);
   const [isFollower, setIsFollower] = useState<boolean>(false);
-  const [isFollowersListOpen, setIsFollowersListOpen] = useState<boolean>(false);
 
   // After clicking the profile navlink, get the appropriate author info and data
   useEffect(() => {
@@ -83,12 +91,6 @@ export default function AuthorPage(props: any) {
     </Container>)
   }
 
-  const displayPosts = () => {
-    if (props.loggedInUser) {
-      return <PostList postEntries={postEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} isResharable={true}/>
-    }
-  }
-
   const displayFollowButton = () => {
     if (props.loggedInUser && author?.id !== props.loggedInUser.authorId) {
       return <FollowRequestButton loggedInUser={props.loggedInUser} currentAuthor={author} isFollower={isFollower} setIsFollower={setIsFollower} />
@@ -125,7 +127,14 @@ export default function AuthorPage(props: any) {
           </Card>
         </Col>
         <Col>
-          {author && displayPosts()}
+          {author && props.loggedInUser && <PostList postEntries={postEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} isResharable={true}/>}
+          
+          {author && isValidGithub(author.github) && 
+            <>
+              <h3>Github feed</h3>
+              <GithubFeed github={author.github}/>
+            </>
+          }
         </Col>
       </Row>
     </Container>
