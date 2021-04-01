@@ -49,7 +49,7 @@ export default function PostDetailPage(props: Props) {
   return (
     <Row>
       <Col>
-        {postEntry ? <PostDetailModal post={postEntry} toggle={redirectOnToggle} isOpen={true}/>:<p>Cannot load the post!</p>}
+        {postEntry ? <PostDetailModal post={postEntry} toggle={redirectOnToggle} isOpen={true} loggedInUser={props.loggedInUser}/>:<p>Cannot load the post!</p>}
       </Col>
     </Row>
   );

@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Post } from '../types/Post';
+import { PostComment } from '../types/PostComment';
+import { UserLogin } from '../types/UserLogin';
+import CommentFormElement from './CommentFormElement';
+import CommentList from './CommentList';
 import PostContent from './PostContentEl';
 
 interface Props {
   post: Post;
   toggle: any;
   isOpen: boolean;
+  loggedInUser: UserLogin | undefined;
 }
 
 /**
@@ -16,8 +21,10 @@ interface Props {
 export default function PostDetailModal(props:Props) {
   const post: Post = props.post;
 
+  const [updateComment, setUpdateComment] = useState(false);
+
   return (
-    <Modal isOpen={props.isOpen} toggle={props.toggle}>
+    <Modal isOpen={props.isOpen} toggle={props.toggle} size="lg">
       <ModalHeader toggle={props.toggle}>{post.title}</ModalHeader>
       <ModalBody style={{wordWrap: 'break-word'}}>
         <h6 className="mb-2 text-muted">By: {post.author.displayName}</h6>
@@ -27,8 +34,9 @@ export default function PostDetailModal(props:Props) {
         </div>
       </ModalBody>
       <ModalFooter>
-        
+        <CommentFormElement loggedInUser={props.loggedInUser} postId={post.id} postAuthor={post.author} setUpdateComment={setUpdateComment} />
       </ModalFooter>
+      {props.loggedInUser && <ModalFooter><CommentList postId={post.id} postAuthor={post.author} loggedInUser={props.loggedInUser} updateComment={updateComment} setUpdateComment={setUpdateComment}/></ModalFooter>}
     </Modal>
   );
 }
