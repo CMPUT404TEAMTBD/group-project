@@ -6,6 +6,7 @@ import { UserLogin } from '../types/UserLogin';
 import CommentFormElement from './CommentFormElement';
 import CommentList from './CommentList';
 import PostContent from './PostContentEl';
+import { getDateString } from '../helpers/DateHelper';
 
 interface Props {
   post: Post;
@@ -28,6 +29,7 @@ export default function PostDetailModal(props:Props) {
       <ModalHeader toggle={props.toggle}>{post.title}</ModalHeader>
       <ModalBody style={{wordWrap: 'break-word'}}>
         <h6 className="mb-2 text-muted">By: {post.author.displayName}</h6>
+        <span className="mb-2 text-muted">{getDateString(post)}</span>
         <div>
           <p>{post.description}</p>
           <PostContent postContent={post} isPreview={false}/>
