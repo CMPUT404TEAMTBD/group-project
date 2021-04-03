@@ -94,11 +94,11 @@ const SettingsPage = (props: Props) => {
                         />
                     </FormGroup>
                     <FormGroup>
-                        <Label for="githubUrl">GitHub Username</Label>
+                        <Label for="githubUsername">GitHub Username</Label>
                         <Input
                             type="text" // TODO add URL validation
-                            name="githubUrl"
-                            id="githubUrl"
+                            name="githubUsername"
+                            id="githubUsername"
                             placeholder="New GitHub Username"
                             onChange={(e) => setGithub(e.target.value)}
                             value={github}
