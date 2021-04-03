@@ -33,7 +33,6 @@ const SettingsPage = (props: Props) => {
     useEffect(() => {
         AxiosWrapper.get(authorUrl, props.loggedInUser).then((res: any) => {
             setDisplayName(res.data.displayName);
-            setGithub(res.data.github);
             const github = res.data.github;
             // Show only the username part of the Github URL 
             setGithub(github?.substring(github.lastIndexOf("/") + 1));
