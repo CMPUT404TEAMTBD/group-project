@@ -34,6 +34,9 @@ const SettingsPage = (props: Props) => {
         AxiosWrapper.get(authorUrl, props.loggedInUser).then((res: any) => {
             setDisplayName(res.data.displayName);
             setGithub(res.data.github);
+            const github = res.data.github;
+            // Show only the username part of the Github URL 
+            setGithub(github?.substring(github.lastIndexOf("/") + 1));
         }).catch((err: any) => {
             console.error(err);
             setResponseMessage(500);
@@ -51,7 +54,7 @@ const SettingsPage = (props: Props) => {
         } else {
             AxiosWrapper.post(authorUrl, {
                 displayName,
-                github
+                github: `https://github.com/${github}`
             }, props.loggedInUser).then((res: any) => {
                 setResponseMessage(res.status);
             }).catch((err: any) => {
@@ -91,17 +94,17 @@ const SettingsPage = (props: Props) => {
                         />
                     </FormGroup>
                     <FormGroup>
-                        <Label for="githubUrl">GitHub Account</Label>
+                        <Label for="githubUrl">GitHub Username</Label>
                         <Input
                             type="text" // TODO add URL validation
                             name="githubUrl"
                             id="githubUrl"
-                            placeholder="New GitHub Account"
+                            placeholder="New GitHub Username"
                             onChange={(e) => setGithub(e.target.value)}
                             value={github}
                         />
                         <FormText color="muted">
-                            e.g. https://github.com/yourUsername
+                            e.g. johndoe
                         </FormText>
                     </FormGroup>
                     <FormGroup>
