@@ -5,7 +5,6 @@ import LikesFeed from '../components/LikesFeed';
 import PostList from '../components/PostList';
 import { Like } from '../types/Like';
 import { Post } from '../types/Post';
-import AppSidebar from '../components/AppSidebar';
 
 
 /**
