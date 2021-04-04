@@ -15,7 +15,6 @@ import AuthorResultsPage from './pages/AuthorResultsPage';
 import PostDetailPage from './pages/PostDetailPage';
 import FollowListPage from './pages/FollowListPage';
 import InboxPage from './pages/InboxPage';
-import AppSidebar from './components/AppSidebar';
 
 const LOCAL_STORAGE_USER = 'loggedInUser';
 
