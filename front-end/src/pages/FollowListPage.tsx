@@ -5,6 +5,7 @@ import { Row, Col, Card, CardBody, CardTitle, Container, Button, CardText, Nav, 
 import AuthorListItem from '../components/AuthorListItem';
 import { Author } from '../types/Author';
 import { UserLogin } from '../types/UserLogin';
+var classNames = require('classnames');
 
 interface Props extends RouteComponentProps<MatchParams> {
   loggedInUser: UserLogin | undefined,
@@ -55,29 +56,29 @@ export default function FollowListPage(props: Props) {
   };
 
   return (
-    <Container fluid>
+    <>
 
       <Row className="justify-content-md-center">
-        <Nav tabs>
+        <Nav tabs light>
           <NavItem>
-            <NavLink onClick={() => { toggle('followers') }} className="mb-2 text-muted">
-              <h2>Followers</h2>
+            <NavLink onClick={() => { toggle('followers') }} className={classNames({ active: activeTab === 'followers' })}>
+              <h3>Followers</h3>
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink onClick={() => { toggle('following') }} className="mb-2 text-muted">
-              <h2>Following</h2>
+            <NavLink onClick={() => { toggle('following') }} className={classNames({ active: activeTab === 'following' })}>
+              <h3>Following</h3>
             </NavLink>
           </NavItem>
         </Nav>
       </Row>
       <Row className="justify-content-md-center">
-        <Col sm="12" md={{ size: 6 }}>
+        <Col>
           <TabContent activeTab={activeTab}>
             <TabPane tabId="followers">
               <Container fluid>
               <Row>
-                <Col sm="12">
+                <Col>
                   {followers && displayFollowList(followers)}
                 </Col>
               </Row>
@@ -86,7 +87,7 @@ export default function FollowListPage(props: Props) {
             <TabPane tabId="following">
             <Container fluid>
               <Row>
-                <Col sm="12">
+                <Col>
                   {following && displayFollowList(following)}
                 </Col>
               </Row>
@@ -95,6 +96,6 @@ export default function FollowListPage(props: Props) {
           </TabContent>
         </Col>
       </Row>
-    </Container>
+    </>
   );
 }
