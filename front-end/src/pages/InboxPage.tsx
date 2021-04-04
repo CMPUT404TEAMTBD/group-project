@@ -7,7 +7,6 @@ import { Like } from '../types/Like';
 import { Post } from '../types/Post';
 import { Follow } from '../types/Follow';
 import AuthorListItem from '../components/AuthorListItem';
-import AppSidebar from '../components/AppSidebar';
 var classNames = require('classnames');
 
 
