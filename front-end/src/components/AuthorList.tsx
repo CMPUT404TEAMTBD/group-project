@@ -18,7 +18,7 @@ export default function AuthorList(props: Props) {
   return (
     <>
       {props.authorList?.length !== 0 ?
-       props.authorList?.map((author: Author) => <AuthorListItem author={author} loggedInUser={props.loggedInUser}></AuthorListItem>):
+       props.authorList?.map((author: Author) => <AuthorListItem author={author} loggedInUser={props.loggedInUser} key={author.id}></AuthorListItem>):
        <Card body className="text-center"><CardBody><CardTitle tag="h5" >No Authors Found :(</CardTitle></CardBody></Card>
       }
     </>
