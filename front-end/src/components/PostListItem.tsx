@@ -10,6 +10,7 @@ import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import { getDateString } from '../helpers/DateHelper';
 import { Like } from '../types/Like';
 import { Author } from '../types/Author';
+import * as icons from '../assets/Icons';
 
 
 interface Props {
@@ -103,14 +104,14 @@ export default function PostListItem(props: Props) {
   }
 
 
-  const EditCardLink = () => props.loggedInUser !== undefined && isAuthorPost ? <CardLink onClick={() => { setIsEditModalOpen(true); }}>Edit</CardLink> : null;
-  const DeleteCardLink = () => props.loggedInUser !== undefined && isAuthorPost ? <CardLink onClick={() => { setIsDeleteModalOpen(true); }}>Delete</CardLink> : null;
+  const EditCardLink = () => props.loggedInUser !== undefined && isAuthorPost ? <CardLink onClick={() => { setIsEditModalOpen(true); }}>{icons.editButtonIcon}</CardLink> : null;
+  const DeleteCardLink = () => props.loggedInUser !== undefined && isAuthorPost ? <CardLink onClick={() => { setIsDeleteModalOpen(true); }}>{icons.deleteButtonIcon}</CardLink> : null;
   const LikeCardLink = () => props.loggedInUser
     ? hasLiked
-      ? <CardLink >Liked</CardLink>
-      : <CardLink onClick={() => likePost()}>Like</CardLink>
+      ? <CardLink >{icons.likedButtonIcon}</CardLink>
+      : <CardLink onClick={() => likePost()}>{icons.likeButtonIcon}</CardLink>
     : null;
-  const ReshareCardLink = () => props.loggedInUser !== undefined && !isAuthorPost && props.isReshareable ?<CardLink onClick={() => reshare(props.post)}>Share</CardLink> : null;
+  const ReshareCardLink = () => props.loggedInUser !== undefined && !isAuthorPost && props.isReshareable ?<CardLink onClick={() => reshare(props.post)}>{icons.shareButtonIcon}</CardLink> : null;
    
 
   const post: Post = props.post;
