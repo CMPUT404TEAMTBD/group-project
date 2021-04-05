@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.scss';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { Container } from 'reactstrap';
+import { Card, CardTitle, Col, Container, Row } from 'reactstrap';
 import AppNavBar from './components/AppNavBar';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -14,6 +14,7 @@ import CreatePostComponent from './components/CreatePost';
 import AuthorResultsPage from './pages/AuthorResultsPage';
 import PostDetailPage from './pages/PostDetailPage';
 import FollowListPage from './pages/FollowListPage';
+import InboxPage from './pages/InboxPage';
 
 const LOCAL_STORAGE_USER = 'loggedInUser';
 
@@ -41,11 +42,14 @@ function App() {
       <LoggedInUserContext.Provider value={loggedInUser}>
       <BrowserRouter>
         <div>
-          <AppNavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} />
-          <Container fluid={true}>
-            <Switch>
+          <Container>
+            <Row style={{padding: '3rem'}} className="justify-content-md-center">
+              <Col xs="2"><AppNavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} /></Col>
+              <Col>
+              <Switch>
               <Route exact path="/" render={(props) => <HomePage {...props} loggedInUser={loggedInUser} />} />
               <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} />} />
+              <Route path="/inbox" render={(props) => <InboxPage {...props} loggedInUser={loggedInUser} /> } />
               <Route path="/author/:authorId/followers/" render={(props) => <FollowListPage {...props} loggedInUser={loggedInUser} activeTab={'followers'} />}/>
               <Route path="/author/:authorId/following/" render={(props) => <FollowListPage {...props} loggedInUser={loggedInUser} activeTab={'following'}/>}/>
               <Route path="/author/:authorId" render={(props) => <AuthorPage {...props} loggedInUser={loggedInUser}/>}/>
@@ -56,6 +60,8 @@ function App() {
               <Route path="/posts/:postId" render={(props) => <PostDetailPage {...props} loggedInUser={loggedInUser}/>}/>
               <Route component={NotFoundPage} />
             </Switch>
+              </Col>
+            </Row>
           </Container>
           </div>
         </BrowserRouter>

@@ -10,7 +10,13 @@ import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import { getDateString } from '../helpers/DateHelper';
 import { Like } from '../types/Like';
 import { Author } from '../types/Author';
-import * as Icons from '../assets/Icons'
+import {
+  HiHeart,
+  HiShare,
+  HiOutlineHeart,
+  HiOutlinePencil,
+  HiOutlineTrash,
+} from "react-icons/hi";
 
 
 interface Props {
@@ -104,14 +110,14 @@ export default function PostListItem(props: Props) {
   }
 
 
-  const EditCardLink = () => props.loggedInUser !== undefined && isAuthorPost ? <CardLink onClick={() => { setIsEditModalOpen(true); }}>{Icons.editButtonIcon}</CardLink> : null;
-  const DeleteCardLink = () => props.loggedInUser !== undefined && isAuthorPost ? <CardLink onClick={() => { setIsDeleteModalOpen(true); }}>{Icons.deleteButtonIcon}</CardLink> : null;
+  const EditCardLink = () => props.loggedInUser !== undefined && isAuthorPost ? <CardLink onClick={() => { setIsEditModalOpen(true); }}><HiOutlinePencil size="1.5em"/></CardLink> : null;
+  const DeleteCardLink = () => props.loggedInUser !== undefined && isAuthorPost ? <CardLink onClick={() => { setIsDeleteModalOpen(true); }}><HiOutlineTrash size="1.5em"/></CardLink> : null;
   const LikeCardLink = () => props.loggedInUser
     ? hasLiked
-      ? <CardLink >{Icons.likedButtonIcon}</CardLink>
-      : <CardLink onClick={() => likePost()}>{Icons.likeButtonIcon}</CardLink>
+      ? <CardLink><HiHeart size="1.5em"/></CardLink>
+      : <CardLink onClick={() => likePost()}><HiOutlineHeart size="1.5em"/></CardLink>
     : null;
-  const ReshareCardLink = () => props.loggedInUser !== undefined && !isAuthorPost && props.isReshareable ?<CardLink onClick={() => reshare(props.post)}>{Icons.shareButtonIcon}</CardLink> : null;
+  const ReshareCardLink = () => props.loggedInUser !== undefined && !isAuthorPost && props.isReshareable ?<CardLink onClick={() => reshare(props.post)}><HiShare size="1.5em"/></CardLink> : null;
    
 
   const post: Post = props.post;
@@ -125,10 +131,10 @@ export default function PostListItem(props: Props) {
           <CardText onClick={() => setIsModalOpen(true)}>🔥{likes.length}</CardText>
           <CardText onClick={() => setIsModalOpen(true)}>{post.description}</CardText>
           <PostContentEl postContent={post} isPreview={true} />
-          {EditCardLink()}
-          {DeleteCardLink()}
           {LikeCardLink()}
           {ReshareCardLink()}
+          {EditCardLink()}
+          {DeleteCardLink()}
         </CardBody>
       </Card>
       <PostDetailModal post={post} toggle={toggle} isOpen={isModalOpen} loggedInUser={props.loggedInUser} />

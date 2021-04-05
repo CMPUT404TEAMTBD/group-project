@@ -8,7 +8,14 @@ import {
 } from "reactstrap";
 import { NavLink } from "react-router-dom";
 import { UserLogin } from "../types/UserLogin";
-import FriendRequestListModal from "./FriendRequestListModal";
+import {
+  HiOutlineHome,
+  HiOutlineLogin,
+  HiOutlineLogout,
+  HiOutlineInbox,
+  HiOutlineCog,
+  HiOutlineUser,
+} from "react-icons/hi";
 
 interface Props {
   loggedInUser: UserLogin | undefined;
@@ -27,7 +34,6 @@ interface Props {
  */
 export default function AppNavBar(props: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isFriendRequestOpen, setIsFriendRequestOpen] = useState<boolean>(false);
 
   const toggle = () => setIsOpen(!isOpen);
   const close = () => setIsOpen(false);
@@ -40,41 +46,58 @@ export default function AppNavBar(props: Props) {
     return (
       <>
         <NavItem onClick={close}>
-          <NavLink to="#" className="nav-link" onClick={() => setIsFriendRequestOpen(!isFriendRequestOpen)}>Friend Requests</NavLink>
-          <FriendRequestListModal {...props} isFriendRequestOpen={isFriendRequestOpen} setIsFriendRequestOpen={setIsFriendRequestOpen} />
+          <NavLink to="/inbox" className="nav-link">
+            <HiOutlineInbox size="1.5em" /> Inbox
+          </NavLink>
         </NavItem>
         <NavItem onClick={close}>
-          <NavLink to="/settings" className="nav-link">Settings</NavLink>
+          <NavLink
+            to={`/author/${props.loggedInUser?.authorId}`}
+            className="nav-link"
+          >
+            <HiOutlineUser size="1.5em"/> Profile
+          </NavLink>
         </NavItem>
         <NavItem onClick={close}>
-          <NavLink to={`/author/${props.loggedInUser?.authorId}`} className="nav-link">Profile</NavLink>
+          <NavLink to="/settings" className="nav-link">
+            <HiOutlineCog size="1.5em" /> Settings
+          </NavLink>
         </NavItem>
         <NavItem onClick={close}>
-          <NavLink to="/" className="nav-link" onClick={() => logOut()}>Log Out</NavLink>
+          <NavLink to="/" className="nav-link" onClick={() => logOut()}>
+            <HiOutlineLogout size="1.5em"/> Log Out
+          </NavLink>
         </NavItem>
       </>
-    )
+    );
   }
 
   return (
     <div>
-      <Navbar color="dark" dark expand="md" >
+      <Navbar light expand="md">
         <NavbarToggler onClick={toggle} />
-        <NavLink to="/" className="navbar-brand font-title">
-          🗑🔥
-        </NavLink>
         <Collapse isOpen={isOpen} navbar>
-          <Nav className="ml-auto" navbar>
-            {
-              props.loggedInUser ?
-                loggedIn() :
-                <NavItem onClick={close}>
-                  <NavLink to="/auth/" className="nav-link">Log In</NavLink>
-                </NavItem>
-            }
+          <Nav vertical className="ml-auto" navbar>
+            <NavLink to="/" className="navbar-brand font-title">
+              🗑🔥
+            </NavLink>
+            <NavItem onClick={close}>
+              <NavLink to="/" className="nav-link">
+                <HiOutlineHome size="1.5em"/> Feed
+              </NavLink>
+            </NavItem>
+            {props.loggedInUser ? (
+              loggedIn()
+            ) : (
+              <NavItem onClick={close}>
+                <NavLink to="/auth/" className="nav-link">
+                  <HiOutlineLogin size="1.5em"/> Log In
+                </NavLink>
+              </NavItem>
+            )}
           </Nav>
         </Collapse>
       </Navbar>
     </div>
-  )
+  );
 }
