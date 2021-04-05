@@ -1,5 +1,5 @@
 import { AxiosWrapper } from '../helpers/AxiosWrapper';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Alert,
     Card,
@@ -9,6 +9,7 @@ import {
     FormGroup,
     Input,
     Label,
+    FormText,
 } from 'reactstrap';
 import { UserLogin } from '../types/UserLogin';
 interface Props {
@@ -21,43 +22,38 @@ interface Props {
  * @param props
  */
 const SettingsPage = (props: Props) => {
-    // https://reactstrap.github.io/components/form/#app
-    // https://medium.com/better-programming/easily-create-a-form-with-react-hooks-1cab17e2be0d
-    // setting state: https://stackoverflow.com/questions/45850550/accessing-data-from-axios-get-request
-
-    const initialInputState = { displayName: undefined, githubUrl: undefined };
     const authorId = props.loggedInUser ? props.loggedInUser.authorId + "/" : "";
-    const authorUrl = process.env.REACT_APP_API_URL + "/api/author/" + authorId;
-    const [eachEntry, setEachEntry] = useState(initialInputState);
-    const { displayName, githubUrl } = eachEntry;
-    const [unchangedData, setUnchangedData] = useState(initialInputState);
+    const authorUrl = `${process.env.REACT_APP_API_URL}/api/author/${authorId}`;
     const [responseMessage, setResponseMessage] = useState(100);
+    const [displayName, setDisplayName] = useState<string>();
+    const [github, setGithub] = useState<string>();
 
     // get current author data
-    function getAuthorData() {
+
+    useEffect(() => {
         AxiosWrapper.get(authorUrl, props.loggedInUser).then((res: any) => {
-            setUnchangedData(res.data);
+            setDisplayName(res.data.displayName);
+            const github = res.data.github;
+            // Show only the username part of the Github URL 
+            setGithub(github?.substring(github.lastIndexOf("/") + 1));
         }).catch((err: any) => {
             console.error(err);
             setResponseMessage(500);
-        })};
+        });
+    }, []);
 
-    const handleInputChange = (e: any) => {
-        setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
-    };
 
     // on submitting any changes, update the author's display name
     // and/or GitHub URL. Blank inputs will not change the corresponding field(s)
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        getAuthorData();
 
-        if (!displayName && !githubUrl) {
+        if (!displayName && !github) {
             setResponseMessage(400); // handle empty input
         } else {
             AxiosWrapper.post(authorUrl, {
-                displayName: !displayName ? unchangedData.displayName : displayName,
-                github: !githubUrl ? unchangedData.githubUrl : githubUrl,
+                displayName,
+                github: `https://github.com/${github}`
             }, props.loggedInUser).then((res: any) => {
                 setResponseMessage(res.status);
             }).catch((err: any) => {
@@ -92,22 +88,27 @@ const SettingsPage = (props: Props) => {
                             name="displayName"
                             id="displayName"
                             placeholder="New Display Name"
-                            onChange={handleInputChange}
+                            onChange={(e) => setDisplayName(e.target.value)}
                             value={displayName}
                         />
                     </FormGroup>
                     <FormGroup>
-                        <Label for="githubUrl">GitHub Account</Label>
+                        <Label for="githubUsername">GitHub Username</Label>
                         <Input
                             type="text" // TODO add URL validation
-                            name="githubUrl"
-                            id="githubUrl"
-                            placeholder="New GitHub Account"
-                            onChange={handleInputChange}
-                            value={githubUrl}
+                            name="githubUsername"
+                            id="githubUsername"
+                            placeholder="New GitHub Username"
+                            onChange={(e) => setGithub(e.target.value)}
+                            value={github}
                         />
+                        <FormText color="muted">
+                            e.g. johndoe
+                        </FormText>
                     </FormGroup>
-                    <Button type="submit">Submit</Button>
+                    <FormGroup>
+                        <Button type="submit">Submit</Button>
+                    </FormGroup>
                     {displayResponse()}
                 </Form>
             </CardBody>

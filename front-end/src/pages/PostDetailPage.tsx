@@ -1,8 +1,6 @@
 import { AxiosWrapper } from '../helpers/AxiosWrapper';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router';
-import { useParams } from 'react-router-dom';
 import { Row, Col } from 'reactstrap';
 import PostDetailModal from '../components/PostDetailModal';
 import { Post } from '../types/Post';
@@ -49,7 +47,7 @@ export default function PostDetailPage(props: Props) {
   return (
     <Row>
       <Col>
-        {postEntry ? <PostDetailModal post={postEntry} toggle={redirectOnToggle} isOpen={true}/>:<p>Cannot load the post!</p>}
+        {postEntry ? <PostDetailModal post={postEntry} toggle={redirectOnToggle} isOpen={true} loggedInUser={props.loggedInUser}/>:<p>Cannot load the post!</p>}
       </Col>
     </Row>
   );

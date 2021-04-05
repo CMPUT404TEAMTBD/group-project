@@ -133,7 +133,7 @@ export default function CreateEditPostModal(props: Props){
     if (ResponseHelper.isSuccess(res)) {
       const post:Post = res.data;
       if(isCreate){
-        if(props.prependToFeed !== undefined && post.visibility === PostVisibility.PUBLIC){
+        if(props.prependToFeed !== undefined && post.visibility === PostVisibility.PUBLIC && !post.unlisted){
           props.prependToFeed(post)
         }
         resetFormAndToggle()
