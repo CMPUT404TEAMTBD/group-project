@@ -1,4 +1,4 @@
-import { Card, CardBody } from "reactstrap";
+import { ListGroupItem } from "reactstrap";
 import { Like } from "../types/Like";
 
 interface Props {
@@ -11,10 +11,8 @@ interface Props {
  */
 export default function LikeListItem(props: Props) {
   return (
-    <Card>
-      <CardBody>
-        <p>{props.like.author.displayName} liked your post!</p>
-      </CardBody>
-    </Card>
-  )
+    <ListGroupItem>
+      {props.like.author.displayName} liked your post!
+    </ListGroupItem>
+  );
 }

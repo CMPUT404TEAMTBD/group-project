@@ -8,14 +8,7 @@ import {
 } from "reactstrap";
 import { NavLink } from "react-router-dom";
 import { UserLogin } from "../types/UserLogin";
-import {
-  HiOutlineHome,
-  HiOutlineLogin,
-  HiOutlineLogout,
-  HiOutlineInbox,
-  HiOutlineCog,
-  HiOutlineUser,
-} from "react-icons/hi";
+import * as Icons from '../assets/Icons';
 
 interface Props {
   loggedInUser: UserLogin | undefined;
@@ -47,7 +40,7 @@ export default function AppNavBar(props: Props) {
       <>
         <NavItem onClick={close}>
           <NavLink to="/inbox" className="nav-link">
-            <HiOutlineInbox size="1.5em" /> Inbox
+            {Icons.inboxIcon} Inbox
           </NavLink>
         </NavItem>
         <NavItem onClick={close}>
@@ -55,17 +48,17 @@ export default function AppNavBar(props: Props) {
             to={`/author/${props.loggedInUser?.authorId}`}
             className="nav-link"
           >
-            <HiOutlineUser size="1.5em"/> Profile
+            {Icons.profileIcon} Profile
           </NavLink>
         </NavItem>
         <NavItem onClick={close}>
           <NavLink to="/settings" className="nav-link">
-            <HiOutlineCog size="1.5em" /> Settings
+          {Icons.settingsIcon} Settings
           </NavLink>
         </NavItem>
         <NavItem onClick={close}>
           <NavLink to="/" className="nav-link" onClick={() => logOut()}>
-            <HiOutlineLogout size="1.5em"/> Log Out
+          {Icons.logoutIcon} Log Out
           </NavLink>
         </NavItem>
       </>
@@ -83,7 +76,7 @@ export default function AppNavBar(props: Props) {
             </NavLink>
             <NavItem onClick={close}>
               <NavLink to="/" className="nav-link">
-                <HiOutlineHome size="1.5em"/> Feed
+              {Icons.homeIcon} Feed
               </NavLink>
             </NavItem>
             {props.loggedInUser ? (
@@ -91,7 +84,7 @@ export default function AppNavBar(props: Props) {
             ) : (
               <NavItem onClick={close}>
                 <NavLink to="/auth/" className="nav-link">
-                  <HiOutlineLogin size="1.5em"/> Log In
+                {Icons.loginIcon} Log In
                 </NavLink>
               </NavItem>
             )}
