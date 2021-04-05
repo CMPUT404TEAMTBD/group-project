@@ -9,7 +9,6 @@ import {
   Alert,
   Card,
   CardBody,
-  CardImg,
   CardTitle,
   CardLink,
   CardText,
@@ -20,6 +19,7 @@ import FollowRequestButton from '../components/FriendRequestButton';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { isValidGithub } from '../helpers/GithubHelper';
 import GithubFeed from '../components/GithubFeed';
+import ProfilePic from '../components/ProfilePic';
 
 interface Props extends RouteComponentProps<MatchParams>{
   loggedInUser?: string,
@@ -74,17 +74,6 @@ export default function AuthorPage(props: any) {
     };
   }, []);
 
-  // Author's profile pic will be the same one from their GitHub
-  const profilePic = () => {
-    if (author?.github?.includes("github.com")) {
-      return <CardImg top width="100%" src={author.github + ".png"} alt="Card image cap" />
-    } else {
-      return <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-    }
-  }
-
   if (responseMessage > 299) {
     return (<Container>
       <Alert color="danger">An error occurred! Please try again</Alert>
@@ -115,7 +104,7 @@ export default function AuthorPage(props: any) {
       <Row className="justify-content-md-center">
         <Col sm={2}>
           <Card body className="text-center">
-            {profilePic()}
+            <ProfilePic author={author}/>
             <CardBody>
               <CardTitle tag="h3">{author?.displayName}</CardTitle>
               <CardText>
