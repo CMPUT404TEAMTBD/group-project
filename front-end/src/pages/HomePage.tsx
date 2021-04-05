@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, Form, Input, Label, FormGroup } from 'reactstrap';
 import PostList from '../components/PostList';
 import { Post } from '../types/Post';
-import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-
+import AuthorSearchBar from '../components/AuthorSearchBar';
 
 /**
  * Renders the homepage which will display a stream of public posts
@@ -29,11 +28,6 @@ export default function HomePage(props: any) {
     });
   }, []);
 
-  // update on search
-  function onUserSearchChange(e: any) {
-    setUserSearch(e.target.value);
-  }
-
   // search for authors with the same displayName
   function searchUsers(e: any) {
     e.preventDefault();
@@ -47,7 +41,7 @@ export default function HomePage(props: any) {
       <FormGroup row>
       <Label for="Author Search" sm={1}>{searchIcon}</Label>
         <Col>
-        <Input type="text" name="Author Search" placeholder={"Search Authors"} onChange={e => onUserSearchChange(e)} />
+          <AuthorSearchBar loggedInUser={props.loggedInUser}/>
         </Col>
       </FormGroup>
       </Form>
