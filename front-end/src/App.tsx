@@ -43,7 +43,7 @@ function App() {
       <BrowserRouter>
         <div>
           <Container>
-            <Row style={{padding: '5%'}} className="justify-content-md-center">
+            <Row style={{padding: '3rem'}} className="justify-content-md-center">
               <Col xs="2"><AppNavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} /></Col>
               <Col>
               <Switch>
