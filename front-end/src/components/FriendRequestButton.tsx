@@ -53,7 +53,7 @@ export default function FollowRequestButton(props: Props) {
 
   return (
     <>
-      <Button onClick={sendFollowRequest}>{props.isFollower ? "Unfollow" : "Follow"}</Button>
+      <Button className="list-group-item" color="link" onClick={sendFollowRequest}>{props.isFollower ? "Unfollow" : "Follow"}</Button>
     </>
   )
 
