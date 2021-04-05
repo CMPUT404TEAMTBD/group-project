@@ -1,10 +1,10 @@
 import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Form, Input, Nav, NavItem, NavLink, TabContent, Card, CardTitle, TabPane, Container, Label, FormGroup } from 'reactstrap';
-import LikesFeed from '../components/LikesFeed';
+import { Row, Col, Form, Input, Label, FormGroup } from 'reactstrap';
 import PostList from '../components/PostList';
-import { Like } from '../types/Like';
 import { Post } from '../types/Post';
+import { Typeahead } from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 
 /**
