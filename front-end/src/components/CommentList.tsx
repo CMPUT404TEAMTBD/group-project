@@ -40,10 +40,10 @@ export default function CommentList(props: Props) {
   }, []);
 
   if (props.updateComment) {
-    props.setUpdateComment(false);
     if (commentList !== undefined) {
       setCommentList([props.updateComment, ...commentList])
     }
+    props.setUpdateComment(undefined);
   }
 
   return (
