@@ -348,7 +348,7 @@ class LikesPostViewSet(viewsets.ModelViewSet):
 
     # TODO: Author is currently being ignored. Do we need to use it?
     def retrieve(self, request, author, post):
-        likes = Like.objects.filter(object__contains=post)
+        likes = Like.objects.filter(object__contains=post).exclude(object__contains="comment")
         serializer = LikeSerializer(likes, many=True)
 
         return Response({
