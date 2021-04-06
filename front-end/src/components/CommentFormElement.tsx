@@ -10,7 +10,8 @@ interface Props {
   loggedInUser: UserLogin | undefined,
   postId: string,
   postAuthor: Author,
-  setUpdateComment: Function,
+  commentList: PostComment[] | undefined,
+  setCommentList: Function,
 }
 
 /**
@@ -67,7 +68,9 @@ export default function CommentFormElement(props: Props) {
     if (res.status === 201) {
       // Successfully commented on post, so clear the text box
       setCommentContent("");
-      props.setUpdateComment(comment);
+      if (props.commentList !== undefined) {
+        props.setCommentList([comment, ...props.commentList])
+      }
     } else if (res.status >= 400) {
       // Error in commenting on post
       setShowError(true)
