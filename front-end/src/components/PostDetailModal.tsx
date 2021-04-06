@@ -22,7 +22,7 @@ interface Props {
 export default function PostDetailModal(props:Props) {
   const post: Post = props.post;
 
-  const [updateComment, setUpdateComment] = useState(false);
+  const [updateComment, setUpdateComment] = useState<PostComment | undefined>(undefined);
 
   return (
     <Modal isOpen={props.isOpen} toggle={props.toggle} size="lg">

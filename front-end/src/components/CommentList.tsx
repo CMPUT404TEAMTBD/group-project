@@ -14,7 +14,7 @@ interface Props {
   postAuthor: Author,
   loggedInUser: UserLogin | undefined,
   setUpdateComment: Function,
-  updateComment: boolean,
+  updateComment: PostComment | undefined,
 }
 
 /**
@@ -27,9 +27,8 @@ export default function CommentList(props: Props) {
 
   function fetchComments() {
     AxiosWrapper.get(`${props.postAuthor.url}posts/${props.postId}/comments/`, props.loggedInUser).then((res: any) => {
-      // TODO: filters for friend posts?
       const comments: PostComment[] = res.data;
-      // Reverse the posts so that they are in order (from newest to oldest).
+      // Reverse the comments so that they are in order (from newest to oldest).
       setCommentList(comments.reverse());
     }).catch((err: any) => {
       console.error(err);
@@ -41,8 +40,10 @@ export default function CommentList(props: Props) {
   }, []);
 
   if (props.updateComment) {
-    fetchComments();
     props.setUpdateComment(false);
+    if (commentList !== undefined) {
+      setCommentList([props.updateComment, ...commentList])
+    }
   }
 
   return (

@@ -55,7 +55,7 @@ export default function CommentFormElement(props: Props) {
         // Send POST request to comment on a post
         AxiosWrapper.post(`${props.postAuthor.host}api/author/${props.postAuthor.id}/posts/${props.postId}/comments/`, comment, props.loggedInUser)
           .then((res: any) => {
-            handleRes(res, comment);
+            handleRes(res, res.data);
           }).catch((err: any) => {
             setShowError(true)
           });
@@ -66,8 +66,10 @@ export default function CommentFormElement(props: Props) {
   function handleRes(res: AxiosResponse, comment: PostComment) {
     if (res.status === 201) {
       // Successfully commented on post, so clear the text box
+      console.log("comment is ");
+      console.log(comment);
       setCommentContent("");
-      props.setUpdateComment(true);
+      props.setUpdateComment(comment);
     } else if (res.status >= 400) {
       // Error in commenting on post
       setShowError(true)
