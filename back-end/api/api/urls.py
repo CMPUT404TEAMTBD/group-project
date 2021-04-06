@@ -166,7 +166,7 @@ urlpatterns = [
     path('api/author/<str:sender>/following/<str:receiver>/', following, name='following'),
     path('api/author/<str:author>/posts/<str:post>/comments/', comments, name='comments'),
     path('api/author/<str:author>/posts/<str:post>/likes/', likes_post, name='likes-post'),
-    path('api/author/<str:author>/posts/<str:post>/comments/<str:comment>/likes', likes_comment, name='likes-comment'),
+    path('api/author/<str:author>/posts/<str:post>/comments/<str:comment>/likes/', likes_comment, name='likes-comment'),
     path('api/author/<str:author>/liked/', liked, name='liked'),
     path('api/author/<str:author>/inbox/', inbox, name='inbox')
 ]
