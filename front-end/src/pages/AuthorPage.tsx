@@ -65,14 +65,6 @@ export default function AuthorPage(props: any) {
     };
   }, []);
 
-  // Author's profile pic will be the same one from their GitHub
-  const profilePic = (github: string | undefined) => {
-    if (github && github.split('https://github.com/').pop()) {
-      return <CardImg top width="100%" src={github + ".png"} alt="Card image cap" />
-    } else {
-      return <CardBody>{Icons.defaultProfilePic}</CardBody>;
-    }
-  }
 
   if (responseMessage > 299) {
     return (<Container>
@@ -83,10 +75,7 @@ export default function AuthorPage(props: any) {
 
   const displayProfileButtons = () => {
     if (props.loggedInUser && author?.id === props.loggedInUser.authorId) {
-      return (<>
-        <ListGroupItem tag="a" href={`/author/${props.loggedInUser.authorId}/followers`}>Followers</ListGroupItem>
-        <ListGroupItem tag="a" href={`/author/${props.loggedInUser.authorId}/following`}>Following</ListGroupItem>
-      </>)
+      return <ListGroupItem tag="a" href={`/author/${props.loggedInUser.authorId}/followers`}>Follows</ListGroupItem>
     } else {
       return <FollowRequestButton loggedInUser={props.loggedInUser} currentAuthor={author} isFollower={isFollower} setIsFollower={setIsFollower} />
     }
