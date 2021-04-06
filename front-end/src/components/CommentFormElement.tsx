@@ -45,11 +45,12 @@ export default function CommentFormElement(props: Props) {
       if (res.status === 200) {
         const author: Author = res.data;
         setCommentAuthor(author);
+        return author;
       }
-    }).then(() => {
-      if (commentAuthor) {
+    }).then((author: any) => {
+      if (author) {
         const comment: PostComment = {
-          author: commentAuthor,
+          author,
           comment: commentContent,
         }
         // Send POST request to comment on a post
