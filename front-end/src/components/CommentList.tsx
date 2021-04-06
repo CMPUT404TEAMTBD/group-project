@@ -1,8 +1,13 @@
 import { Col, Container } from 'reactstrap';
+import { UserLogin } from '../types/UserLogin';
+import { Author } from '../types/Author';
 import { PostComment } from '../types/PostComment';
 import CommentListItem from './CommentListItem';
 
 interface Props {
+  loggedInUser: UserLogin | undefined,
+  postId: string,
+  postAuthor: Author,
   commentList: PostComment[] | undefined,
 }
 

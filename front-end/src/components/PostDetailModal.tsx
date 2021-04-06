@@ -53,7 +53,7 @@ export default function PostDetailModal(props:Props) {
       <ModalFooter>
         <CommentFormElement loggedInUser={props.loggedInUser} postId={post.id} postAuthor={post.author} commentList={commentList} setCommentList={setCommentList} />
       </ModalFooter>
-      {props.loggedInUser && <ModalFooter><CommentList commentList={commentList} /></ModalFooter>}
+      {props.loggedInUser && <ModalFooter><CommentList loggedInUser={props.loggedInUser} postId={post.id} postAuthor={post.author} commentList={commentList} /></ModalFooter>}
     </Modal>
   );
 }
