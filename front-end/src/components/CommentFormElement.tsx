@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Alert, Button, Card, CardTitle, Form, FormGroup, Input, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { UserLogin } from "../types/UserLogin";
 import { Author } from '../types/Author';
-import { PostComment } from '../types/PostComment';
 
 interface Props {
   loggedInUser: UserLogin | undefined,
@@ -48,14 +47,14 @@ export default function CommentFormElement(props: Props) {
       }
     }).then(() => {
       if (commentAuthor) {
-        const comment: PostComment = {
-          author: commentAuthor,
-          comment: commentContent,
+        const comment = {
+          "author": commentAuthor,
+          "comment": commentContent,
         }
         // Send POST request to comment on a post
         AxiosWrapper.post(`${props.postAuthor.host}api/author/${props.postAuthor.id}/posts/${props.postId}/comments/`, comment, props.loggedInUser)
           .then((res: any) => {
-            handleRes(res, comment);
+            handleRes(res);
           }).catch((err: any) => {
             setShowError(true)
           });
@@ -63,7 +62,7 @@ export default function CommentFormElement(props: Props) {
     });
   }
 
-  function handleRes(res: AxiosResponse, comment: PostComment) {
+  function handleRes(res: AxiosResponse) {
     if (res.status === 201) {
       // Successfully commented on post, so clear the text box
       setCommentContent("");

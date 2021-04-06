@@ -13,7 +13,7 @@ export default function LikeListItem(props: Props) {
   return (
     <Card>
       <CardBody>
-        <p>{props.like.author.displayName} liked your post!</p>
+        <p>{props.like.author.displayName} liked your {props.like.object.includes("comment") ? "comment" : "post"}!</p>
       </CardBody>
     </Card>
   )
