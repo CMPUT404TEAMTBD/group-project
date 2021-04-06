@@ -4,12 +4,14 @@ import { useState } from "react";
 import { Alert, Button, Card, CardTitle, Form, FormGroup, Input, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { UserLogin } from "../types/UserLogin";
 import { Author } from '../types/Author';
+import { PostComment } from '../types/PostComment'
 
 interface Props {
   loggedInUser: UserLogin | undefined,
   postId: string,
   postAuthor: Author,
-  setUpdateComment: Function,
+  commentList: PostComment[] | undefined,
+  setCommentList: Function,
 }
 
 /**
@@ -44,6 +46,7 @@ export default function CommentFormElement(props: Props) {
       if (res.status === 200) {
         const author: Author = res.data;
         setCommentAuthor(author);
+        return author;
       }
     }).then(() => {
       if (commentAuthor) {
@@ -54,7 +57,7 @@ export default function CommentFormElement(props: Props) {
         // Send POST request to comment on a post
         AxiosWrapper.post(`${props.postAuthor.host}api/author/${props.postAuthor.id}/posts/${props.postId}/comments/`, comment, props.loggedInUser)
           .then((res: any) => {
-            handleRes(res);
+            handleRes(res, res.data);
           }).catch((err: any) => {
             setShowError(true)
           });
@@ -62,11 +65,13 @@ export default function CommentFormElement(props: Props) {
     });
   }
 
-  function handleRes(res: AxiosResponse) {
+  function handleRes(res: AxiosResponse, comment: PostComment) {
     if (res.status === 201) {
       // Successfully commented on post, so clear the text box
       setCommentContent("");
-      props.setUpdateComment(true);
+      if (props.commentList !== undefined) {
+        props.setCommentList([comment, ...props.commentList])
+      }
     } else if (res.status >= 400) {
       // Error in commenting on post
       setShowError(true)

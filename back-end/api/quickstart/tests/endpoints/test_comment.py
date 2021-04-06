@@ -57,5 +57,7 @@ class CreateCommentTest(TestCase):
       content_type='application/json'
     )
 
+    comment = Comment.objects.get(post=self.post)
+    self.assertTrue(comment)
     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-    self.assertTrue(Comment.objects.get(post=self.post))
+    self.assertEqual(response.data, CommentSerializer(comment).data)

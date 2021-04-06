@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Post } from '../types/Post';
 import { PostComment } from '../types/PostComment';
@@ -7,6 +7,7 @@ import CommentFormElement from './CommentFormElement';
 import CommentList from './CommentList';
 import PostContent from './PostContentEl';
 import { getDateString } from '../helpers/DateHelper';
+import { AxiosWrapper } from '../helpers/AxiosWrapper';
 
 interface Props {
   post: Post;
@@ -22,7 +23,21 @@ interface Props {
 export default function PostDetailModal(props:Props) {
   const post: Post = props.post;
 
-  const [updateComment, setUpdateComment] = useState(false);
+  const [commentList, setCommentList] = useState<PostComment[] | undefined>(undefined);
+
+  function fetchComments() {
+    AxiosWrapper.get(`${post.author.url}posts/${post.id}/comments/`, props.loggedInUser).then((res: any) => {
+      const comments: PostComment[] = res.data;
+      // Reverse the comments so that they are in order (from newest to oldest).
+      setCommentList(comments.reverse());
+    }).catch((err: any) => {
+      console.error(err);
+    });
+  }
+
+  useEffect(() => {
+    fetchComments();
+  }, []);
 
   return (
     <Modal isOpen={props.isOpen} toggle={props.toggle} size="lg">
@@ -36,9 +51,9 @@ export default function PostDetailModal(props:Props) {
         </div>
       </ModalBody>
       <ModalFooter>
-        <CommentFormElement loggedInUser={props.loggedInUser} postId={post.id} postAuthor={post.author} setUpdateComment={setUpdateComment} />
+        <CommentFormElement loggedInUser={props.loggedInUser} postId={post.id} postAuthor={post.author} commentList={commentList} setCommentList={setCommentList} />
       </ModalFooter>
-      {props.loggedInUser && <ModalFooter><CommentList postId={post.id} postAuthor={post.author} loggedInUser={props.loggedInUser} updateComment={updateComment} setUpdateComment={setUpdateComment}/></ModalFooter>}
+      {props.loggedInUser && <ModalFooter><CommentList loggedInUser={props.loggedInUser} postId={post.id} postAuthor={post.author} commentList={commentList} /></ModalFooter>}
     </Modal>
   );
 }

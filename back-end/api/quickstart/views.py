@@ -171,11 +171,12 @@ class CommentViewSet(viewsets.ModelViewSet):
     def create(self, request, author, post):
         try:
             postObj = Post.objects.get(id=post)
-            Comment.objects.create(**request.data, post=postObj)
+            comment = Comment.objects.create(**request.data, post=postObj)
+            serializer = CommentSerializer(comment)
         except Post.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        return Response(status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class FriendsListViewSet(viewsets.ModelViewSet):
@@ -348,7 +349,7 @@ class LikesPostViewSet(viewsets.ModelViewSet):
 
     # TODO: Author is currently being ignored. Do we need to use it?
     def retrieve(self, request, author, post):
-        likes = Like.objects.filter(object__contains=post)
+        likes = Like.objects.filter(object__contains=post).exclude(object__contains="comment")
         serializer = LikeSerializer(likes, many=True)
 
         return Response({

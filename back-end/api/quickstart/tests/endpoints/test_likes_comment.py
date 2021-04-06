@@ -8,7 +8,7 @@ from quickstart.tests.helper_test import get_test_like_fields
 client = Client()
 
 class GetLikesForComment(TestCase):
-  """Tests for getting all likes of a comment at endpoint api/author/<str:author>/posts/<str:post>/comments/<str:comment>/likes."""
+  """Tests for getting all likes of a comment at endpoint api/author/<str:author>/posts/<str:post>/comments/<str:comment>/likes/."""
   def setUp(self):
     self.test_comment_id = 1
     self.like1 = Like.objects.create(**get_test_like_fields(object_id=self.test_comment_id))
@@ -18,7 +18,7 @@ class GetLikesForComment(TestCase):
     self.likes = [self.like1, self.like2]
 
   def test_get_likes_for_comment(self):
-    response = client.get(f'/api/author/authorId/posts/postId/comments/{self.test_comment_id}/likes')
+    response = client.get(f'/api/author/authorId/posts/postId/comments/{self.test_comment_id}/likes/')
 
     likes = Like.objects.filter(object__contains=self.test_comment_id)
     serializer = LikeSerializer(likes, many=True)
