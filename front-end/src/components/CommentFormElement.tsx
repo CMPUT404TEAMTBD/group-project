@@ -10,7 +10,8 @@ interface Props {
   loggedInUser: UserLogin | undefined,
   postId: string,
   postAuthor: Author,
-  setUpdateComment: Function,
+  commentList: PostComment[] | undefined,
+  setCommentList: Function,
 }
 
 /**
@@ -56,7 +57,7 @@ export default function CommentFormElement(props: Props) {
         // Send POST request to comment on a post
         AxiosWrapper.post(`${props.postAuthor.host}api/author/${props.postAuthor.id}/posts/${props.postId}/comments/`, comment, props.loggedInUser)
           .then((res: any) => {
-            handleRes(res, comment);
+            handleRes(res, res.data);
           }).catch((err: any) => {
             setShowError(true)
           });
@@ -68,7 +69,9 @@ export default function CommentFormElement(props: Props) {
     if (res.status === 201) {
       // Successfully commented on post, so clear the text box
       setCommentContent("");
-      props.setUpdateComment(true);
+      if (props.commentList !== undefined) {
+        props.setCommentList([comment, ...props.commentList])
+      }
     } else if (res.status >= 400) {
       // Error in commenting on post
       setShowError(true)

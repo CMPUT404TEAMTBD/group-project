@@ -171,11 +171,12 @@ class CommentViewSet(viewsets.ModelViewSet):
     def create(self, request, author, post):
         try:
             postObj = Post.objects.get(id=post)
-            Comment.objects.create(**request.data, post=postObj)
+            comment = Comment.objects.create(**request.data, post=postObj)
+            serializer = CommentSerializer(comment)
         except Post.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        return Response(status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class FriendsListViewSet(viewsets.ModelViewSet):
