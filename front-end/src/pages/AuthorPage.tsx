@@ -8,10 +8,10 @@ import {
   Alert,
   Card,
   CardImg,
+  CardBody,
   CardTitle,
   ListGroup,
   ListGroupItem,
-  CardBody,
 } from 'reactstrap';
 import { Author } from '../types/Author';
 import FollowRequestButton from '../components/FriendRequestButton';
@@ -19,6 +19,7 @@ import { Link, NavLink, RouteComponentProps } from 'react-router-dom';
 import { isValidGithub } from '../helpers/GithubHelper';
 import GithubFeed from '../components/GithubFeed';
 import * as Icons from '../assets/Icons';
+import ProfilePic from '../components/ProfilePic';
 
 interface Props extends RouteComponentProps<MatchParams>{
   loggedInUser?: string,
@@ -38,7 +39,6 @@ export default function AuthorPage(props: any) {
   const authorUrl = process.env.REACT_APP_API_URL + "/api" + props.location.pathname;
   const [author, setAuthor] = useState<Author | undefined>(undefined);
   const [responseMessage, setResponseMessage] = useState(100);
-  const [postEntries, setPostEntries] = useState<Post[] | undefined>(undefined);
   const [isFollower, setIsFollower] = useState<boolean>(false);
 
   // After clicking the profile navlink, get the appropriate author info and data
@@ -62,14 +62,6 @@ export default function AuthorPage(props: any) {
           setIsFollower(false);
         });
       }
-
-      AxiosWrapper.get(authorUrl + "/posts/", props.loggedInUser).then((res: any) => {
-        const posts: Post[] = res.data;
-        setPostEntries(posts);
-      }).catch((err: any) => {
-        console.error("ERROR GETTING POSTS");
-        setResponseMessage(500);
-      })
     };
   }, []);
 
@@ -112,7 +104,7 @@ export default function AuthorPage(props: any) {
           <Card body className="text-center">
             <Row>
               <Col sm={3}>
-                {profilePic(author?.github)}
+              <ProfilePic author={author}/>
                 <ListGroup>
                   {displayProfileButtons()}
                   <ListGroupItem tag="a" href={author ? author.github : "#"}>
