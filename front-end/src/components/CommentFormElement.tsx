@@ -66,8 +66,6 @@ export default function CommentFormElement(props: Props) {
   function handleRes(res: AxiosResponse, comment: PostComment) {
     if (res.status === 201) {
       // Successfully commented on post, so clear the text box
-      console.log("comment is ");
-      console.log(comment);
       setCommentContent("");
       props.setUpdateComment(comment);
     } else if (res.status >= 400) {
