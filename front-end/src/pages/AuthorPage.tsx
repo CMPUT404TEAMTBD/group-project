@@ -35,9 +35,7 @@ interface MatchParams {
  * @param props 
  */
 export default function AuthorPage(props: any) {
-  // TODO: don't use props.location.pathname
-
-  const authorUrl = `${props.location.state.host}api/author/${props.location.state.id}`;
+  const authorUrl = `${props.location.state.host}api/author/${props.location.state.id}/`;
   const [author, setAuthor] = useState<Author | undefined>(undefined);
   const [responseMessage, setResponseMessage] = useState(100);
   const [isFollower, setIsFollower] = useState<boolean>(false);
