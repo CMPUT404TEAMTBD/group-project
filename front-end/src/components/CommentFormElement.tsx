@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Alert, Button, Card, CardTitle, Form, FormGroup, Input, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 import { UserLogin } from "../types/UserLogin";
 import { Author } from '../types/Author';
-import { PostComment } from '../types/PostComment'
+import { PostComment } from '../types/PostComment';
 
 interface Props {
   loggedInUser: UserLogin | undefined,
