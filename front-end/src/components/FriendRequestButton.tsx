@@ -12,6 +12,7 @@ interface Props {
 }
 
 export default function FollowRequestButton(props: Props) {
+  // TODO: fix author URL so we can handle foreign authors
   const authorUrl = `${props.currentAuthor?.host}api/author/${props.currentAuthor?.id}/followers/${props.loggedInUser?.authorId}/`;
   const loggedInUserUrl = `${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser?.authorId}/`;
   const followingUrl = `${loggedInUserUrl}following/${props.currentAuthor?.id}/`;
@@ -53,7 +54,7 @@ export default function FollowRequestButton(props: Props) {
 
   return (
     <>
-      <Button onClick={sendFollowRequest}>{props.isFollower ? "Unfollow" : "Follow"}</Button>
+      <Button className="list-group-item" color="link" onClick={sendFollowRequest}>{props.isFollower ? "Unfollow" : "Follow"}</Button>
     </>
   )
 

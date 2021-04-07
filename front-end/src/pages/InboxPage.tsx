@@ -8,11 +8,7 @@ import { Post } from '../types/Post';
 import { Follow } from '../types/Follow';
 import AuthorListItem from '../components/AuthorListItem';
 import clsx from 'clsx'; 
-import {
-  HiOutlineHeart,
-  HiOutlineMail,
-  HiOutlineUsers,
-} from "react-icons/hi";
+import * as Icons from '../assets/Icons';
 
 
 /**
@@ -80,22 +76,22 @@ export default function HomePage(props: any) {
             <NavItem>
               <NavLink
                 className={clsx({ active: activeTab === "postsTab" })}
-                onClick={() => toggle("postsTab")} >
-                <HiOutlineMail color="black" size="1.5em"/> Posts
+                onClick={() => toggle("postsTab")}>
+                {Icons.mailIcon} Posts
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink
                 className={clsx({ active: activeTab === "followsTab" })}
-                onClick={() => toggle("followsTab")} >
-                <HiOutlineUsers color="black" size="1.5em"/> Follows
+                onClick={() => toggle("followsTab")}>
+                {Icons.peopleIcon} Follows
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink
                 className={clsx({ active: activeTab === "likesTab" })}
-                onClick={() => toggle("likesTab")} >
-                <HiOutlineHeart color="black" size="1.5em"/> Likes
+                onClick={() => toggle("likesTab")}>
+                {Icons.likeButtonIcon} Likes
               </NavLink>
             </NavItem>
           </Nav>
@@ -105,40 +101,40 @@ export default function HomePage(props: any) {
         <Col className="justify-content-md-center">
           <TabContent activeTab={activeTab}>
             <TabPane tabId="postsTab">
-              <Container>
-                <Row>
-                  <Col>
-                    {props.loggedInUser ? displayInboxPosts() : displayLoginMessage()}
-                  </Col>
-                </Row>
-              </Container>
+              <Row style={{ padding: "1rem" }}>
+                <Col>
+                  {props.loggedInUser
+                    ? displayInboxPosts()
+                    : displayLoginMessage()}
+                </Col>
+              </Row>
             </TabPane>
             <TabPane tabId="followsTab">
-              <Container>
-                <Row>
-                  <Col>
-                    {friendReqEntries?.length !== 0 ? (
-                      friendReqEntries?.map((follow: Follow) => (
-                        <AuthorListItem author={follow.actor} loggedInUser={props.loggedInUser}></AuthorListItem>))
-                    ) : (
-                      <Card body className="text-center">
-                        <CardBody>
-                          <CardTitle tag="h5">No Friend Requests :(</CardTitle>
-                        </CardBody>
-                      </Card>
-                    )}
-                  </Col>
-                </Row>
-              </Container>
+              <Row style={{ padding: "1rem" }}>
+                <Col>
+                  {friendReqEntries?.length !== 0 ? (
+                    friendReqEntries?.map((follow: Follow) => (
+                      <AuthorListItem
+                        author={follow.actor}
+                        loggedInUser={props.loggedInUser}
+                      ></AuthorListItem>
+                    ))
+                  ) : (
+                    <Card body className="text-center">
+                      <CardBody>
+                        <CardTitle tag="h5">No Friend Requests :(</CardTitle>
+                      </CardBody>
+                    </Card>
+                  )}
+                </Col>
+              </Row>
             </TabPane>
             <TabPane tabId="likesTab">
-              <Container>
-                <Row>
-                  <Col>
-                    <LikesFeed likesList={likeEntries}></LikesFeed>
-                  </Col>
-                </Row>
-              </Container>
+              <Row style={{ padding: "1rem" }}>
+                <Col>
+                  <LikesFeed likesList={likeEntries}></LikesFeed>
+                </Col>
+              </Row>
             </TabPane>
           </TabContent>
         </Col>

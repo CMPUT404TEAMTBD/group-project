@@ -1,6 +1,5 @@
 import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import React, { useEffect, useState } from 'react';
-import PostList from '../components/PostList';
 import { Post } from '../types/Post';
 import {
   Col,
@@ -8,17 +7,18 @@ import {
   Row,
   Alert,
   Card,
+  CardImg,
   CardBody,
   CardTitle,
-  CardLink,
-  CardText,
-  Button,
+  ListGroup,
+  ListGroupItem,
 } from 'reactstrap';
 import { Author } from '../types/Author';
 import FollowRequestButton from '../components/FriendRequestButton';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, NavLink, RouteComponentProps } from 'react-router-dom';
 import { isValidGithub } from '../helpers/GithubHelper';
 import GithubFeed from '../components/GithubFeed';
+import * as Icons from '../assets/Icons';
 import ProfilePic from '../components/ProfilePic';
 
 interface Props extends RouteComponentProps<MatchParams>{
@@ -39,7 +39,6 @@ export default function AuthorPage(props: any) {
   const authorUrl = process.env.REACT_APP_API_URL + "/api" + props.location.pathname;
   const [author, setAuthor] = useState<Author | undefined>(undefined);
   const [responseMessage, setResponseMessage] = useState(100);
-  const [postEntries, setPostEntries] = useState<Post[] | undefined>(undefined);
   const [isFollower, setIsFollower] = useState<boolean>(false);
 
   // After clicking the profile navlink, get the appropriate author info and data
@@ -63,16 +62,9 @@ export default function AuthorPage(props: any) {
           setIsFollower(false);
         });
       }
-
-      AxiosWrapper.get(authorUrl + "/posts/", props.loggedInUser).then((res: any) => {
-        const posts: Post[] = res.data;
-        setPostEntries(posts);
-      }).catch((err: any) => {
-        console.error("ERROR GETTING POSTS");
-        setResponseMessage(500);
-      })
     };
   }, []);
+
 
   if (responseMessage > 299) {
     return (<Container>
@@ -80,52 +72,46 @@ export default function AuthorPage(props: any) {
     </Container>)
   }
 
-  const displayFollowButton = () => {
-    if (props.loggedInUser && author?.id !== props.loggedInUser.authorId) {
+
+  const displayProfileButtons = () => {
+    if (props.loggedInUser && author?.id === props.loggedInUser.authorId) {
+      return <ListGroupItem tag="a" href={`/author/${props.loggedInUser.authorId}/followers`}>Follows</ListGroupItem>
+    } else {
       return <FollowRequestButton loggedInUser={props.loggedInUser} currentAuthor={author} isFollower={isFollower} setIsFollower={setIsFollower} />
     }
   }
 
-  const displayFollowListButtons = () => {
-    if (props.loggedInUser && author?.id === props.loggedInUser.authorId) {
-      return (<>
-        <CardText>
-          <Link className="text-white" to={{ pathname: `/author/${props.loggedInUser.authorId}/followers` }}><Button>Followers</Button></Link>
-        </CardText>
-        <CardText>
-          <Link className="text-white" to={{ pathname: `/author/${props.loggedInUser.authorId}/following` }}><Button>Following</Button></Link>
-        </CardText>
-      </>)
-    }
-  }
-
   return (
-    <Container fluid>
-      <Row className="justify-content-md-center">
-        <Col sm={2}>
-          <Card body className="text-center">
-            <ProfilePic author={author}/>
-            <CardBody>
-              <CardTitle tag="h3">{author?.displayName}</CardTitle>
-              <CardText>
-                <Button><CardLink className="text-white" href={author ? author.github : "#"} >GitHub</CardLink></Button>
-              </CardText>
-              <CardText>{displayFollowButton()}</CardText>
-              {displayFollowListButtons()}
-            </CardBody>
-          </Card>
-        </Col>
+    <>
+      <Row>
         <Col>
-          {author && props.loggedInUser && <PostList postEntries={postEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} isResharable={true}/>}
-          
-          {author && isValidGithub(author.github) && 
-            <>
-              <h3>Github feed</h3>
-              <GithubFeed github={author.github}/>
-            </>
-          }
+          <CardTitle tag="h2">{author?.displayName}</CardTitle>
         </Col>
       </Row>
-    </Container>
+      <Row className="justify-content-md-center">
+        <Col>
+          <Card body className="text-center">
+            <Row>
+              <Col sm={3}>
+              <ProfilePic author={author}/>
+                <ListGroup>
+                  {displayProfileButtons()}
+                  <ListGroupItem tag="a" href={author ? author.github : "#"}>
+                    GitHub {Icons.githubIcon}
+                  </ListGroupItem>
+                </ListGroup>
+              </Col>
+              <Col>
+                {author && isValidGithub(author.github) && (
+                  <>
+                    <GithubFeed github={author.github} />
+                  </>
+                )}
+              </Col>
+            </Row>
+          </Card>
+        </Col>
+      </Row>
+    </>
   );
 }
