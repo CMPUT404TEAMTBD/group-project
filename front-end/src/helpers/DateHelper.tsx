@@ -1,7 +1,6 @@
-import { Post } from "../types/Post";
 import dateformat from "dateformat";
 
-export function getDateString(post: Post) {
-  let date: Date = new Date(post.published);
+export function getDateString(obj: any) {
+  let date: Date = new Date(obj.published);
   return dateformat(date, "dddd, mmmm dS, yyyy, h:MM TT")
 }

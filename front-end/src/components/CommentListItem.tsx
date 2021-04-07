@@ -6,6 +6,7 @@ import { UserLogin } from '../types/UserLogin';
 import { PostComment } from '../types/PostComment';
 import { Like } from '../types/Like'
 import { likeButtonIcon, likedButtonIcon } from '../assets/Icons';
+import { getDateString } from '../helpers/DateHelper';
 
 interface Props {
   postId: string,
@@ -57,7 +58,7 @@ export default function CommentListItem(props: Props) {
 
   return (
       <Card>
-          <CardHeader className="mb-2 text-muted"><b>@{props.comment.author.displayName}</b></CardHeader>
+          <CardHeader className="mb-2 text-muted"><b>@{props.comment.author.displayName}</b> {getDateString(props.comment)}</CardHeader>
           <CardBody>
               {props.comment.comment}
               <CardText>🔥{likes.length}</CardText>
