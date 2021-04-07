@@ -60,7 +60,7 @@ export default function PostListItem(props: Props) {
       console.error("User is not logged in, cannot like!");
       return;
     }
-    AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/auth-user/${props.loggedInUser.username}`, props.loggedInUser)
+    AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/auth-user/${props.loggedInUser.username}/`, props.loggedInUser)
       .then((res: any) => {
         const author: Author = res.data;
         const like: Like = {

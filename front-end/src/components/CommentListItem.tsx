@@ -27,7 +27,7 @@ export default function CommentListItem(props: Props) {
           setLikes(resLikes);
           setHasLiked(resLikes.filter((l: Like) => l.author.id === props.loggedInUser?.authorId).length !== 0);
         })
-      });
+      }, [hasLiked, props.comment.author.host, props.comment.id, props.loggedInUser, props.postAuthor.id, props.postId]);
 
     const LikeCardLink = () => props.loggedInUser
     ? hasLiked
@@ -40,7 +40,7 @@ export default function CommentListItem(props: Props) {
       console.error("User is not logged in, cannot like!");
       return;
     }
-    AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/auth-user/${props.loggedInUser.username}`, props.loggedInUser)
+    AxiosWrapper.get(`${process.env.REACT_APP_API_URL}/api/auth-user/${props.loggedInUser.username}/`, props.loggedInUser)
       .then((res: any) => {
         const author: Author = res.data;
         const like: Like = {
