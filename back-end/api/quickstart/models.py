@@ -33,7 +33,7 @@ class Post(models.Model):
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   author = models.ForeignKey(Author, on_delete=models.CASCADE)
   type = 'post'
-  title = models.TextField(blank=False)
+  title = models.TextField(blank=True)
   description = models.TextField(blank=True)
   source = models.TextField(default='')
   origin = models.TextField(default='')
