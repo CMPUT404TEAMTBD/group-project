@@ -50,7 +50,7 @@ export default function CommentFormElement(props: Props) {
       }
     }).then((author: any) => {
       if (author) {
-        const comment: PostComment = {
+        const comment = {
           author,
           comment: commentContent,
         }

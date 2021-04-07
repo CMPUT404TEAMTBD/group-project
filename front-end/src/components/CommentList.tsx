@@ -19,7 +19,10 @@ export default function CommentList(props: Props) {
   return (
     <Container fluid>
       <Col>
-        {props.commentList && props.commentList.map((c: PostComment) => <CommentListItem comment={c} />)}
+        {props.commentList && props.commentList.map((c: PostComment) => <CommentListItem comment={c} 
+                                                                loggedInUser={props.loggedInUser} 
+                                                                postId={props.postId} 
+                                                                postAuthor={props.postAuthor}/>)}
       </Col>
     </Container>
   );

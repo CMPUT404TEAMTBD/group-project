@@ -12,7 +12,7 @@ interface Props {
 export default function LikeListItem(props: Props) {
   return (
     <ListGroupItem>
-      {props.like.author.displayName} liked your post!
+      {props.like.author.displayName} liked your {props.like.object.includes("comment") ? "comment" : "post"}!
     </ListGroupItem>
   );
 }
