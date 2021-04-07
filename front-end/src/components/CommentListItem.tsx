@@ -24,11 +24,10 @@ export default function CommentListItem(props: Props) {
     useEffect(() => {
         AxiosWrapper.get(`${props.comment.author.host}api/author/${props.postAuthor.id}/posts/${props.postId}/comments/${props.comment.id}/likes/`, props.loggedInUser).then((res: any) => {
           const resLikes: Like[] = res.data.items;
-          console.log(resLikes);
           setLikes(resLikes);
           setHasLiked(resLikes.filter((l: Like) => l.author.id === props.loggedInUser?.authorId).length !== 0);
         })
-      }, [hasLiked]);
+      });
 
     const LikeCardLink = () => props.loggedInUser
     ? hasLiked
