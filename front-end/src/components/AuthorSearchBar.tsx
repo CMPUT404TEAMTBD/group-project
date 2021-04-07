@@ -55,7 +55,7 @@ export default function AuthorSearchBar(props: Props) {
 
   const redirectToAuthor = (author:Author) => {
     history.push({
-      pathname: `/author/${author.id}/`,
+      pathname: `/author/${author.id}`,
       state: {
         host: author.host,
         id: author.id
