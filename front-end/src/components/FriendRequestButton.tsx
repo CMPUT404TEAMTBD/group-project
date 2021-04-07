@@ -19,6 +19,7 @@ export default function FollowRequestButton(props: Props) {
 
   const sendFollowRequest = () => {
     // get the loggedinuser author object
+    props.setIsFollower(!props.isFollower);
     AxiosWrapper.get(loggedInUserUrl, props.loggedInUser).then((res: any) => {
       if (!props.isFollower) {
         let followObject = {
@@ -26,10 +27,9 @@ export default function FollowRequestButton(props: Props) {
           actor: res.data,
           object: props.currentAuthor
         }
-        AxiosWrapper.put(authorUrl, followObject, props.loggedInUser).then((res: any) => {
-          if (ResponseHelper.isSuccess(res)) {
-            props.setIsFollower(true);
-          }
+        AxiosWrapper.put(authorUrl, followObject, props.loggedInUser).catch((res: any) => {
+          props.setIsFollower(false);
+          alert("There was an error following");
         });
         AxiosWrapper.put(followingUrl, props.currentAuthor, props.loggedInUser).then((res: any) => {
           if (ResponseHelper.isSuccess(res)) {
@@ -37,10 +37,9 @@ export default function FollowRequestButton(props: Props) {
           }
         });
       } else {
-        AxiosWrapper.delete(authorUrl, props.loggedInUser).then((res: any) => {
-          if (ResponseHelper.isSuccess(res)) {
-            props.setIsFollower(false);
-          }
+        AxiosWrapper.delete(authorUrl, props.loggedInUser).catch((res: any) => {
+          props.setIsFollower(true);
+          alert("There was an error unfollowing");
         });
         AxiosWrapper.delete(followingUrl, props.loggedInUser).then((res: any) => {
           if (ResponseHelper.isSuccess(res)) {
