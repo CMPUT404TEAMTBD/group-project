@@ -51,8 +51,8 @@ export default function CommentFormElement(props: Props) {
     }).then((author: any) => {
       if (author) {
         const comment = {
-          "author": author,
-          "comment": commentContent,
+          author,
+          comment: commentContent,
         }
         // Send POST request to comment on a post
         AxiosWrapper.post(`${props.postAuthor.host}api/author/${props.postAuthor.id}/posts/${props.postId}/comments/`, comment, props.loggedInUser)
