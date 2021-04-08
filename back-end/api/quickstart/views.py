@@ -13,6 +13,7 @@ from .mixins import MultipleFieldLookupMixin
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAuthenticatedOrGet
+from django.core.paginator import Paginator
 
 
 class AuthorViewSet(viewsets.ModelViewSet):
@@ -88,8 +89,6 @@ class PostListViewSet(viewsets.ModelViewSet):
     """
     def list(self, request, author):
         try:
-            # TODO: Set up pagination: https://www.django-rest-framework.org/api-guide/pagination/
-
             authenticated_author = Author.objects.get(user__username=request.user)
             # Check if the authenticated author is the same as the author we're querying for posts.
             if str(authenticated_author.id) == author:
@@ -123,7 +122,6 @@ class PublicPostListViewSet(viewsets.ModelViewSet):
 
     def list(self, request):
         try:
-            # TODO: Set up pagination: https://www.django-rest-framework.org/api-guide/pagination/
             # Warning: visibility='PUBLIC' (single quotes) does not work.
             queryset = Post.objects.filter(visibility="PUBLIC", unlisted=False)
             serializer = PostSerializer(queryset, many=True)
@@ -161,10 +159,13 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     lookup_field = 'id'
+    page_size = 5
 
     def retrieve(self, request, author, post):
         queryset = Comment.objects.filter(post=post)
-        serializer = CommentSerializer(queryset, many=True)
+        paginator = Paginator(queryset, request.GET.get('size', self.page_size))
+        page_obj = paginator.page(request.GET.get('page', 1))
+        serializer = CommentSerializer(page_obj, many=True)
 
         return Response(serializer.data)
 

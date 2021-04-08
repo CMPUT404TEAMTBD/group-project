@@ -70,6 +70,8 @@ posts_list = views.PostListViewSet.as_view({
 
 # Endpoint: /api/author/{AUTHOR_ID}/posts/{POST_ID}/comments
 # GET get comments of the post
+# Supports pagination by adding query parameters page and size to url
+# i.e /api/author/{AUTHOR_ID}/posts/{POST_ID}/comments/?size=10&page=2
 # POST if you post an object of “type”:”comment”, it will add your comment to the post
 comments = views.CommentViewSet.as_view({
     'get': 'retrieve',

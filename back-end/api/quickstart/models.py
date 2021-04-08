@@ -24,7 +24,7 @@ class Post(models.Model):
 
   # Sorting post by newest first taken from: https://stackoverflow.com/a/6686363
   class Meta:
-        ordering = ['-published']
+    ordering = ['-published']
 
   class Visibility(models.TextChoices):
     PUBLIC = 'PUBLIC'
@@ -47,6 +47,10 @@ class Post(models.Model):
 
 # An Author can communicate with other Authors by commenting on posts. 
 class Comment(models.Model):
+
+  class Meta:
+    ordering = ['-published']
+
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   post = models.ForeignKey(Post, on_delete=models.CASCADE)
   type = 'comment'
