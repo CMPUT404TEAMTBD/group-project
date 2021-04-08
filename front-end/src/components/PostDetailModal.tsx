@@ -32,6 +32,9 @@ export default function PostDetailModal(props:Props) {
     if (props.loggedInUser !== undefined) {
       AxiosWrapper.get(`${post.author.url}posts/${post.id}/comments/`, props.loggedInUser).then((res: any) => {
         const comments: PostComment[] = res.data;
+        if (res.status === 204 || res.data.length < 5) {
+          setNoMoreComments(true);
+        }
         setCommentList(comments);
       }).catch((err: any) => {
         console.error(err);
