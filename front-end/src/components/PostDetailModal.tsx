@@ -29,12 +29,14 @@ export default function PostDetailModal(props:Props) {
   const [noMoreComments, setNoMoreComments] = useState(false);
 
   function fetchComments() {
-    AxiosWrapper.get(`${post.author.url}posts/${post.id}/comments/`, props.loggedInUser).then((res: any) => {
-      const comments: PostComment[] = res.data;
-      setCommentList(comments);
-    }).catch((err: any) => {
-      console.error(err);
-    });
+    if (props.loggedInUser !== undefined) {
+      AxiosWrapper.get(`${post.author.url}posts/${post.id}/comments/`, props.loggedInUser).then((res: any) => {
+        const comments: PostComment[] = res.data;
+        setCommentList(comments);
+      }).catch((err: any) => {
+        console.error(err);
+      }); 
+    }
   }
 
   function addMoreComments() {
