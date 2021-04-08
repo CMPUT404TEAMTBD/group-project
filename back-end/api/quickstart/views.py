@@ -12,7 +12,6 @@ from quickstart.serializers import AuthorSerializer, PostSerializer, FollowSeria
 from .mixins import MultipleFieldLookupMixin
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-from .permissions import IsAuthenticatedOrGet
 from django.core.paginator import Paginator, EmptyPage
 
 
@@ -135,6 +134,8 @@ class PostViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows post to be viewed or edited.
     """
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     lookup_field = 'id'
@@ -403,7 +404,7 @@ class InboxViewSet(viewsets.ModelViewSet):
     API endpoint that allows getting inbox items for an author
     """
     authentication_classes = [BasicAuthentication]
-    permission_classes = [IsAuthenticatedOrGet]
+    permission_classes = [IsAuthenticated]
     queryset = Inbox.objects.all()
     serializer_class = InboxSerializer
     lookup_field = 'author'

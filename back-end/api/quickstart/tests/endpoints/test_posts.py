@@ -3,16 +3,19 @@ Referenced https://realpython.com/test-driven-development-of-a-django-restful-ap
 import json
 import uuid
 from rest_framework import status
-from django.test import TestCase, Client
+from rest_framework.test import APIClient, force_authenticate
+from django.contrib.auth.models import User
+from django.test import TestCase
 from quickstart.models import Author, Post
 from quickstart.serializers import AuthorSerializer, PostSerializer
 from quickstart.tests.helper_test import get_test_author_fields, get_test_post_fields, get_test_partial_post_fields
 
-client = Client()
+client = APIClient()
 
 class GetPostById(TestCase):
   """Tests for getting a single Post by their ID at endpoint /api/author/{AUTHOR_ID}/posts/{POST_ID}/."""
   def setUp(self):
+    client.force_authenticate(User.objects.create(username='john', password='doe'))
     self.author = Author.objects.create(**get_test_author_fields())
     self.post = Post.objects.create(**get_test_post_fields(), author=self.author)
 
@@ -31,6 +34,7 @@ class GetPostById(TestCase):
 class UpdatePostById(TestCase):
   """Tests for updating a single Post by POST'ing to endpoint /author/{AUTHOR_ID}/posts/{POST_ID}/."""
   def setUp(self):
+    client.force_authenticate(User.objects.create(username='john', password='doe'))
     self.author = Author.objects.create(**get_test_author_fields())
     self.post = Post.objects.create(**get_test_post_fields(), author=self.author)
 
@@ -74,6 +78,7 @@ class UpdatePostById(TestCase):
 class DeletePostById(TestCase):
   """Tests for deleting a single Post by their ID at endpoint /author/{AUTHOR_ID}/posts/{POST_ID}/."""
   def setUp(self):
+    client.force_authenticate(User.objects.create(username='john', password='doe'))
     self.author = Author.objects.create(**get_test_author_fields())
     self.post = Post.objects.create(**get_test_post_fields(), author=self.author)
 
@@ -89,6 +94,7 @@ class DeletePostById(TestCase):
 class CreatePostById(TestCase):
   """Tests for creating a single Post by PUT'ing to endpoint /author/{AUTHOR_ID}/posts/{POST_ID}/."""
   def setUp(self):
+    client.force_authenticate(User.objects.create(username='john', password='doe'))
     self.author = Author.objects.create(**get_test_author_fields())
     self.uuid = uuid.uuid4()
     self.payload = get_test_post_fields()
