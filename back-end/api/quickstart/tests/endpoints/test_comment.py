@@ -31,6 +31,13 @@ class GetAllCommentsTest(TestCase):
     self.assertEqual(response.data, serializer.data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+  def test_get_paginated_comments(self):
+    for i in range(10):
+      Comment.objects.create(**get_test_comment_fields(), post=self.post1)
+
+    response = client.get(f'/api/author/testauthor/posts/{self.post1.id}/comments/?size=5&page=2')
+
+    self.assertEqual(len(response.data), 5)
 
   def test_get_empty_comments(self):
     response = client.get(f'/api/author/testauthor/posts/{self.post3.id}/comments/')
