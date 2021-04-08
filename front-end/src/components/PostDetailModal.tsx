@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { CardLink, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Post } from '../types/Post';
 import { PostComment } from '../types/PostComment';
 import { UserLogin } from '../types/UserLogin';
@@ -8,6 +8,7 @@ import CommentList from './CommentList';
 import PostContent from './PostContentEl';
 import { getDateString } from '../helpers/DateHelper';
 import { AxiosWrapper } from '../helpers/AxiosWrapper';
+import { chevronDoubleDown } from '../assets/Icons';
 
 interface Props {
   post: Post;
@@ -71,7 +72,7 @@ export default function PostDetailModal(props:Props) {
         <CommentFormElement loggedInUser={props.loggedInUser} postId={post.id} postAuthor={post.author} commentList={commentList} setCommentList={setCommentList} />
       </ModalFooter>
       {props.loggedInUser && <ModalFooter><CommentList loggedInUser={props.loggedInUser} postId={post.id} postAuthor={post.author} commentList={commentList} /></ModalFooter>}
-      {!noMoreComments ? <Button onClick={addMoreComments}>Show more</Button> : null}
+      {!noMoreComments ? <CardLink onClick={() => addMoreComments()} style={{paddingBottom: '1em', marginLeft: 'auto', marginRight: 'auto'}}>{chevronDoubleDown}</CardLink> : null}
     </Modal>
   );
 }
