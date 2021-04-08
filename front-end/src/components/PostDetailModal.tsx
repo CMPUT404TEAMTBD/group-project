@@ -25,34 +25,26 @@ export default function PostDetailModal(props:Props) {
   const post: Post = props.post;
 
   const [commentList, setCommentList] = useState<PostComment[] | undefined>(undefined);
-  const [commentPageNum, setCommentPageNum] = useState(2);
+  const [commentPageNum, setCommentPageNum] = useState(1);
   const [noMoreComments, setNoMoreComments] = useState(false);
 
   function fetchComments() {
     if (props.loggedInUser !== undefined) {
-      AxiosWrapper.get(`${post.author.url}posts/${post.id}/comments/`, props.loggedInUser).then((res: any) => {
+      AxiosWrapper.get(`${post.author.url}posts/${post.id}/comments/?page=${commentPageNum}`, props.loggedInUser).then((res: any) => {
         const comments: PostComment[] = res.data;
-        setCommentList(comments);
+        if (res.status === 204 || comments.length < 5) {
+          setNoMoreComments(true);
+        }
+        if (commentList) {
+          setCommentList([...commentList, ...comments])
+        } else {
+          setCommentList(comments)
+        }
+        setCommentPageNum(commentPageNum + 1)
       }).catch((err: any) => {
         console.error(err);
       }); 
     }
-  }
-
-  function addMoreComments() {
-    AxiosWrapper.get(`${post.author.url}posts/${post.id}/comments/?page=${commentPageNum}`, props.loggedInUser).then((res: any) => {
-      if (res.status === 204 || res.data.length < 5) {
-        setNoMoreComments(true);
-      }
-      if (commentList) {
-        setCommentList([...commentList, ...res.data])
-      } else {
-        setCommentList(res.data)
-      }
-      setCommentPageNum(commentPageNum + 1)
-    }).catch((err: any) => {
-      console.error(err);
-    });
   }
 
   useEffect(() => {
@@ -74,7 +66,7 @@ export default function PostDetailModal(props:Props) {
         <CommentFormElement loggedInUser={props.loggedInUser} postId={post.id} postAuthor={post.author} commentList={commentList} setCommentList={setCommentList} />
       </ModalFooter>
       {props.loggedInUser && <ModalFooter><CommentList loggedInUser={props.loggedInUser} postId={post.id} postAuthor={post.author} commentList={commentList} /></ModalFooter>}
-      {!noMoreComments ? <CardLink onClick={() => addMoreComments()} style={{paddingBottom: '1em', marginLeft: 'auto', marginRight: 'auto'}}>{chevronDoubleDown}</CardLink> : null}
+      {!noMoreComments ? <CardLink onClick={() => fetchComments()} style={{paddingBottom: '1em', marginLeft: 'auto', marginRight: 'auto'}}>{chevronDoubleDown}</CardLink> : null}
     </Modal>
   );
 }
