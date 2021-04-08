@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Post } from '../types/Post';
 import { PostComment } from '../types/PostComment';
 import { UserLogin } from '../types/UserLogin';
@@ -24,12 +24,29 @@ export default function PostDetailModal(props:Props) {
   const post: Post = props.post;
 
   const [commentList, setCommentList] = useState<PostComment[] | undefined>(undefined);
+  const [commentPageNum, setCommentPageNum] = useState(2);
+  const [noMoreComments, setNoMoreComments] = useState(false);
 
   function fetchComments() {
     AxiosWrapper.get(`${post.author.url}posts/${post.id}/comments/`, props.loggedInUser).then((res: any) => {
       const comments: PostComment[] = res.data;
-      // Reverse the comments so that they are in order (from newest to oldest).
-      setCommentList(comments.reverse());
+      setCommentList(comments);
+    }).catch((err: any) => {
+      console.error(err);
+    });
+  }
+
+  function addMoreComments() {
+    AxiosWrapper.get(`${post.author.url}posts/${post.id}/comments/?page=${commentPageNum}`, props.loggedInUser).then((res: any) => {
+      if (res.status === 204 || res.data.length < 5) {
+        setNoMoreComments(true);
+      }
+      if (commentList) {
+        setCommentList([...commentList, ...res.data])
+      } else {
+        setCommentList(res.data)
+      }
+      setCommentPageNum(commentPageNum + 1)
     }).catch((err: any) => {
       console.error(err);
     });
@@ -54,6 +71,7 @@ export default function PostDetailModal(props:Props) {
         <CommentFormElement loggedInUser={props.loggedInUser} postId={post.id} postAuthor={post.author} commentList={commentList} setCommentList={setCommentList} />
       </ModalFooter>
       {props.loggedInUser && <ModalFooter><CommentList loggedInUser={props.loggedInUser} postId={post.id} postAuthor={post.author} commentList={commentList} /></ModalFooter>}
+      {!noMoreComments ? <Button onClick={addMoreComments}>Show more</Button> : null}
     </Modal>
   );
 }

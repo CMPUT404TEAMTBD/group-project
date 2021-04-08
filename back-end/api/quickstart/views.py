@@ -13,7 +13,7 @@ from .mixins import MultipleFieldLookupMixin
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsAuthenticatedOrGet
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 
 
 class AuthorViewSet(viewsets.ModelViewSet):
@@ -162,10 +162,15 @@ class CommentViewSet(viewsets.ModelViewSet):
     page_size = 5
 
     def retrieve(self, request, author, post):
-        queryset = Comment.objects.filter(post=post)
-        paginator = Paginator(queryset, request.GET.get('size', self.page_size))
-        page_obj = paginator.page(request.GET.get('page', 1))
-        serializer = CommentSerializer(page_obj, many=True)
+        try:
+            queryset = Comment.objects.filter(post=post)
+            paginator = Paginator(queryset, request.GET.get('size', self.page_size))
+            page_obj = paginator.page(request.GET.get('page', 1))
+            serializer = CommentSerializer(page_obj, many=True)
+        except Post.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        except EmptyPage:
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(serializer.data)
 
