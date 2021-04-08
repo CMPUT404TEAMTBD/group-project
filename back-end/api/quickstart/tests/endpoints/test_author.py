@@ -42,7 +42,6 @@ class UpdateAuthorById(TestCase):
       data=json.dumps(self.payload),
       content_type='application/json'
     )
-    self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     # Compare each payload field with the updated Author object.
     serializer = AuthorSerializer(Author.objects.get(id=self.john.id))
@@ -52,6 +51,10 @@ class UpdateAuthorById(TestCase):
     # Ensure other fields are unchanged
     self.assertEqual(serializer.data['id'], str(self.john.id))
     self.assertEqual(serializer.data['type'], self.john.type)
+
+    # Check the response was alright
+    self.assertEqual(response.status_code, status.HTTP_200_OK)
+    self.assertEqual(response.data, serializer.data)
 
   def test_partial_update_author(self):
     partial_payload = partial_payload = { 'displayName': 'new name'}
