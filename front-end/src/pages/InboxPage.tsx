@@ -68,8 +68,19 @@ export default function HomePage(props: any) {
       </>)
   }
 
+  function clearInbox() {
+    AxiosWrapper.delete(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/inbox/", props.loggedInUser).then((res: any) => {
+      setInboxEntries([]);
+      setLikeEntries([]);
+      setFriendReqEntries([]);
+    }).catch((err: any) => {
+      console.error(err);
+    })
+  }
+
   return (
     <>
+      <NavLink onClick={clearInbox}>{Icons.clearInboxIcon} Clear Inbox</NavLink>
       <Row className="justify-content-md-center">
         <Col>
           <Nav tabs light className="justify-content-md-center">
@@ -139,6 +150,7 @@ export default function HomePage(props: any) {
           </TabContent>
         </Col>
       </Row>
+
     </>
   );
 }
