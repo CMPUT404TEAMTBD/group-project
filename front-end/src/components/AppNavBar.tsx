@@ -45,7 +45,13 @@ export default function AppNavBar(props: Props) {
         </NavItem>
         <NavItem onClick={close}>
           <NavLink
-            to={`/author/${props.loggedInUser?.authorId}`}
+            to={{
+              pathname: `/author/${props.loggedInUser?.authorId}`,
+              state: {
+                host: props.loggedInUser?.host,
+                id: props.loggedInUser?.authorId
+              }
+            }}
             className="nav-link"
           >
             {Icons.profileIcon} Profile
