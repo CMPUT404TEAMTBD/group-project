@@ -26,13 +26,15 @@ export default function PostDetailModal(props:Props) {
   const [commentList, setCommentList] = useState<PostComment[] | undefined>(undefined);
 
   function fetchComments() {
-    AxiosWrapper.get(`${post.author.url}posts/${post.id}/comments/`, props.loggedInUser).then((res: any) => {
-      const comments: PostComment[] = res.data;
-      // Reverse the comments so that they are in order (from newest to oldest).
-      setCommentList(comments.reverse());
-    }).catch((err: any) => {
-      console.error(err);
-    });
+    if (props.loggedInUser !== undefined) {
+      AxiosWrapper.get(`${post.author.url}posts/${post.id}/comments/`, props.loggedInUser).then((res: any) => {
+        const comments: PostComment[] = res.data;
+        // Reverse the comments so that they are in order (from newest to oldest).
+        setCommentList(comments.reverse());
+      }).catch((err: any) => {
+        console.error(err);
+      });
+    }
   }
 
   useEffect(() => {
