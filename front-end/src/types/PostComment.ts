@@ -3,7 +3,8 @@ import { PostContentType } from "./Post";
 
 export interface PostComment {
     // type: string,
-    id: string,
+    id?: string,
     author: Author,
     comment: string,
+    contentType: PostContentType,
 }

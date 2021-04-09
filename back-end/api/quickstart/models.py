@@ -57,6 +57,7 @@ class Comment(models.Model):
   author = models.JSONField()
   comment = models.TextField()
   published = models.DateTimeField(default=timezone.now, editable=False)
+  contentType = models.TextField()
 
 # Author A can send a Follow request to Author B when they want to
 # be constantly informed on whatever Author B is posting.
