@@ -36,20 +36,31 @@ export default function HomePage(props: any) {
   return (
     <>
       <Row className="justify-content-md-center">
-      <Form style={{width: "80%"}} onSubmit={e => searchUsers(e)}>
-      <FormGroup row>
-      <Label for="Author Search" sm={1}>{Icons.searchIcon}</Label>
-        <Col>
-          <AuthorSearchBar loggedInUser={props.loggedInUser}/>
-        </Col>
-      </FormGroup>
-      </Form>
+        {props.loggedInUser && (
+          <Form style={{ width: "80%" }} onSubmit={(e) => searchUsers(e)}>
+            <FormGroup row>
+              <Label for="Author Search" sm={1}>
+                {Icons.searchIcon}
+              </Label>
+              <Col>
+                <AuthorSearchBar loggedInUser={props.loggedInUser} />
+              </Col>
+            </FormGroup>
+          </Form>
+        )}
       </Row>
-        <Row>
-          <Col className="justify-content-md-center">
-          {<PostList postEntries={postEntries} setPostEntries={setPostEntries} loggedInUser={props.loggedInUser} isResharable={true}/>}
-          </Col>
-        </Row>
+      <Row>
+        <Col className="justify-content-md-center">
+          {
+            <PostList
+              postEntries={postEntries}
+              setPostEntries={setPostEntries}
+              loggedInUser={props.loggedInUser}
+              isResharable={true}
+            />
+          }
+        </Col>
+      </Row>
     </>
   );
 }

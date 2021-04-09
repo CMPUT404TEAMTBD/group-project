@@ -80,10 +80,9 @@ export default function HomePage(props: any) {
 
   return (
     <>
-      <NavLink onClick={clearInbox}>{Icons.clearInboxIcon} Clear Inbox</NavLink>
-      <Row className="justify-content-md-center">
+      <Row className="justify-content-md-left">
         <Col>
-          <Nav tabs light className="justify-content-md-center">
+          <Nav tabs light className="justify-content-md-left">
             <NavItem>
               <NavLink
                 className={clsx({ active: activeTab === "postsTab" })}
@@ -107,9 +106,10 @@ export default function HomePage(props: any) {
             </NavItem>
           </Nav>
         </Col>
+        <Col className="justify-content-md-right" sm={2}><NavLink onClick={clearInbox}>{Icons.clearInboxIcon} Clear</NavLink></Col>
       </Row>
       <Row className="justify-content-md-center">
-        <Col className="justify-content-md-center">
+        <Col className="justify-content-md-left">
           <TabContent activeTab={activeTab}>
             <TabPane tabId="postsTab">
               <Row style={{ padding: "1rem" }}>
@@ -150,7 +150,6 @@ export default function HomePage(props: any) {
           </TabContent>
         </Col>
       </Row>
-
     </>
   );
 }

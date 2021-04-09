@@ -4,6 +4,7 @@ import { UserLogin } from '../types/UserLogin';
 import CreateEditPostModal from '../components/CreateEditPostModal';
 import PostListItem from '../components/PostListItem';
 import { Post } from '../types/Post';
+import * as Icons from '../assets/Icons';
 
 interface Props {
   postEntries?: Post[];
@@ -44,7 +45,7 @@ export default function PostList(props: Props) {
   function CreatePostModal() {
     return (
       <>
-        <Button onClick={() => setIsCreatePostModalOpen(true)}>Create Post</Button>
+        <Button onClick={() => setIsCreatePostModalOpen(true)}>Create Post {Icons.makePostIcon}</Button>
         <CreateEditPostModal
           toggle={() => setIsCreatePostModalOpen(!isCreatePostModalOpen)}
           isModalOpen={isCreatePostModalOpen}
@@ -68,12 +69,10 @@ export default function PostList(props: Props) {
   }
 
   return (
-    <>
       <Col>
         {props.loggedInUser ? CreatePostModal() : null}
         {postListElToDisplay}
       </Col>
-    </>
   );
 }
 
