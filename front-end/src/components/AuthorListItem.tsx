@@ -51,7 +51,17 @@ export default function AuthorListItem(props: Props) {
             }
           </Col>
           <Col xs="6">
-            <CardTitle tag="h3" ><Link to={{ pathname: `/author/${props.author.id}` }}>{props.author.displayName}</Link></CardTitle>
+            <CardTitle tag="h3" >
+              <Link to=
+                {{ 
+                  pathname: `/author/${props.author.id}`,
+                  state: {
+                    host: props.author.host,
+                    id: props.author.id
+                  }
+                }}>{props.author.displayName}
+              </Link>
+            </CardTitle>
             <CardSubtitle tag="h5">
               {displayFollowButton()}
             </CardSubtitle> 
