@@ -29,7 +29,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Comment
-        fields = ['id', 'type', 'author', 'comment', 'published']
+        fields = ['id', 'type', 'author', 'comment', 'published', 'contentType']
 
 
 class FollowSerializer(serializers.HyperlinkedModelSerializer):
