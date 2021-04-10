@@ -62,7 +62,7 @@ export default function PostDetailModal(props:Props) {
       <ModalBody style={{wordWrap: 'break-word'}}>
         <h6 className="mb-2 text-muted">By: {post.author.displayName}</h6>
         <span className="mb-2 text-muted">{getDateString(post)}</span>
-        <div style={{height: "1em"}} >
+        <div className="mb-4" style={{height: "1em"}} >
           {/* I'm being hypocritical here using CardLink in a Modal */}
           <CardLink onClick={()=>copyLinkToClipboard(post)}>{linkIcon}</CardLink>
         </div>
