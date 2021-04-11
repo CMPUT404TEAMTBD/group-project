@@ -114,30 +114,28 @@ export default function CreateEditPostModal(props: Props){
         let post: Post | undefined = undefined;
         if (uuid === ""){
           promise = AxiosWrapper.post(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/posts/`, data, props.loggedInUser);
-        }
-          else{
-            promise = AxiosWrapper.put(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/posts/${uuid}/`, data, props.loggedInUser)
+        }else{
+          promise = AxiosWrapper.put(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/posts/${uuid}/`, data, props.loggedInUser)
           }
           
-          promise.then((res: any) => {
-            handleRes(res)
-            post = res.data;
+        promise.then((res: any) => {
+          handleRes(res)
+          post = res.data;
 
-            const urlPrefix = `${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}`;
-            const authorsUrl = visibility === PostVisibility.FRIENDS ? `${urlPrefix}/friends/` : `${urlPrefix}/followers/`;
+          const urlPrefix = `${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}`;
+          const authorsUrl = visibility === PostVisibility.FRIENDS ? `${urlPrefix}/friends/` : `${urlPrefix}/followers/`;
 
-            return AxiosWrapper.get(authorsUrl, props.loggedInUser);
-          }).then((res: any) => {
-            let authors: Author[] = res.data.items;
-            authors.forEach(a => {
-              AxiosWrapper.post(`${a.host}api/author/${a.id}/inbox/`, post, props.loggedInUser);
-            });
-          }).catch((error: any) => {
-            setShowError(true)
-          })
+          return AxiosWrapper.get(authorsUrl, props.loggedInUser);
+        }).then((res: any) => {
+          let authors: Author[] = res.data.items;
+          authors.forEach(a => {
+            AxiosWrapper.post(`${a.host}api/author/${a.id}/inbox/`, post, props.loggedInUser);
+          });
+        }).catch((error: any) => {
+          setShowError(true)
+        })
 
-        }
-      else if(props.editFields !== undefined){
+        }else if(props.editFields !== undefined){
           AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data, props.loggedInUser)
           .then((res: any) => {
             handleRes(res)
