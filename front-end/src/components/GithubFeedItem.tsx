@@ -1,4 +1,4 @@
-import { Card, CardBody } from "reactstrap";
+import { Card, CardBody, CardSubtitle } from "reactstrap";
 import { GithubEvent } from "../types/Github";
 
 interface Props {
@@ -10,11 +10,16 @@ interface Props {
  * @param props
  */
 export default function LikeListItem(props: Props) {
+  const prUrl = `https://github.com/${props.githubEvent.repo.name}/pull/${props.githubEvent.payload.number}`;
+
   return (
     <Card>
-      <CardBody>
-        <p>Performed a {props.githubEvent.type} on the repo {props.githubEvent.repo.name}</p>
+      <CardBody >
+        Created pull request - <a href={prUrl}>{props.githubEvent.payload.pull_request.title}</a>
       </CardBody>
+      <CardSubtitle className="mb-2 text-muted">
+        {props.githubEvent.repo.name}
+      </CardSubtitle>
     </Card>
   )
 }
