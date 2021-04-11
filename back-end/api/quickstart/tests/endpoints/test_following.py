@@ -64,3 +64,17 @@ class CreateFollowing(TestCase):
     )
     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
     self.assertTrue(Following.objects.get(receiver=self.receiver, sender=self.sender))
+
+  def test_create_dup_following(self):
+    client.put(
+      f'/api/author/{self.sender.id}/following/{self.receiver_id}/',
+      data=json.dumps(self.receiver),
+      content_type='application/json'
+    )
+
+    response = client.put(
+      f'/api/author/{self.sender.id}/following/{self.receiver_id}/',
+      data=json.dumps(self.receiver),
+      content_type='application/json'
+    )
+    self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
