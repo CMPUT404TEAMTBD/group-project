@@ -112,12 +112,13 @@ export default function CreateEditPostModal(props: Props){
       if(isCreate){
         let promise = undefined;
         let post: Post | undefined = undefined;
+
         if (uuid === ""){
           promise = AxiosWrapper.post(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/posts/`, data, props.loggedInUser);
         }else{
           promise = AxiosWrapper.put(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/posts/${uuid}/`, data, props.loggedInUser)
           }
-          
+  
         promise.then((res: any) => {
           handleRes(res)
           post = res.data;
@@ -135,14 +136,14 @@ export default function CreateEditPostModal(props: Props){
           setShowError(true)
         })
 
-        }else if(props.editFields !== undefined){
-          AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data, props.loggedInUser)
-          .then((res: any) => {
-            handleRes(res)
-          }).catch((err: any) => {
-            setShowError(true)
-          })
-        } 
+      }else if(props.editFields !== undefined){
+        AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data, props.loggedInUser)
+        .then((res: any) => {
+          handleRes(res)
+        }).catch((err: any) => {
+          setShowError(true)
+        })
+      } 
   }
 
   function handleRes(res:AxiosResponse){
