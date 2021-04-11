@@ -173,7 +173,10 @@ class CommentViewSet(viewsets.ModelViewSet):
         except EmptyPage:
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-        return Response(serializer.data)
+        return Response({
+            'count': len(queryset),
+            'items': serializer.data
+        })
 
     def create(self, request, author, post):
         try:

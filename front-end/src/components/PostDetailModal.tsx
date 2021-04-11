@@ -31,7 +31,7 @@ export default function PostDetailModal(props:Props) {
   function fetchComments() {
     if (props.loggedInUser !== undefined) {
       AxiosWrapper.get(`${post.author.url}posts/${post.id}/comments/?page=${commentPageNum}`, props.loggedInUser).then((res: any) => {
-        const comments: PostComment[] = res.data;
+        const comments: PostComment[] = res.data.items;
         if (res.status === 204 || comments.length < 5) {
           setNoMoreComments(true);
         }
