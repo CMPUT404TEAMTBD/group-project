@@ -15,7 +15,7 @@ export default function LikeListItem(props: Props) {
   return (
     <Card>
       <CardBody >
-        Created pull request - <a href={prUrl}>{props.githubEvent.payload.pull_request.title}</a>
+        <a href={prUrl}>{props.githubEvent.payload.pull_request.title}</a>
       </CardBody>
       <CardSubtitle className="mb-2 text-muted">
         {props.githubEvent.repo.name}
