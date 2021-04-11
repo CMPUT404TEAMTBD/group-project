@@ -9,7 +9,7 @@ interface Props {
  * github list event component to show the author's github events
  * @param props
  */
-export default function LikeListItem(props: Props) {
+export default function GithubFeedItem(props: Props) {
   const prUrl = `https://github.com/${props.githubEvent.repo.name}/pull/${props.githubEvent.payload.number}`;
 
   return (
