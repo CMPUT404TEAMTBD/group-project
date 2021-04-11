@@ -112,7 +112,7 @@ export default function CreateEditPostModal(props: Props){
       if(isCreate){
         if (uuid === ""){
           let post: Post | undefined = undefined;
-          AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data, props.loggedInUser)
+          AxiosWrapper.post(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/posts/`, data, props.loggedInUser)
           .then((res: any) => {
             handleRes(res)
             post = res.data;
@@ -133,7 +133,7 @@ export default function CreateEditPostModal(props: Props){
         }
         else{
           let post: Post | undefined = undefined;
-          AxiosWrapper.put(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + uuid + "/" , data, props.loggedInUser)
+          AxiosWrapper.put(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/posts/${uuid}/`, data, props.loggedInUser)
           .then((res: any) => {
             handleRes(res)
             post = res.data;
