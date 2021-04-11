@@ -9,8 +9,6 @@ import { ResponseHelper } from "../helpers/ResponseHelper"
 import PostContentEl from "./PostContentEl";
 import * as Style from '../assets/createPostUI';
 import {v4 as uuidv4} from 'uuid';
-import ReactDOM from 'react-dom';
-
 
 
 interface Props {
