@@ -36,10 +36,12 @@ const CreatePostComponent = (props: any) => {
         setCategories(parsed);
     }
 
+    
+
     // Create a post by sending a POST request
     function sendPost(e:any) {
         e.preventDefault();
-
+        
         let data = {
             title: title,
             description: desc,
@@ -49,6 +51,7 @@ const CreatePostComponent = (props: any) => {
             content: content,
             categories: categories
         }
+        
         AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data, props.loggedInUser)
         .then((res: any) => {
             if (ResponseHelper.isSuccess(res)) {

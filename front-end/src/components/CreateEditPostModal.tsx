@@ -7,6 +7,10 @@ import { UserLogin } from "../types/UserLogin";
 import { Author } from "../types/Author";
 import { ResponseHelper } from "../helpers/ResponseHelper"
 import PostContentEl from "./PostContentEl";
+import * as Style from '../assets/createPostUI';
+import {v4 as uuidv4} from 'uuid';
+
+
 
 interface Props {
   loggedInUser: UserLogin
@@ -85,8 +89,20 @@ export default function CreateEditPostModal(props: Props){
       setCategories(parsed);
   }
 
+  
+  // function sendPost_id(e:any, data: any){
+  //   e.preventDefault();
+  //   let postuuid = uuidv4();
+
+    
+  // }
+  function generateUUID(){
+    return uuidv4();
+  }
+
   function sendPost(e:any) {
       e.preventDefault();
+    
 
       const data = {
         title: title,
@@ -117,7 +133,16 @@ export default function CreateEditPostModal(props: Props){
           }).catch((error: any) => {
             setShowError(true)
           })
+
+        //put to post_id
+        const uuid = generateUUID();
+        console.log(uuid)
+        AxiosWrapper.put(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + uuid + "/", data, props.loggedInUser)
+        .then((res: any) => {
+          handleRes(res)
+        })
       }
+
       else if(props.editFields !== undefined){
           AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data, props.loggedInUser)
           .then((res: any) => {
@@ -125,7 +150,15 @@ export default function CreateEditPostModal(props: Props){
           }).catch((err: any) => {
             setShowError(true)
           })
+
+          //put to post_id
+          const uuid = generateUUID();
+          AxiosWrapper.put(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + uuid + "/", data, props.loggedInUser)
+          .then((res: any) => {
+            handleRes(res)
+          })
         }
+
     
   }
 
@@ -208,7 +241,7 @@ export default function CreateEditPostModal(props: Props){
               <Label for="Unlisted">Unlisted</Label>
             </FormGroup>
             <FormGroup>
-              <input type="submit" value="Submit" />
+              <input style = {Style.buttonStyle}type="submit" value="Submit" />
             </FormGroup>
           </Form>
           <PostContentEl postContent={postContent} isPreview={false}/>
