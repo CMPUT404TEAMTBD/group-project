@@ -1,5 +1,3 @@
-import { Button } from 'react-bootstrap';
-
 export const buttonStyle = {
     backgroundColor: 'black',
     border: 'none',
