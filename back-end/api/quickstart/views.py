@@ -202,7 +202,7 @@ class FriendsListViewSet(viewsets.ModelViewSet):
             friends = []
             for follow in follow_queryset:
                 for following in following_queryset:
-                    if follow.sender["id"] == following.receiver["id"]:
+                    if "id" in follow.sender and "id" in following.receiver and follow.sender["id"] == following.receiver["id"]:
                         friends.append(follow.sender)
                         break
 
