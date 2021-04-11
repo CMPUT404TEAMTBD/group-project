@@ -9,6 +9,7 @@ import { ResponseHelper } from "../helpers/ResponseHelper"
 import PostContentEl from "./PostContentEl";
 import * as Style from '../assets/createPostUI';
 import {v4 as uuidv4} from 'uuid';
+import ReactDOM from 'react-dom';
 
 
 
@@ -23,6 +24,7 @@ interface Props {
   prependToFeed?: Function
   // Used to edit an existing post in the feed
   modifyInFeed?: Function
+
 }
 
 /**
@@ -53,6 +55,7 @@ export default function CreateEditPostModal(props: Props){
   const [visibility, setVisibility] = useState(postFields.visibility);
   const [unlisted, setUnlisted] = useState(postFields.unlisted);
   const [showError, setShowError] = useState(false);
+  const [uuid, setuuid] = useState<string>("");
 
   function changeVisibility(isChecked: boolean) {
       if (isChecked) {
@@ -90,20 +93,14 @@ export default function CreateEditPostModal(props: Props){
   }
 
   
-  // function sendPost_id(e:any, data: any){
-  //   e.preventDefault();
-  //   let postuuid = uuidv4();
-
-    
-  // }
-  function generateUUID(){
+  function generateUUID(e:any){
+    e.preventDefault();
     return uuidv4();
   }
 
   function sendPost(e:any) {
       e.preventDefault();
     
-
       const data = {
         title: title,
         description: desc,
@@ -115,8 +112,9 @@ export default function CreateEditPostModal(props: Props){
       }
 
       if(isCreate){
-        let post: Post | undefined = undefined;
-        AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data, props.loggedInUser)
+        if (uuid === ""){
+          let post: Post | undefined = undefined;
+          AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data, props.loggedInUser)
           .then((res: any) => {
             handleRes(res)
             post = res.data;
@@ -134,13 +132,27 @@ export default function CreateEditPostModal(props: Props){
             setShowError(true)
           })
 
-        //put to post_id
-        const uuid = generateUUID();
-        console.log(uuid)
-        AxiosWrapper.put(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + uuid + "/", data, props.loggedInUser)
-        .then((res: any) => {
-          handleRes(res)
-        })
+        }
+        else{
+          let post: Post | undefined = undefined;
+          AxiosWrapper.put(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + uuid + "/" , data, props.loggedInUser)
+          .then((res: any) => {
+            handleRes(res)
+            post = res.data;
+
+            const urlPrefix = `${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}`;
+            const authorsUrl = visibility === PostVisibility.FRIENDS ? `${urlPrefix}/friends/` : `${urlPrefix}/followers/`;
+
+            return AxiosWrapper.get(authorsUrl, props.loggedInUser);
+          }).then((res: any) => {
+            let authors: Author[] = res.data.items;
+            authors.forEach(a => {
+              AxiosWrapper.post(`${a.host}api/author/${a.id}/inbox/`, post, props.loggedInUser);
+            });
+          }).catch((error: any) => {
+            setShowError(true)
+          })
+        }
       }
 
       else if(props.editFields !== undefined){
@@ -150,16 +162,7 @@ export default function CreateEditPostModal(props: Props){
           }).catch((err: any) => {
             setShowError(true)
           })
-
-          //put to post_id
-          const uuid = generateUUID();
-          AxiosWrapper.put(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + uuid + "/", data, props.loggedInUser)
-          .then((res: any) => {
-            handleRes(res)
-          })
-        }
-
-    
+        } 
   }
 
   function handleRes(res:AxiosResponse){
@@ -210,7 +213,7 @@ export default function CreateEditPostModal(props: Props){
     <ModalBody>
       <div>
           {showError ? <Alert>Could not modify post</Alert> : null}
-          <Form inline={true} onSubmit={e => sendPost(e)}>
+          <Form inline={true} onSubmit={e => {sendPost(e); setuuid("")}}>
             <FormGroup>
               <Input type="text" name="Title" placeholder="Title" onChange={e => setTitle(e.target.value)} value={title}/>
             </FormGroup>
@@ -241,7 +244,9 @@ export default function CreateEditPostModal(props: Props){
               <Label for="Unlisted">Unlisted</Label>
             </FormGroup>
             <FormGroup>
-              <input style = {Style.buttonStyle}type="submit" value="Submit" />
+              <span>{uuid? uuid : null}</span>
+              <input style = {Style.buttonStyle} type="submit" value="Submit" />
+              <button style = {Style.buttonStyle} onClick = {e=>{setuuid(generateUUID(e));}}>Generate UUID</button>
             </FormGroup>
           </Form>
           <PostContentEl postContent={postContent} isPreview={false}/>
