@@ -225,9 +225,9 @@ export default function CreateEditPostModal(props: Props){
               <Label for="Unlisted">Unlisted</Label>
             </FormGroup>
             <FormGroup>
-              <span>{uuid? uuid : null}</span>
               <input style = {Style.buttonStyle} type="submit" value="Submit" />
               <button style = {Style.buttonStyle} onClick = {e=>{setuuid(generateUUID(e));}}>Generate UUID</button>
+              <span className="text-muted">{uuid? uuid : null}</span>
             </FormGroup>
           </Form>
           <PostContentEl postContent={postContent} isPreview={false}/>
