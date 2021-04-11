@@ -7,6 +7,9 @@ import { UserLogin } from "../types/UserLogin";
 import { Author } from "../types/Author";
 import { ResponseHelper } from "../helpers/ResponseHelper"
 import PostContentEl from "./PostContentEl";
+import * as Style from '../assets/createPostUI';
+import {v4 as uuidv4} from 'uuid';
+
 
 interface Props {
   loggedInUser: UserLogin
@@ -19,6 +22,7 @@ interface Props {
   prependToFeed?: Function
   // Used to edit an existing post in the feed
   modifyInFeed?: Function
+
 }
 
 /**
@@ -49,6 +53,7 @@ export default function CreateEditPostModal(props: Props){
   const [visibility, setVisibility] = useState(postFields.visibility);
   const [unlisted, setUnlisted] = useState(postFields.unlisted);
   const [showError, setShowError] = useState(false);
+  const [uuid, setuuid] = useState<string>("");
 
   function changeVisibility(isChecked: boolean) {
       if (isChecked) {
@@ -85,9 +90,15 @@ export default function CreateEditPostModal(props: Props){
       setCategories(parsed);
   }
 
+  
+  function generateUUID(e:any){
+    e.preventDefault();
+    return uuidv4();
+  }
+
   function sendPost(e:any) {
       e.preventDefault();
-
+    
       const data = {
         title: title,
         description: desc,
@@ -99,34 +110,40 @@ export default function CreateEditPostModal(props: Props){
       }
 
       if(isCreate){
+        let promise = undefined;
         let post: Post | undefined = undefined;
-        AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/", data, props.loggedInUser)
-          .then((res: any) => {
-            handleRes(res)
-            post = res.data;
 
-            const urlPrefix = `${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}`;
-            const authorsUrl = visibility === PostVisibility.FRIENDS ? `${urlPrefix}/friends/` : `${urlPrefix}/followers/`;
+        if (uuid === ""){
+          promise = AxiosWrapper.post(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/posts/`, data, props.loggedInUser);
+        }else{
+          promise = AxiosWrapper.put(`${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}/posts/${uuid}/`, data, props.loggedInUser)
+          }
+  
+        promise.then((res: any) => {
+          handleRes(res)
+          post = res.data;
 
-            return AxiosWrapper.get(authorsUrl, props.loggedInUser);
-          }).then((res: any) => {
-            let authors: Author[] = res.data.items;
-            authors.forEach(a => {
-              AxiosWrapper.post(`${a.host}api/author/${a.id}/inbox/`, post, props.loggedInUser);
-            });
-          }).catch((error: any) => {
-            setShowError(true)
-          })
-      }
-      else if(props.editFields !== undefined){
-          AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data, props.loggedInUser)
-          .then((res: any) => {
-            handleRes(res)
-          }).catch((err: any) => {
-            setShowError(true)
-          })
-        }
-    
+          const urlPrefix = `${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser.authorId}`;
+          const authorsUrl = visibility === PostVisibility.FRIENDS ? `${urlPrefix}/friends/` : `${urlPrefix}/followers/`;
+
+          return AxiosWrapper.get(authorsUrl, props.loggedInUser);
+        }).then((res: any) => {
+          let authors: Author[] = res.data.items;
+          authors.forEach(a => {
+            AxiosWrapper.post(`${a.host}api/author/${a.id}/inbox/`, post, props.loggedInUser);
+          });
+        }).catch((error: any) => {
+          setShowError(true)
+        })
+
+      }else if(props.editFields !== undefined){
+        AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser.authorId + "/posts/" + props.editFields.id + "/", data, props.loggedInUser)
+        .then((res: any) => {
+          handleRes(res)
+        }).catch((err: any) => {
+          setShowError(true)
+        })
+      } 
   }
 
   function handleRes(res:AxiosResponse){
@@ -177,7 +194,7 @@ export default function CreateEditPostModal(props: Props){
     <ModalBody>
       <div>
           {showError ? <Alert>Could not modify post</Alert> : null}
-          <Form inline={true} onSubmit={e => sendPost(e)}>
+          <Form inline={true} onSubmit={e => {sendPost(e); setuuid("")}}>
             <FormGroup>
               <Input type="text" name="Title" placeholder="Title" onChange={e => setTitle(e.target.value)} value={title}/>
             </FormGroup>
@@ -208,7 +225,9 @@ export default function CreateEditPostModal(props: Props){
               <Label for="Unlisted">Unlisted</Label>
             </FormGroup>
             <FormGroup>
-              <input type="submit" value="Submit" />
+              <input style = {Style.buttonStyle} type="submit" value="Submit" />
+              <button style = {Style.buttonStyle} onClick = {e=>{setuuid(generateUUID(e));}}>Generate UUID</button>
+              <span className="text-muted">{uuid? uuid : null}</span>
             </FormGroup>
           </Form>
           <PostContentEl postContent={postContent} isPreview={false}/>
