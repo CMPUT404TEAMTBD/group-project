@@ -21,8 +21,9 @@ export default function GithubFeed(props: Props) {
     const usernameMatches = props.github.match(/https?:\/\/github.com\/(.+)/);
     // console.log(usernameMatches, usernameMatches?.length !== undefined, usernameMatches?.length === 2);
     if (usernameMatches && usernameMatches.length === 2){
-      axios.get(`https://api.github.com/users/${usernameMatches[1]}/events`).then((res) => {
-        setGithubEvents(res.data)
+      axios.get(`https://api.github.com/users/${usernameMatches[1]}/events?per_page=100`).then((res) => {
+        let prOpenedEvents = res.data.filter((e: any) => e.type === "PullRequestEvent" && e.payload.action === "opened");
+        setGithubEvents(prOpenedEvents)
       });
     } else {
       setError("The github url provided isn't valid :(");

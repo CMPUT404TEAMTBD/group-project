@@ -4,8 +4,8 @@ export interface GithubEvent {
   id: number,
   // "CreateEvent/PushEvent/DeleteEvent/etc."
   type: string,
-  repo: GithubRepo
-
+  repo: GithubRepo,
+  payload: any
 }
 
 interface GithubRepo {
