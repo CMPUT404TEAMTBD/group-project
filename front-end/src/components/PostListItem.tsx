@@ -86,6 +86,8 @@ export default function PostListItem(props: Props) {
       }
       AxiosWrapper.post(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/posts/", data, props.loggedInUser)
         .then((res: any) => {
+          alert("You reshared the post!");
+
           post = res.data;
 
           const urlPrefix = `${process.env.REACT_APP_API_URL}/api/author/${props.loggedInUser?.authorId}`;
