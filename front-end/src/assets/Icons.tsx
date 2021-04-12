@@ -88,6 +88,22 @@ export const linkIcon = <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w
     <path strokeLinecap="round" style={{height:'100%'}} strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
 </svg>
 
+export const followingIcon = <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" height="25" width="25" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" stroke="black" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+</svg>;
+
+export const followersIcon = <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" height="25" width="25" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" stroke="black" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+</svg>;
+
+export const unfollowIcon = <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" height="25" width="25" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" stroke="black" strokeWidth={2} d="M13 7a4 4 0 11-8 0 4 4 0 018 0zM9 14a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6zM21 12h-6" />
+</svg>;
+
+export const followIcon = <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" height="25" width="25" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" stroke="black" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+</svg>;
+
 export function UserProfileIcon(props:StyleProps){
   return(
   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" style={props.style}>

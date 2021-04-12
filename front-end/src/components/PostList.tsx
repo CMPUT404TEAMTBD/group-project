@@ -11,6 +11,7 @@ interface Props {
   setPostEntries: Function;
   loggedInUser?: UserLogin;
   isResharable : Boolean;
+  displayCreateButton: Boolean;
 }
 
 /**
@@ -70,7 +71,7 @@ export default function PostList(props: Props) {
 
   return (
       <Col>
-        {props.loggedInUser ? CreatePostModal() : null}
+        {props.loggedInUser && props.displayCreateButton ? CreatePostModal() : null}
         {postListElToDisplay}
       </Col>
   );

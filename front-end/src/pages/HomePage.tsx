@@ -57,6 +57,7 @@ export default function HomePage(props: any) {
               setPostEntries={setPostEntries}
               loggedInUser={props.loggedInUser}
               isResharable={true}
+              displayCreateButton={true}
             />
           }
         </Col>

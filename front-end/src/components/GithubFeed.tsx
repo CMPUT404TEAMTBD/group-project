@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Card, CardBody, CardTitle } from "reactstrap";
 import { GithubEvent } from "../types/Github";
 import GithubFeedItem from "./GithubFeedItem";
 
@@ -34,7 +35,7 @@ export default function GithubFeed(props: Props) {
   return (
     <>
       {error ?  
-          <p>{error}</p>
+          <Card body className="text-center"><CardBody><CardTitle tag="h5" >Couldn't get GitHub Feed :(</CardTitle></CardBody></Card>
         : 
           loading ? 
             <p>Loading...</p>

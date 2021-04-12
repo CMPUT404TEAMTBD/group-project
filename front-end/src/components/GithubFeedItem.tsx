@@ -1,4 +1,5 @@
-import { Card, CardBody, CardSubtitle } from "reactstrap";
+import React from "react";
+import { Card, CardBody, CardTitle } from "reactstrap";
 import { GithubEvent } from "../types/Github";
 
 interface Props {
@@ -13,13 +14,13 @@ export default function GithubFeedItem(props: Props) {
   const prUrl = `https://github.com/${props.githubEvent.repo.name}/pull/${props.githubEvent.payload.number}`;
 
   return (
-    <Card>
-      <CardBody >
+    <Card className="text-center">
+      <CardBody className="mb-2 text-muted">
+      <CardTitle>
         <a href={prUrl}>{props.githubEvent.payload.pull_request.title}</a>
-      </CardBody>
-      <CardSubtitle className="mb-2 text-muted">
+      </CardTitle>
         {props.githubEvent.repo.name}
-      </CardSubtitle>
+      </CardBody>
     </Card>
   )
 }
