@@ -107,8 +107,8 @@ export default function PostListItem(props: Props) {
 
   const LikeCardLink = () => props.loggedInUser
     ? hasLiked
-      ? <CardLink>{Icons.getNum(likes.length)}{Icons.likedButtonIcon}</CardLink>
-      : <CardLink onClick={() => likePost()}>{Icons.getNum(likes.length)}{Icons.likeButtonIcon}</CardLink>
+      ? <CardLink>{Icons.likedButtonIcon}{Icons.getNum(likes.length)}</CardLink>
+      : <CardLink onClick={() => likePost()}>{Icons.likeButtonIcon}{Icons.getNum(likes.length)}</CardLink>
     : null;
 
   const showCardLinks = () => {
@@ -148,10 +148,10 @@ export default function PostListItem(props: Props) {
           <Row className="float-right">
             {props.loggedInUser ? 
               <>
+                {showCardLinks()}
                 <Col md={{ size: 'auto'}}>
                   {LikeCardLink()}
                 </Col>
-                {showCardLinks()}
               </> : null}
           </Row>
         </CardBody>
