@@ -7,7 +7,6 @@ import { UserLogin } from "../types/UserLogin";
 import { Author } from "../types/Author";
 import { ResponseHelper } from "../helpers/ResponseHelper"
 import PostContentEl from "./PostContentEl";
-import * as Style from '../assets/createPostUI';
 import {v4 as uuidv4} from 'uuid';
 
 
@@ -225,7 +224,7 @@ export default function CreateEditPostModal(props: Props){
               <Label for="Unlisted">Unlisted</Label>
             </FormGroup>
             <FormGroup>                           
-              { isCreate ? <Button onClick = {e=>{setuuid(generateUUID(e));}}>Generate UUID</Button> : null}
+              { isCreate ? <Button onClick = {e=>{setuuid(generateUUID(e));}}>Generate UUID</Button> : null }
               <Button type="submit" value="Submit">Submit</Button>
             </FormGroup>
           </Form>
