@@ -173,7 +173,10 @@ class CommentViewSet(viewsets.ModelViewSet):
         except EmptyPage:
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-        return Response(serializer.data)
+        return Response({
+            'count': len(queryset),
+            'items': serializer.data
+        })
 
     def create(self, request, author, post):
         try:
@@ -199,7 +202,7 @@ class FriendsListViewSet(viewsets.ModelViewSet):
             friends = []
             for follow in follow_queryset:
                 for following in following_queryset:
-                    if follow.sender["id"] == following.receiver["id"]:
+                    if "id" in follow.sender and "id" in following.receiver and follow.sender["id"] == following.receiver["id"]:
                         friends.append(follow.sender)
                         break
 
@@ -258,6 +261,9 @@ class FollowersViewSet(MultipleFieldLookupMixin, viewsets.ModelViewSet):
     def create(self, request, receiver, sender):
         try:
             author = Author.objects.get(id=receiver)
+            # check if follow already exists
+            if Follow.objects.filter(receiver=author, sender__id=sender).exists():
+                return Response(status=status.HTTP_204_NO_CONTENT)
             Follow.objects.create(receiver=author, sender=request.data["actor"])
         except Author.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
@@ -328,6 +334,9 @@ class FollowingViewSet(viewsets.ModelViewSet):
     def create(self, request, sender, receiver):
         try:
             author = Author.objects.get(id=sender)
+            # check if following already exists
+            if Following.objects.filter(sender=author, receiver__id=receiver).exists():
+                return Response(status=status.HTTP_204_NO_CONTENT)
             Following.objects.create(sender=author, receiver=request.data)
         except Author.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)

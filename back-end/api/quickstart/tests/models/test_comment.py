@@ -20,3 +20,4 @@ class CreateComment(TestCase):
     self.assertEqual(self.comment.type, 'comment')
     self.assertEqual(self.comment.author, self.fields.author)
     self.assertEqual(self.comment.comment, self.fields.comment)
+    self.assertEqual(self.comment.contentType, self.fields.contentType)

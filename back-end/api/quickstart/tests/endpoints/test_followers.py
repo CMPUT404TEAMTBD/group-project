@@ -75,3 +75,17 @@ class CreateFollow(TestCase):
 
     changed_inbox = Inbox.objects.get(author=self.receiver)
     self.assertTrue(changed_inbox.items[0])
+
+  def test_create_dup_follow(self):
+    client.put(
+      f'/api/author/{self.receiver.id}/followers/{self.sender_id}/',
+      data=json.dumps(self.object),
+      content_type='application/json'
+    )
+
+    response = client.put(
+      f'/api/author/{self.receiver.id}/followers/{self.sender_id}/',
+      data=json.dumps(self.object),
+      content_type='application/json'
+    )
+    self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

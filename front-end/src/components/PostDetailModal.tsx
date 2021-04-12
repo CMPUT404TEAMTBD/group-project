@@ -8,7 +8,7 @@ import CommentList from './CommentList';
 import PostContent from './PostContentEl';
 import { getDateString } from '../helpers/DateHelper';
 import { AxiosWrapper } from '../helpers/AxiosWrapper';
-import { chevronDoubleDown } from '../assets/Icons';
+import { chevronDoubleDown, linkIcon } from '../assets/Icons';
 
 interface Props {
   post: Post;
@@ -30,8 +30,8 @@ export default function PostDetailModal(props:Props) {
 
   function fetchComments() {
     if (props.loggedInUser !== undefined) {
-      AxiosWrapper.get(`${post.author.url}posts/${post.id}/comments/?page=${commentPageNum}`, props.loggedInUser).then((res: any) => {
-        const comments: PostComment[] = res.data;
+      AxiosWrapper.get(`${post.author.host}api/author/${post.author.id}/posts/${post.id}/comments/?page=${commentPageNum}`, props.loggedInUser).then((res: any) => {
+        const comments: PostComment[] = res.data.items;
         if (res.status === 204 || comments.length < 5) {
           setNoMoreComments(true);
         }
@@ -47,6 +47,11 @@ export default function PostDetailModal(props:Props) {
     }
   }
 
+  function copyLinkToClipboard(post: Post) {
+    navigator.clipboard.writeText(`${window.location.host}/posts/${post.id}`);
+    alert("Link Copied!");
+  }
+
   useEffect(() => {
     fetchComments();
   }, []);
@@ -57,6 +62,10 @@ export default function PostDetailModal(props:Props) {
       <ModalBody style={{wordWrap: 'break-word'}}>
         <h6 className="mb-2 text-muted">By: {post.author.displayName}</h6>
         <span className="mb-2 text-muted">{getDateString(post)}</span>
+        <div className="mb-4" style={{height: "1em"}} >
+          {/* I'm being hypocritical here using CardLink in a Modal */}
+          <CardLink onClick={()=>copyLinkToClipboard(post)}>{linkIcon}</CardLink>
+        </div>
         <div>
           <p>{post.description}</p>
           <PostContent postContent={post} isPreview={false}/>

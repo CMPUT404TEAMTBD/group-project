@@ -28,7 +28,7 @@ class GetAllCommentsTest(TestCase):
     comments = Comment.objects.filter(post=self.post1)
     serializer = CommentSerializer(comments, many=True)
 
-    self.assertEqual(response.data, serializer.data)
+    self.assertEqual(response.data['items'], serializer.data)
     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
   def test_get_paginated_comments(self):
@@ -37,12 +37,12 @@ class GetAllCommentsTest(TestCase):
 
     response = client.get(f'/api/author/testauthor/posts/{self.post1.id}/comments/?size=5&page=2')
 
-    self.assertEqual(len(response.data), 5)
+    self.assertEqual(len(response.data['items']), 5)
 
   def test_get_empty_comments(self):
     response = client.get(f'/api/author/testauthor/posts/{self.post3.id}/comments/')
 
-    self.assertEqual(response.data, [])
+    self.assertEqual(response.data['items'], [])
     self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
