@@ -41,9 +41,7 @@ class GetAllCommentsTest(TestCase):
 
   def test_get_empty_comments(self):
     response = client.get(f'/api/author/testauthor/posts/{self.post3.id}/comments/')
-
-    self.assertEqual(response.data['items'], [])
-    self.assertEqual(response.status_code, status.HTTP_200_OK)
+    self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
 
 class CreateCommentTest(TestCase):

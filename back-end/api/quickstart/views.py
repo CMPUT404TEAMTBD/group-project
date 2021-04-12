@@ -168,6 +168,8 @@ class CommentViewSet(viewsets.ModelViewSet):
             paginator = Paginator(queryset, request.GET.get('size', self.page_size))
             page_obj = paginator.page(request.GET.get('page', 1))
             serializer = CommentSerializer(page_obj, many=True)
+            if len(serializer.data) == 0:
+                return Response(status=status.HTTP_204_NO_CONTENT)
         except Post.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         except EmptyPage:
