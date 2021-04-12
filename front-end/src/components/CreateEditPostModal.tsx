@@ -1,13 +1,12 @@
 import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import { AxiosResponse } from 'axios';
 import React, { useState } from "react";
-import { Alert, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { Alert, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Button } from "reactstrap";
 import { Post, PostContent, PostContentType, PostVisibility } from "../types/Post";
 import { UserLogin } from "../types/UserLogin";
 import { Author } from "../types/Author";
 import { ResponseHelper } from "../helpers/ResponseHelper"
 import PostContentEl from "./PostContentEl";
-import * as Style from '../assets/createPostUI';
 import {v4 as uuidv4} from 'uuid';
 
 
@@ -224,12 +223,12 @@ export default function CreateEditPostModal(props: Props){
               <Input id="Unlisted" type="checkbox" name="Unlisted" placeholder="Unlisted" onChange={e => setUnlisted(e.target.checked)} defaultChecked={unlisted}/>
               <Label for="Unlisted">Unlisted</Label>
             </FormGroup>
-            <FormGroup>
-              <input style = {Style.buttonStyle} type="submit" value="Submit" />
-              <button style = {Style.buttonStyle} onClick = {e=>{setuuid(generateUUID(e));}}>Generate UUID</button>
-              <span className="text-muted">{uuid? uuid : null}</span>
+            <FormGroup>                           
+              { isCreate ? <Button onClick = {e=>{setuuid(generateUUID(e));}}>Generate UUID</Button> : null }
+              <Button type="submit" value="Submit">Submit</Button>
             </FormGroup>
           </Form>
+          <p className="text-muted">{uuid ? `UUID: ${uuid}` : null}</p>
           <PostContentEl postContent={postContent} isPreview={false}/>
       </div>
     </ModalBody>
