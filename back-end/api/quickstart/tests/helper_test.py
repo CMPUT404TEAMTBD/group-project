@@ -44,6 +44,7 @@ def get_test_comment_fields(
   return {
     'author': author,
     'comment': 'i am a comment',
+    'contentType': 'text/plain'
   }
 
 def get_test_post_fields(i=1, visibility="PUBLIC", unlisted=False):
