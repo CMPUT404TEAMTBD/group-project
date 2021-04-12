@@ -10,6 +10,7 @@ import {
     Input,
     Label,
     FormText,
+    CardTitle,
 } from 'reactstrap';
 import { UserLogin } from '../types/UserLogin';
 interface Props {
@@ -78,6 +79,8 @@ const SettingsPage = (props: Props) => {
     }
 
     return (
+        <>
+        <CardTitle tag="h2">Settings</CardTitle>
         <Card>
             <CardBody>
                 <Form onSubmit={handleSubmit}>
@@ -113,6 +116,7 @@ const SettingsPage = (props: Props) => {
                 </Form>
             </CardBody>
         </Card>
+        </>
     );
 }
 

@@ -155,7 +155,7 @@ export default function AuthorPage(props: any) {
                     className={clsx({ active: activeTab === "githubTab" })}
                     onClick={() => toggle("githubTab")}
                   >
-                    {Icons.githubIcon} GitHub Feed
+                    {Icons.githubIcon} Feed
                   </NavLink>
                 </NavItem>
                 {!isOtherAuthor && (

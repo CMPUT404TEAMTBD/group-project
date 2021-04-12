@@ -7,6 +7,7 @@ import {
 import LoginForm from "../components/LoginForm";
 import RegisterForm from "../components/RegisterForm";
 import Alert from "reactstrap/es/Alert";
+import * as Icons from '../assets/Icons';
 
 /**
  * Component originally from
@@ -42,14 +43,9 @@ export default class AuthPage extends React.Component {
         break;
     }
     return (
-      <div className={"my-2"}>
+      <div className={"my-2"} style={{padding:'3rem'}}>
         <Row>
-          <Col>
-            <h3 className={"font-title"}>Login</h3>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs="1" sm="2" md="3"></Col>
+          {/* <Col xs="1" sm="2" md="3">{Icons.tamagoLogo}</Col> */}
           <Col>
             {this.props.location.state && this.props.location.state.redirectReason &&
             <Alert color={"warning"}>{this.props.location.state.redirectReason}</Alert>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardBody, CardLink, CardSubtitle, CardText, CardTitle } from 'reactstrap';
+import { Card, CardBody, CardLink, CardSubtitle, CardText, CardTitle, Col, Row } from 'reactstrap';
 import { Post } from '../types/Post';
 import { UserLogin } from '../types/UserLogin';
 import PostContentEl from './PostContentEl';
@@ -105,32 +105,55 @@ export default function PostListItem(props: Props) {
       
   }
 
-
-  const EditCardLink = () => props.loggedInUser !== undefined && isAuthorPost ? <CardLink onClick={() => { setIsEditModalOpen(true); }}>{Icons.editButtonIcon}</CardLink> : null;
-  const DeleteCardLink = () => props.loggedInUser !== undefined && isAuthorPost ? <CardLink onClick={() => { setIsDeleteModalOpen(true); }}>{Icons.deleteButtonIcon}</CardLink> : null;
   const LikeCardLink = () => props.loggedInUser
     ? hasLiked
-      ? <CardLink>{Icons.likedButtonIcon}</CardLink>
-      : <CardLink onClick={() => likePost()}>{Icons.likeButtonIcon}</CardLink>
+      ? <CardLink>{Icons.getNum(likes.length)}{Icons.likedButtonIcon}</CardLink>
+      : <CardLink onClick={() => likePost()}>{Icons.getNum(likes.length)}{Icons.likeButtonIcon}</CardLink>
     : null;
-  const ReshareCardLink = () => props.loggedInUser !== undefined && !isAuthorPost && props.isReshareable ?<CardLink onClick={() => reshare(props.post)}>{Icons.shareButtonIcon}</CardLink> : null;
-   
+
+  const showCardLinks = () => {
+    if (isAuthorPost) {
+      return (<>
+      <Col md={{ size: 'auto'}}>
+        <CardLink onClick={() => { setIsEditModalOpen(true) }}>
+          {Icons.editButtonIcon}
+        </CardLink>
+        </Col>
+      <Col md={{ size: 'auto'}}>
+        <CardLink onClick={() => { setIsDeleteModalOpen(true) }}>
+          {Icons.deleteButtonIcon}
+        </CardLink>
+      </Col>
+      </>);
+    } else if (!isAuthorPost && props.isReshareable) {
+        return (<Col md={{ size: 'auto'}}>
+          <CardLink onClick={() => reshare(props.post)}>
+            {Icons.shareButtonIcon}
+          </CardLink>
+        </Col>);
+      };
+  }
 
   const post: Post = props.post;
   return (
     <div>
       <Card>
-        <CardBody>
+        <CardBody style={{paddingBottom:'0'}}>
           <CardTitle onClick={() => setIsModalOpen(true)} tag="h5" style={{ cursor: 'pointer' }}>{post.title}</CardTitle>
-          <CardSubtitle tag="h6" className="mb-2 text-muted">By: {post.author.displayName}</CardSubtitle>
-          <CardSubtitle className="mb-2 text-muted">{getDateString(post)}</CardSubtitle>
-          <CardText onClick={() => setIsModalOpen(true)}>🔥{likes.length}</CardText>
-          <CardText onClick={() => setIsModalOpen(true)}>{post.description}</CardText>
+          <CardSubtitle tag="h6" className="mb-2 text-muted">@{post.author.displayName} • {getDateString(post)}</CardSubtitle>
+          <CardSubtitle style={{fontStyle: 'italic'}} className="mb-2 text-muted" onClick={() => setIsModalOpen(true)}>{post.description}</CardSubtitle>
           <PostContentEl postContent={post} isPreview={true} />
-          {LikeCardLink()}
-          {ReshareCardLink()}
-          {EditCardLink()}
-          {DeleteCardLink()}
+          </CardBody>
+          <CardBody style={{paddingTop:'0'}}>
+          <Row className="float-right">
+            {props.loggedInUser ? 
+              <>
+                <Col md={{ size: 'auto'}}>
+                  {LikeCardLink()}
+                </Col>
+                {showCardLinks()}
+              </> : null}
+          </Row>
         </CardBody>
       </Card>
       <PostDetailModal post={post} toggle={toggle} isOpen={isModalOpen} loggedInUser={props.loggedInUser} />

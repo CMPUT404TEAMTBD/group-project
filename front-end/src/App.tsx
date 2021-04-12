@@ -43,11 +43,14 @@ function App() {
         <div>
           <Container>
             <Row style={{padding: '3rem'}} className="justify-content-md-center">
-              <Col xs="2"><AppNavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} /></Col>
+              <Col md="2">
+                <AppNavBar loggedInUser={loggedInUser} setLoggedInUser={setLoggedInUser} /></Col>
               <Col>
               <Switch>
               <Route exact path="/" render={(props) => <HomePage {...props} loggedInUser={loggedInUser} />} />
-              <Route path="/auth" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} />} />
+              <Route path="/login" render={(props) => <AuthPage {...props} setLoggedInUser={setLoggedInUser} />} />
+              {loggedInUser && 
+              <>
               <Route path="/inbox" render={(props) => <InboxPage {...props} loggedInUser={loggedInUser} /> } />
               <Route path="/author/:authorId" render={(props) => <AuthorPage {...props} loggedInUser={loggedInUser}/>}/>
               {/* TODO: hide settings page if not logged in */}
@@ -55,6 +58,8 @@ function App() {
               <Route path="/create_post" render={(props) => <CreatePostComponent {...props} loggedInUser={loggedInUser} />} />
               <Route path="/authors/:displayName" render={(props) => <AuthorResultsPage {...props} loggedInUser={loggedInUser} />}/>
               <Route path="/posts/:postId" render={(props) => <PostDetailPage {...props} loggedInUser={loggedInUser}/>}/>
+              </>
+              }
               <Route component={NotFoundPage} />
             </Switch>
               </Col>

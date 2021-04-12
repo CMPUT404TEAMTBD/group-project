@@ -19,6 +19,10 @@ export default function HomePage(props: any) {
 
   // get all public posts
   useEffect(() => {
+
+    if (!props.loggedInUser) {
+      props.history.push('/login')
+    }
     AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/public-posts/", props.loggedInUser).then((res: any) => {
       const posts: Post[] = res.data;
       setPostEntries(posts);
