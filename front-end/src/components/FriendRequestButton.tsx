@@ -3,6 +3,7 @@ import { Button } from 'reactstrap'
 import { Author } from '../types/Author';
 import { UserLogin } from '../types/UserLogin';
 import { ResponseHelper } from '../helpers/ResponseHelper';
+import * as Icons from '../assets/Icons';
     
 interface Props {
     loggedInUser?: UserLogin;
@@ -53,7 +54,7 @@ export default function FollowRequestButton(props: Props) {
 
   return (
     <>
-      <Button className="list-group-item" color="link" onClick={sendFollowRequest}>{props.isFollower ? "Unfollow" : "Follow"}</Button>
+      <Button color="white" onClick={sendFollowRequest}>{props.isFollower ? Icons.unfollowIcon : Icons.followIcon}</Button>
     </>
   )
 

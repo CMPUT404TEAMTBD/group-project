@@ -8,9 +8,18 @@ interface Props{
 }
 
 export default function ProfilePic(props:Props){
-  if (props.author?.github?.includes("github.com")) {
-    return <img width="100%" src={props.author.github + ".png"} alt="Card image cap" style={props.style}/>
-  } else {
+  const githubUsername = props.author?.github?.split("https://github.com/").pop();
+
+  if (!props.author || !props.author.github.includes("github.com/") ||
+      !props.author.github.split('https://github.com/').pop()) {
     return <UserProfileIcon style={props.style}/>
   }
+
+  if (githubUsername && githubUsername.length > 0) {
+    return <a href={props.author ? props.author.github : "#"}>
+      <img width="100%" src={props.author?.github + ".png"} alt="Card image cap" style={props.style}/>
+      </a>
+  }
+
+  return <UserProfileIcon style={props.style}/>
 }

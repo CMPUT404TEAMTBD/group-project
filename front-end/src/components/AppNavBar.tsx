@@ -5,6 +5,8 @@ import {
   NavbarToggler,
   Nav,
   NavItem,
+  CardImg,
+  Card,
 } from "reactstrap";
 import { NavLink } from "react-router-dom";
 import { UserLogin } from "../types/UserLogin";
@@ -39,6 +41,11 @@ export default function AppNavBar(props: Props) {
     return (
       <>
         <NavItem onClick={close}>
+          <NavLink to="/" className="nav-link">
+            {Icons.homeIcon} Feed
+          </NavLink>
+        </NavItem>
+        <NavItem onClick={close}>
           <NavLink to="/inbox" className="nav-link">
             {Icons.inboxIcon} Inbox
           </NavLink>
@@ -63,7 +70,7 @@ export default function AppNavBar(props: Props) {
           </NavLink>
         </NavItem>
         <NavItem onClick={close}>
-          <NavLink to="/" className="nav-link" onClick={() => logOut()}>
+          <NavLink to="/login" className="nav-link" onClick={() => logOut()}>
           {Icons.logoutIcon} Log Out
           </NavLink>
         </NavItem>
@@ -73,30 +80,24 @@ export default function AppNavBar(props: Props) {
 
   return (
     <div>
+      {props.loggedInUser ?
+      
       <Navbar light expand="md">
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav vertical className="ml-auto" navbar>
-            <NavLink to="/" className="navbar-brand font-title">
-              🗑🔥
-            </NavLink>
-            <NavItem onClick={close}>
-              <NavLink to="/" className="nav-link">
-              {Icons.homeIcon} Feed
+          <NavLink to="/" className="navbar-brand font-title text-center">
+                {Icons.tamagoEgg("45", "45")}
               </NavLink>
-            </NavItem>
-            {props.loggedInUser ? (
-              loggedIn()
-            ) : (
-              <NavItem onClick={close}>
-                <NavLink to="/auth/" className="nav-link">
-                {Icons.loginIcon} Log In
-                </NavLink>
-              </NavItem>
-            )}
+            {loggedIn()}
           </Nav>
         </Collapse>
       </Navbar>
+      :
+      <NavLink style={{padding: '4rem'}} to="/" className="navbar-brand font-title text-center">
+        {Icons.tamagoEgg("150", "150")}
+      </NavLink>
+      }
     </div>
   );
 }

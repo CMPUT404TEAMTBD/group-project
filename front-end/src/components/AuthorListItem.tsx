@@ -1,7 +1,7 @@
 import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
-import { Card, CardBody, Container, Row, Col, CardImg, CardTitle, Button, CardLink, CardSubtitle } from 'reactstrap';
+import { CardBody, Row, Col, CardImg, ListGroupItem } from 'reactstrap';
 import { Author } from "../types/Author";
 import { UserLogin } from '../types/UserLogin';
 import FollowRequestButton from './FriendRequestButton';
@@ -40,35 +40,46 @@ export default function AuthorListItem(props: Props) {
   }
 
   return (
-    <Card>
-    <CardBody>
-      <Container fluid>
-        <Row>
-          <Col xs="2">
-            { !isValidGithub(props.author.github) ?
-              <CardBody>{Icons.defaultProfilePic}</CardBody> :
-              <CardImg top src={props.author.github + ".png"} alt="Profile Pic" />
-            }
-          </Col>
-          <Col xs="6">
-            <CardTitle tag="h3" >
-              <Link to=
-                {{ 
-                  pathname: `/author/${props.author.id}`,
-                  state: {
-                    host: props.author.host,
-                    id: props.author.id
-                  }
-                }}>{props.author.displayName}
-              </Link>
-            </CardTitle>
-            <CardSubtitle tag="h5">
-              {displayFollowButton()}
-            </CardSubtitle> 
-          </Col>
-        </Row>
-      </Container>
-    </CardBody>
-  </Card>
+    <ListGroupItem>
+      <Row style={{alignItems: "center"}}>
+        <Col xs="2">
+          { !isValidGithub(props.author.github) ?
+            <CardBody>{Icons.defaultProfilePic}</CardBody> :
+            <CardImg top src={props.author.github + ".png"} alt="Profile Pic" />
+          }
+        </Col>
+        <Col>
+          <Row>
+            <Link to=
+              {{ 
+                pathname: `/author/${props.author.id}`,
+                state: {
+                  host: props.author.host,
+                  id: props.author.id
+                }
+              }}
+              style={{ color: 'black', fontSize: '1.5rem' }}
+              ><h5>{props.author.displayName}</h5>
+            </Link>
+            </Row>
+            <Row>
+            <Link to=
+              {{ 
+                pathname: `${props.author.host}`,
+                state: {
+                  host: props.author.host,
+                  id: props.author.id
+                }
+              }}
+              style={{ color: 'grey', fontSize: '1.5rem' }}
+              ><h6>{props.author.host}</h6>
+            </Link>
+            </Row>
+        </Col>
+        <Col xs="2" lg="2">
+          {displayFollowButton()}
+        </Col>
+      </Row>
+  </ListGroupItem>
   )
 }

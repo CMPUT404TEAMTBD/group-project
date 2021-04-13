@@ -29,9 +29,11 @@ import * as Icons from '../assets/Icons';
 import ProfilePic from '../components/ProfilePic';
 import clsx from 'clsx';
 import PostList from '../components/PostList';
+import AuthorListItem from '../components/AuthorListItem';
+import { UserLogin } from '../types/UserLogin';
 
 interface Props extends RouteComponentProps<MatchParams>{
-  loggedInUser?: string,
+  loggedInUser: UserLogin | undefined,
 }
 
 interface MatchParams {
@@ -50,13 +52,33 @@ export default function AuthorPage(props: any) {
   const [responseMessage, setResponseMessage] = useState(100);
   const [isFollower, setIsFollower] = useState<boolean>(false);
   const [isOtherAuthor, setIsOtherAuthor] = useState<boolean>(false);
+  const [followers, setFollowers] = useState<Author[] | undefined>(undefined);
+  const [following, setFollowing] = useState<Author[] | undefined>(undefined);
   const [activeTab, setActiveTab] = useState("githubTab");
   const toggle = (tab: string) => {
     if (activeTab !== tab) setActiveTab(tab);
     if (tab === 'postsTab') displayPosts();
+    if (tab === 'followingTab') getFollowingList();
+    if (tab === 'followersTab') getFollowersList();
   }
 
-  function displayPosts(){
+  function getFollowingList() {
+    AxiosWrapper.get(`${authorUrl}following/`, props.loggedInUser).then((res: any) => {
+      console.log(res.data)
+      const followingList: Author[] = res.data.items;
+      setFollowing(followingList);
+    });
+  }
+
+  function getFollowersList() {
+    AxiosWrapper.get(process.env.REACT_APP_API_URL + "/api/author/" + props.loggedInUser?.authorId + "/followers/", props.loggedInUser).then((res: any) => {
+      console.log(res.data.items)
+      const followersList: Author[] = res.data.items;
+      setFollowers(followersList);
+    });
+  }
+
+  function displayPosts() {
       AxiosWrapper.get(`${authorUrl}posts/`, props.loggedInUser).then((res: any) => {
         const posts: Post[] = res.data;
         setPostEntries(posts);
@@ -99,31 +121,31 @@ export default function AuthorPage(props: any) {
 
 
   const displayProfileButtons = () => {
-    if (props.loggedInUser && author?.id === props.loggedInUser.authorId) {
-      return <ListGroupItem tag="a" href={`/author/${props.loggedInUser.authorId}/followers`}>Follows</ListGroupItem>
-    } else {
+    if (props.loggedInUser && author?.id !== props.loggedInUser.authorId) {
       return <FollowRequestButton loggedInUser={props.loggedInUser} currentAuthor={author} isFollower={isFollower} setIsFollower={setIsFollower} />
     }
   }
+
+  const displayFollowList = (list: Author[]) => {
+    if (list && list.length > 0) {
+      return (<>
+      <ListGroup>
+        {list.map((auth: Author) => <AuthorListItem author={auth} loggedInUser={props.loggedInUser}></AuthorListItem>)}
+        </ListGroup>
+      </>)
+    }
+    return <Card body className="text-center"><CardBody><CardTitle tag="h5" >No authors to show :(</CardTitle></CardBody></Card>;
+  };
 
   return (
     <>
       <Row>
         <Col sm={3}>
-          <Card>
-            <CardHeader tag="h5" className="text-center">{author?.displayName}</CardHeader>
+            <CardHeader style={{backgroundColor: 'white'}} tag="h4" className="text-center">{author?.displayName}</CardHeader>
             <CardBody>
               <ProfilePic author={author} />
             </CardBody>
-            <CardFooter>
-              <ListGroup className="text-center">
-                {displayProfileButtons()}
-                <ListGroupItem tag="a" href={author ? author.github : "#"}>
-                  GitHub
-                </ListGroupItem>
-              </ListGroup>
-            </CardFooter>
-          </Card>
+            <Card>{displayProfileButtons()}</Card>
         </Col>
         <Col>
           <Row className="justify-content-md-left">
@@ -134,10 +156,11 @@ export default function AuthorPage(props: any) {
                     className={clsx({ active: activeTab === "githubTab" })}
                     onClick={() => toggle("githubTab")}
                   >
-                    {Icons.githubIcon} GitHub Feed
+                    {Icons.githubIcon} Feed
                   </NavLink>
                 </NavItem>
                 {!isOtherAuthor && (
+                  <>
                   <NavItem>
                     <NavLink
                       className={clsx({ active: activeTab === "postsTab" })}
@@ -146,6 +169,23 @@ export default function AuthorPage(props: any) {
                       {Icons.mailIcon} Posts
                     </NavLink>
                   </NavItem>
+                  <NavItem>
+                    <NavLink
+                      className={clsx({ active: activeTab === "followingTab" })}
+                      onClick={() => toggle("followingTab")}
+                    >
+                      {Icons.followingIcon} Following
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink
+                      className={clsx({ active: activeTab === "followersTab" })}
+                      onClick={() => toggle("followersTab")}
+                    >
+                      {Icons.peopleIcon} Followers
+                    </NavLink>
+                  </NavItem>
+                  </>
                 )}
               </Nav>
             </Col>
@@ -163,6 +203,7 @@ export default function AuthorPage(props: any) {
                   </Row>
                 </TabPane>
                 {!isOtherAuthor && (
+                  <>
                   <TabPane tabId="postsTab">
                     <Row style={{ padding: "1rem" }}>
                       {author && props.loggedInUser && (
@@ -171,10 +212,22 @@ export default function AuthorPage(props: any) {
                           setPostEntries={setPostEntries}
                           loggedInUser={props.loggedInUser}
                           isResharable={true}
+                          displayCreateButton={false}
                         />
                       )}
                     </Row>
                   </TabPane>
+                  <TabPane tabId="followingTab">
+                    <Row style={{ padding: "1rem" }}>
+                      {following && displayFollowList(following)}
+                    </Row>
+                  </TabPane>
+                  <TabPane tabId="followersTab">
+                    <Row style={{ padding: "1rem" }}>
+                      {followers && displayFollowList(followers)}
+                    </Row>
+                  </TabPane>
+                  </>
                 )}
               </TabContent>
             </Col>
