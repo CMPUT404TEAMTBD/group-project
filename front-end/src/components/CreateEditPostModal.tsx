@@ -1,13 +1,14 @@
 import { AxiosWrapper } from '../helpers/AxiosWrapper';
 import { AxiosResponse } from 'axios';
 import React, { useState } from "react";
-import { Alert, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Button } from "reactstrap";
+import { Alert, Form, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader, Button, Col, Row, Container, CustomInput, InputGroup, InputGroupAddon, CardImg } from "reactstrap";
 import { Post, PostContent, PostContentType, PostVisibility } from "../types/Post";
 import { UserLogin } from "../types/UserLogin";
 import { Author } from "../types/Author";
 import { ResponseHelper } from "../helpers/ResponseHelper"
 import PostContentEl from "./PostContentEl";
 import {v4 as uuidv4} from 'uuid';
+import * as Icons from '../assets/Icons';
 
 
 interface Props {
@@ -38,7 +39,8 @@ export default function CreateEditPostModal(props: Props){
     content:'',
     categories:[''],
     visibility: PostVisibility.PUBLIC,
-    unlisted:false
+    unlisted:false,
+    uuid:''
   }
 
   const postFields = props.editFields ?? emptyPostFields
@@ -82,6 +84,7 @@ export default function CreateEditPostModal(props: Props){
     setCategories(emptyPostFields.categories)
     setVisibility(emptyPostFields.visibility)
     setUnlisted(emptyPostFields.unlisted)
+    setuuid(emptyPostFields.uuid)
   }
 
   function parseCategories(categories: string) {
@@ -187,13 +190,28 @@ export default function CreateEditPostModal(props: Props){
     content:content
   }
 
+  const isContentImage = (type: PostContentType) => {
+    if (type === PostContentType.PNG || type === PostContentType.JPEG) {
+      return true;
+    }
+    return false;
+  }
+
   return (
     <Modal isOpen={props.isModalOpen} toggle={props.toggle}>
     <ModalHeader toggle={props.toggle}>{isCreate ? "Create Post" : "Edit Post"}</ModalHeader>
+    <Form onSubmit={e => {sendPost(e); setuuid("")}}>
     <ModalBody>
       <div>
           {showError ? <Alert>Could not modify post</Alert> : null}
-          <Form inline={true} onSubmit={e => {sendPost(e); setuuid("")}}>
+          <FormGroup>
+          { isCreate ? 
+          <InputGroup>
+        <Input disabled value={uuid ? `${uuid}` : ""}/>
+        <InputGroupAddon addonType="prepend"><Button onClick = {e => { setuuid(generateUUID(e)) }}>Generate UUID</Button></InputGroupAddon>
+      </InputGroup>
+          : null }
+      </FormGroup>
             <FormGroup>
               <Input type="text" name="Title" placeholder="Title" onChange={e => setTitle(e.target.value)} value={title}/>
             </FormGroup>
@@ -201,40 +219,72 @@ export default function CreateEditPostModal(props: Props){
               <Input type="text" name="Description" placeholder="Description" onChange={e => setDesc(e.target.value)} value={desc}/>
             </FormGroup>
             <FormGroup>
-              <Label for="Content Type">Content Type</Label>
-              <select name="Content Type" onChange={e => setContentType(e.target.value as PostContentType)} value={contentType}>
-                <option value={PostContentType.PLAIN_TEXT}>text/plain</option>
-                <option value={PostContentType.MARKDOWN}>text/markdown</option>
-                <option value={PostContentType.APPLICATION}>application/base64</option>
-                <option value={PostContentType.PNG}>image/png</option>
-                <option value={PostContentType.JPEG}>image/jpeg</option>
-              </select>
-            </FormGroup>
-            <FormGroup>
-              <Input type="textarea" name="Content" placeholder="Content" onChange={e => setContent(e.target.value)} value={content}/>
-              <Input type="file" name="File" placeholder="File" onChange={e => fileToImageContent(e.target.files)}/>
-            </FormGroup>
-            <FormGroup>
               <Input type="text" name="Categories" placeholder="Categories" onChange={e => parseCategories(e.target.value)} value={categories.join(' ')}/>
             </FormGroup>
             <FormGroup>
-              <Input id="Visibility" type="checkbox" name="Visibility" placeholder="Visibility" onChange={e => changeVisibility(e.target.checked)} defaultChecked={visibility===PostVisibility.FRIENDS}/>
-              <Label for="Visibility">Private</Label>
-              <Input id="Unlisted" type="checkbox" name="Unlisted" placeholder="Unlisted" onChange={e => setUnlisted(e.target.checked)} defaultChecked={unlisted}/>
-              <Label for="Unlisted">Unlisted</Label>
+              { isContentImage(contentType) ? 
+                <CustomInput type="file" id="imageUploader" name="file" placeholder="Image" 
+                  label={"upload an " + contentType.substr(0, contentType.indexOf(';'))}
+                  onChange={e => fileToImageContent(e.target.files)}/> 
+                : <Input type="textarea" name="Content" placeholder={contentType + " Content"} 
+                onChange={e => setContent(e.target.value)} value={content}/>}
             </FormGroup>
-            <FormGroup>                           
-              { isCreate ? <Button onClick = {e=>{setuuid(generateUUID(e));}}>Generate UUID</Button> : null }
-              <Button type="submit" value="Submit">Submit</Button>
+            <FormGroup check inline={true}>
+              <Label check>
+              <Input hidden type="radio" class="radio-inline" onChange={e => setContentType(e.target.value as PostContentType)} name="content-type" value={PostContentType.PLAIN_TEXT} />
+              {Icons.plainTextIcon}
+            </Label>
+            </FormGroup >
+            <FormGroup check inline={true}>
+              <Label check>
+              <Input hidden type="radio" class="radio-inline" onChange={e => setContentType(e.target.value as PostContentType)} name="content-type" value={PostContentType.MARKDOWN} />
+              {Icons.markdownIcon}
+            </Label>
             </FormGroup>
-          </Form>
-          <p className="text-muted">{uuid ? `UUID: ${uuid}` : null}</p>
+            <FormGroup check inline={true}>
+              <Label check>
+              <Input hidden type="radio" class="radio-inline" onChange={e => setContentType(e.target.value as PostContentType)} name="content-type" value={PostContentType.APPLICATION} />
+              b64
+            </Label>
+            </FormGroup >
+            <FormGroup check inline={true}>
+              <Label check>
+              <Input hidden type="radio" class="radio-inline" onChange={e => setContentType(e.target.value as PostContentType)} name="content-type" value={PostContentType.PNG} />
+              {Icons.pngIcon}
+            </Label>
+            </FormGroup>
+            <FormGroup check inline={true}>
+              <Label check>
+              <Input hidden type="radio" class="radio-inline" onChange={e => setContentType(e.target.value as PostContentType)} name="content-type" value={PostContentType.JPEG} />
+              {Icons.jpegIcon}
+            </Label> 
+            </FormGroup>
+            <FormGroup check inline={true}>
+              <Label>{isContentImage(contentType) ? contentType.substr(0, contentType.indexOf(';')) : contentType}</Label>
+            </FormGroup>
+            <div style={{paddingTop:'1rem'}}>
           <PostContentEl postContent={postContent} isPreview={false}/>
+          </div>
       </div>
     </ModalBody>
     <ModalFooter>
-      
+      <FormGroup check inline className="float-left justify-items-left">
+        <Label for="Visibility" check>
+        <Input id="Visibility" type="checkbox" name="Visibility" placeholder="Visibility" onChange={e => changeVisibility(e.target.checked)} defaultChecked={visibility===PostVisibility.FRIENDS}/>
+          Private
+        </Label>
+      </FormGroup>
+      <FormGroup check inline>
+        <Label for="Unlisted" check>
+        <Input id="Unlisted" type="checkbox" name="Unlisted" placeholder="Unlisted" onChange={e => setUnlisted(e.target.checked)} defaultChecked={unlisted}/>
+            Unlisted
+        </Label>
+      </FormGroup>
+      <FormGroup>
+              <Button type="submit" value="Submit">Submit</Button>
+            </FormGroup>
     </ModalFooter>
+    </Form>
   </Modal>
       
   )
