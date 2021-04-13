@@ -54,7 +54,7 @@ export default function FollowRequestButton(props: Props) {
 
   return (
     <>
-      <Button style={{outline: 'none'}} color="white" onClick={sendFollowRequest}>{props.isFollower ? Icons.unfollowIcon : Icons.followIcon}</Button>
+      <Button color="white" onClick={sendFollowRequest}>{props.isFollower ? Icons.unfollowIcon : Icons.followIcon}</Button>
     </>
   )
 

@@ -93,7 +93,10 @@ export default function AppNavBar(props: Props) {
           </Nav>
         </Collapse>
       </Navbar>
-      : <h1 style={{padding: '4rem'}}>{Icons.tamagoEgg("150", "150")}</h1>
+      :
+      <NavLink style={{padding: '4rem'}} to="/" className="navbar-brand font-title text-center">
+        {Icons.tamagoEgg("150", "150")}
+      </NavLink>
       }
     </div>
   );

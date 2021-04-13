@@ -30,9 +30,10 @@ import ProfilePic from '../components/ProfilePic';
 import clsx from 'clsx';
 import PostList from '../components/PostList';
 import AuthorListItem from '../components/AuthorListItem';
+import { UserLogin } from '../types/UserLogin';
 
 interface Props extends RouteComponentProps<MatchParams>{
-  loggedInUser?: string,
+  loggedInUser: UserLogin | undefined,
 }
 
 interface MatchParams {
@@ -120,7 +121,7 @@ export default function AuthorPage(props: any) {
 
 
   const displayProfileButtons = () => {
-    if (author?.id !== props.loggedInUser.authorId) {
+    if (props.loggedInUser && author?.id !== props.loggedInUser.authorId) {
       return <FollowRequestButton loggedInUser={props.loggedInUser} currentAuthor={author} isFollower={isFollower} setIsFollower={setIsFollower} />
     }
   }
