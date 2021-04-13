@@ -108,9 +108,13 @@ export default function AuthorPage(props: any) {
           // 404 is not a follower
           setIsFollower(false);
         });
+      } else {
+        setIsOtherAuthor(false);
       }
     };
-  }, []);
+
+    toggle('githubTab');
+  }, [props.location.state.id]);
 
 
   if (responseMessage > 299) {
