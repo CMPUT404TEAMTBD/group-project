@@ -62,7 +62,7 @@ export default function CommentListItem(props: Props) {
           <CardHeader className="mb-2 text-muted"><b>@{props.comment.author.displayName}</b> {getDateString(props.comment)}</CardHeader>
           <CardBody>
             <PostContentEl postContent={{content:props.comment.comment,contentType:props.comment.contentType}} isPreview={false}/>
-            <CardText>🔥{likes.length}</CardText>
+            <CardText>❤️{likes.length}</CardText>
             {LikeCardLink()}
           </CardBody>
       </Card>
